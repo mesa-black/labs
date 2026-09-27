@@ -1,57 +1,83 @@
 /*
  * BlackMesa Labs — one stylesheet, no build step.
  *
- * Colour carries meaning rather than decoration: teal is the accent, amber is
- * reserved for what went wrong. Three typefaces, three jobs: Archivo sets
- * headings, Newsreader carries the reading, IBM Plex Mono marks everything that
- * comes from a machine — timestamps, versions, commands.
+ * Visual register: French institutional. Navy ink on cream, the tricolour rule
+ * running down the margin, uppercase letterspaced eyebrows, and a single
+ * neo-grotesque played on weight rather than a second display face. Archivo
+ * stands in for Marianne, which is not licensed outside French State
+ * communication; it is the closest free relative — same straight terminals.
+ *
+ * Colour still carries meaning: red marks what is not finished (a draft), navy
+ * marks what leaves the site. Nothing is coloured for decoration.
  */
 
 :root {
-    --paper:   #f3f4f2;
-    --surface: #fbfbfa;
-    --ink:     #14181a;
-    --muted:   #5c6a6c;
-    --accent:  #0d6b63;
-    --warn:    #9c5510;
-    --rule:    #dbdfdb;
-    --chip:    #e8ebe6;
+    --paper:   #faf7f1;   /* crème */
+    --surface: #f4f0e8;
+    --ink:     #16265a;   /* bleu marine */
+    --muted:   #5a6484;
+    --accent:  #16265a;
+    --red:     #c1272d;
+    --flag-blue: #16265a;
+    --rule:    #ddd6c8;
+    --chip:    #efe9dd;
 
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-    --body:    "Newsreader", Georgia, "Times New Roman", serif;
+    --body:    "Archivo", "Helvetica Neue", Arial, sans-serif;
     --mono:    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
     --wrap: 44rem;
+    --flag: 10px;         /* largeur du filet tricolore */
 }
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --paper:   #0e1315;
-        --surface: #151c1e;
-        --ink:     #e6ebe8;
-        --muted:   #93a4a3;
-        --accent:  #56b9ac;
-        --warn:    #dd9750;
-        --rule:    #253032;
-        --chip:    #1d2628;
+        --paper:   #0f1730;
+        --surface: #16203d;
+        --ink:     #eee9df;
+        --muted:   #9aa5c2;
+        --accent:  #8fa6e8;
+        --red:     #e2646a;
+        --flag-blue: #3f5cc4;
+        --rule:    #27314f;
+        --chip:    #1b2540;
     }
 }
 
 :root[data-theme="dark"] {
-    --paper:   #0e1315;
-    --surface: #151c1e;
-    --ink:     #e6ebe8;
-    --muted:   #93a4a3;
-    --accent:  #56b9ac;
-    --warn:    #dd9750;
-    --rule:    #253032;
-    --chip:    #1d2628;
+    --paper:   #0f1730;
+    --surface: #16203d;
+    --ink:     #eee9df;
+    --muted:   #9aa5c2;
+    --accent:  #8fa6e8;
+    --red:     #e2646a;
+    --flag-blue: #3f5cc4;
+    --rule:    #27314f;
+    --chip:    #1b2540;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Le filet tricolore court le long de la marge, comme sur une affiche
+   institutionnelle. Purement décoratif, donc invisible aux lecteurs d'écran. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--flag);
+    background: linear-gradient(
+        to right,
+        var(--flag-blue) 0 40%,
+        transparent 40% 60%,
+        var(--red) 60% 100%
+    );
+    z-index: 50;
+    pointer-events: none;
+}
+
 body {
     margin: 0;
+    padding-left: var(--flag);
     background: var(--paper);
     color: var(--ink);
     font-family: var(--body);
@@ -108,8 +134,9 @@ a { color: inherit; }
 .wordmark {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: -.01em;
+    font-size: .95rem;
+    letter-spacing: .01em;
+    text-transform: uppercase;
     text-decoration: none;
 }
 
@@ -132,7 +159,7 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
    le navigateur applique le gras des titres. */
 .tagline {
     font-family: var(--body);
-    font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+    font-size: clamp(1.05rem, 2.3vw, 1.28rem);
     font-weight: 400;
     line-height: 1.45;
     color: var(--muted);
@@ -165,15 +192,16 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     align-items: center;
     gap: .5rem;
     margin: 0 0 .5rem;
-    font-family: var(--mono);
-    font-size: .7rem;
-    letter-spacing: .1em;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: .68rem;
+    letter-spacing: .14em;
     text-transform: uppercase;
     color: var(--muted);
 }
 
 .draft {
-    color: var(--warn);
+    color: var(--red);
     border: 1px solid currentColor;
     border-radius: 2px;
     padding: .05rem .35rem;
@@ -183,9 +211,9 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .post-title {
     font-family: var(--display);
     font-weight: 600;
-    font-size: clamp(1.3rem, 3.2vw, 1.65rem);
-    line-height: 1.22;
-    letter-spacing: -.015em;
+    font-size: clamp(1.3rem, 3.2vw, 1.7rem);
+    line-height: 1.12;
+    letter-spacing: -.026em;
     margin: 0;
     text-wrap: balance;
     transition: color .15s;
@@ -204,9 +232,9 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .post-header h1 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(1.9rem, 5.4vw, 2.85rem);
-    line-height: 1.08;
-    letter-spacing: -.022em;
+    font-size: clamp(1.9rem, 5.6vw, 3rem);
+    line-height: 1.02;
+    letter-spacing: -.032em;
     margin: .6rem 0 0;
     text-wrap: balance;
 }
@@ -245,7 +273,9 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     margin: 2.8rem 0 1rem;
     text-wrap: balance;
 }
-.prose h2::before { content: "—"; color: var(--accent); margin-right: .5rem; font-weight: 500; }
+/* Un filet discret sépare les sections : la graisse et le serrage du titre
+   suffisent à le faire ressortir. Le rouge reste réservé au signalement. */
+.prose h2 { padding-top: 1.1rem; border-top: 1px solid var(--rule); }
 
 .prose h3 {
     font-family: var(--display);
@@ -259,14 +289,20 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .prose li::marker { color: var(--muted); }
 .prose ol li::marker { font-family: var(--mono); font-size: .85em; }
 
-.prose strong { font-weight: 600; }
+.prose strong { font-weight: 700; }
 .prose p strong {
-    font-weight: 500;
-    background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 20%, transparent) 62%);
+    font-weight: 700;
+    color: var(--ink);
 }
 .prose em { font-style: italic; color: var(--muted); }
 
-.prose a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.prose a {
+    color: var(--ink);
+    text-decoration-color: var(--muted);
+    text-decoration-thickness: 2px;
+    text-underline-offset: .22em;
+}
+.prose a:hover { color: var(--red); }
 
 .prose code {
     font-family: var(--mono);
@@ -365,7 +401,16 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 /* ---------------------------------------------------------------- mobile */
 
 @media (max-width: 34rem) {
-    body { font-size: 1rem; }
+    body { font-size: 1rem; padding-left: 0; }
+
+    /* Sur un écran étroit, le filet vertical vole de la largeur de lecture :
+       il passe en bandeau, en haut. */
+    body::before {
+        inset: 0 0 auto 0;
+        width: auto;
+        height: 4px;
+        background: linear-gradient(to right, var(--flag-blue) 0 40%, transparent 40% 60%, var(--red) 60% 100%);
+    }
 
     /* Sur une colonne étroite, la justification creuse des trous même avec la
        césure : on repasse en fer à gauche là où elle dessert la lecture. */
@@ -388,8 +433,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     color: var(--muted);
 }
 .site-footer p { margin: 0 0 .3rem; }
-.site-footer a { color: var(--accent); text-decoration: none; }
-.site-footer a:hover { text-decoration: underline; }
+.site-footer a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: .2em; }
+.site-footer a:hover { color: var(--red); }
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }

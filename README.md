@@ -105,13 +105,26 @@ survivre à la génération suivante.
 
 ## Le design
 
-Trois familles, trois rôles : **Archivo** pour les titres, **Newsreader** pour la lecture,
-**IBM Plex Mono** pour tout ce qui vient d'une machine — horodatages, versions, commandes.
-La couleur porte du sens plutôt que de décorer : le sarcelle est l'accent, l'ambre est
-réservé à ce qui a mal tourné (un brouillon, un avertissement).
+**Registre institutionnel français** : bleu marine sur crème, le filet tricolore courant le
+long de la marge, des yeux en capitales espacées, et **une seule famille jouée sur les
+graisses** plutôt qu'une police de titre et une police de texte.
+
+La police de l'État, *Marianne*, n'est pas librement licenciable hors communication
+publique. **Archivo** en est le plus proche parent libre — même néo-grotesque, mêmes
+terminaisons droites — et sert donc aux titres comme au texte. **IBM Plex Mono** est
+strictement réservé à ce qui vient d'une machine : commandes, versions, extraits de code.
+Le lecteur apprend ainsi qu'un texte en chasse fixe n'a pas été écrit pour lui.
+
+**Le rouge est un budget, pas une couleur.** Il n'apparaît qu'à cinq endroits : le filet
+tricolore, le badge « brouillon », le survol des liens. Tout le reste est marine. Une
+couleur qui signale partout ne signale plus rien.
+
+Le filet tricolore est décoratif, donc posé en `::before` et invisible aux lecteurs
+d'écran. Sous 34rem il bascule en bandeau horizontal : à la verticale il volerait de la
+largeur de lecture sur un téléphone.
 
 Sur mobile, la justification est **désactivée sous 34rem** : même avec la césure, une
-colonne de téléphone se remplit de trous. Le reste du style ne change pas.
+colonne de téléphone se remplit de trous.
 
 Le corps des articles est **justifié avec césure automatique** — la justification seule,
 sur une colonne étroite, creuse des rivières blanches. La césure s'appuie sur le `lang` de
@@ -119,7 +132,8 @@ la page, d'où sa présence sur `<html>`. Les titres ne sont jamais justifiés :
 répartissent avec `text-wrap: balance`.
 
 Thème clair et sombre gérés par jetons CSS, y compris quand le visiteur laisse son système
-décider.
+décider. Le bleu du filet a son propre jeton : en thème sombre l'encre devient crème, et
+le drapeau y aurait perdu son bleu.
 
 ## SEO et moteurs de réponse
 
