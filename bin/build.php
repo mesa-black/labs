@@ -154,7 +154,8 @@ foreach (LOCALES as $locale) {
             'html' => $html,
             // Reading time from the rendered text: the markdown still carries
             // syntax the reader never sees.
-            'minutes' => max(1, (int) round(str_word_count(strip_tags($html)) / 200)),
+            'words' => $words = str_word_count(strip_tags($html)),
+            'minutes' => max(1, (int) round($words / 200)),
         ];
     }
 
@@ -209,6 +210,15 @@ if (is_dir(OUT)) {
 }
 @mkdir(OUT, 0o755, true);
 
+/** Every page of every language, for one sitemap covering the whole site. */
+$pages = [];
+$homes = [];
+foreach (LOCALES as $locale) {
+    if ($byLocale[$locale] !== []) {
+        $homes[$locale] = $locale === DEFAULT_LOCALE ? '/' : "/$locale/";
+    }
+}
+
 foreach (LOCALES as $locale) {
     $posts = $byLocale[$locale];
     if ($posts === []) {
@@ -227,14 +237,40 @@ foreach (LOCALES as $locale) {
     ];
 
     echo "Building $locale (", \count($posts), " post(s))\n";
-    $write(ltrim($prefix.'/index.html', '/'), $twig->render('index.html.twig', $context + ['posts' => $posts]));
+    $write(ltrim($prefix.'/index.html', '/'), $twig->render('index.html.twig', $context + ['posts' => $posts, 'page_url' => $prefix.'/']));
+    $pages[] = ['url' => $prefix.'/', 'lastmod' => $posts[0]['date']->format('Y-m-d'), 'alternates' => $homes];
 
     foreach ($posts as $post) {
-        $write(ltrim($post['url'], '/').'index.html', $twig->render('post.html.twig', $context + ['post' => $post]));
+        $write(ltrim($post['url'], '/').'index.html', $twig->render('post.html.twig', $context + ['post' => $post, 'page_url' => $post['url']]));
+        $pages[] = ['url' => $post['url'], 'lastmod' => $post['date']->format('Y-m-d'), 'alternates' => $translations[$post['key']]];
     }
 
     $write(ltrim($prefix.'/feed.xml', '/'), $twig->render('feed.xml.twig', $context + ['posts' => \array_slice($posts, 0, 20)]));
 }
+
+// Crawlers: one sitemap for the whole site, and a robots.txt that says so.
+$write('sitemap.xml', $twig->render('sitemap.xml.twig', ['site' => $site, 'pages' => $pages]));
+$write('robots.txt', implode("\n", [
+    'User-agent: *',
+    'Allow: /',
+    '',
+    '# Answer engines are welcome: being quoted is the point of writing this.',
+    '# Flip these to Disallow to opt out.',
+    'User-agent: GPTBot',
+    'Allow: /',
+    'User-agent: ClaudeBot',
+    'Allow: /',
+    'User-agent: PerplexityBot',
+    'Allow: /',
+    '',
+    'Sitemap: '.$site['url'].'/sitemap.xml',
+    '',
+]));
+$write('404.html', $twig->render('404.html.twig', [
+    'site' => $site, 'locale' => DEFAULT_LOCALE, 'locales' => LOCALES,
+    't' => $strings[DEFAULT_LOCALE], 'home' => '/', 'feed_url' => '/feed.xml',
+    'translations' => $translations, 'page_url' => '/404.html',
+]));
 
 copy(ROOT.'/assets/style.css', OUT.'/style.css');
 echo '  ', str_pad('style.css', 48), number_format(filesize(OUT.'/style.css') / 1024, 1), " KB\n";

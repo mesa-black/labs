@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable — {{ site.name }}{% endblock %}
+{% block description %}Cette page n'existe pas (ou plus).{% endblock %}
+
+{% block main %}
+    <main class="wrap">
+        <h1 class="tagline">Cette page n’existe pas, ou plus.</h1>
+        <p class="back"><a href="/">← Tous les articles</a> · <a href="/en/">English</a> · <a href="/es/">Español</a></p>
+    </main>
+{% endblock %}

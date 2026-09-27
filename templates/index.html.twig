@@ -1,8 +1,22 @@
 {% extends 'base.html.twig' %}
 
+{% block og_title %}{{ site.name }}{% endblock %}
+
+{% block schema %}
+    <script type="application/ld+json">{{ {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        'name': site.name,
+        'description': t.tagline,
+        'url': site.url ~ page_url,
+        'inLanguage': locale,
+        'publisher': { '@type': 'Organization', 'name': 'BlackMesa', 'url': 'https://showmetherex.com' }
+    }|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}</script>
+{% endblock %}
+
 {% block main %}
     <main class="wrap">
-        <p class="tagline">{{ t.tagline }}</p>
+        <h1 class="tagline">{{ t.tagline }}</h1>
 
         <ol class="posts">
             {% for post in posts %}

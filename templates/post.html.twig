@@ -5,12 +5,35 @@
 {% block title %}{{ post.title }} — {{ site.name }}{% endblock %}
 {% block description %}{{ post.standfirst ?: t.tagline }}{% endblock %}
 
-{% block canonical %}{% if post.canonical %}<link rel="canonical" href="{{ post.canonical }}">{% endif %}{% endblock %}
+{# Un pointeur désigne le REX comme source ; un article complet fait autorité ici. #}
+{% block canonical %}<link rel="canonical" href="{{ post.canonical ?: site.url ~ post.url }}">{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.standfirst ?: t.tagline }}{% endblock %}
+
+{% block schema %}
+    <script type="application/ld+json">{{ {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        'headline': post.title,
+        'description': post.standfirst,
+        'datePublished': post.date|date('c'),
+        'inLanguage': locale,
+        'url': site.url ~ post.url,
+        'mainEntityOfPage': post.canonical ?: site.url ~ post.url,
+        'author': { '@type': 'Organization', 'name': 'BlackMesa' },
+        'publisher': { '@type': 'Organization', 'name': 'BlackMesa' },
+        'wordCount': post.words,
+        'isAccessibleForFree': true
+    }|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE'))|raw }}</script>
+{% endblock %}
 
 {% block alternates %}
     {% for loc, url in siblings %}
     <link rel="alternate" hreflang="{{ loc }}" href="{{ site.url }}{{ url }}">
     {% endfor %}
+    {% if siblings['fr'] is defined %}<link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ siblings['fr'] }}">{% endif %}
 {% endblock %}
 
 {# On an article, the switcher jumps to the same piece rather than the home page. #}

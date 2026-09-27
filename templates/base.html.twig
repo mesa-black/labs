@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ site.name }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{{ t.tagline }}{% endblock %}">
-    {% block canonical %}{% endblock %}
+    {% block canonical %}<link rel="canonical" href="{{ site.url }}{{ page_url }}">{% endblock %}
     {% block alternates %}{% endblock %}
+
+    {# Partage : sans ça, un lien collé sur LinkedIn sort nu. #}
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="{{ site.name }}">
+    <meta property="og:locale" content="{{ locale }}">
+    <meta property="og:url" content="{{ site.url }}{{ page_url }}">
+    <meta property="og:title" content="{% block og_title %}{{ site.name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ t.tagline }}{% endblock %}">
+    <meta name="twitter:card" content="summary">
+
+    {% block schema %}{% endblock %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}{{ feed_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

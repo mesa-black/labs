@@ -121,6 +121,30 @@ répartissent avec `text-wrap: balance`.
 Thème clair et sombre gérés par jetons CSS, y compris quand le visiteur laisse son système
 décider.
 
+## SEO et moteurs de réponse
+
+Généré à chaque construction, sans rien à maintenir :
+
+- **`sitemap.xml`** couvrant les trois langues, chaque URL portant ses alternates ;
+- **`robots.txt`** qui déclare le sitemap et **autorise explicitement les crawlers des
+  moteurs de réponse** (GPTBot, ClaudeBot, PerplexityBot). C'est un choix : être cité est
+  la raison d'écrire ici. Passer les lignes en `Disallow` suffit à changer d'avis ;
+- **`canonical`** sur chaque page — vers le REX pour un pointeur, auto-référencée sinon ;
+- **`hreflang`** réciproques plus `x-default` vers le français ;
+- **Open Graph** et Twitter Card, pour qu'un lien collé sur LinkedIn ne sorte pas nu ;
+- **JSON-LD** `BlogPosting` sur les articles (titre, chapeau, date, langue, auteur, nombre
+  de mots) et `Blog` sur les accueils. C'est ce qui permet à un moteur de réponse de citer
+  correctement : qui a écrit, quand, pour quelle organisation ;
+- une **page 404** dans le style du site.
+
+Ce qui aide autant sans être une balise : un chapeau qui résume l'article dès le haut de
+page, des sous-titres explicites, des paragraphes courts. Un texte extractible se cite
+mieux qu'un texte fluide.
+
+**Le manque restant : aucune image de partage.** Sans `og:image`, LinkedIn affichera une
+vignette vide. Il faut soit un visuel unique pour tout le site, soit une carte générée par
+article — la seconde option vaut le coup le jour où la publication devient régulière.
+
 ## Déploiement
 
 Pas encore branché. La cible est le Caddy qui sert déjà `mesa.black` : `make build` en CI,
