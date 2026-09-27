@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <main class="wrap">
+        <p class="tagline">{{ site.tagline }}</p>
+
+        <ol class="posts">
+            {% for post in posts %}
+                <li class="post-item">
+                    <a class="post-link" href="/{{ post.slug }}/">
+                        <p class="post-meta">
+                            <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|date_fr }}</time>
+                            <span aria-hidden="true">·</span>
+                            <span>{{ post.minutes }} min</span>
+                            {% if post.draft %}<span class="draft">brouillon</span>{% endif %}
+                        </p>
+                        <h2 class="post-title">{{ post.title }}</h2>
+                        {% if post.standfirst %}<p class="post-standfirst">{{ post.standfirst }}</p>{% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+    </main>
+{% endblock %}

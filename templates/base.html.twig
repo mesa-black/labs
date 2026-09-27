@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="{{ site.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ site.name }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ site.tagline }}{% endblock %}">
+    <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header class="masthead">
+        <div class="wrap masthead-in">
+            <a class="wordmark" href="/">{{ site.name }}</a>
+            <a class="feed" href="/feed.xml">Flux</a>
+        </div>
+    </header>
+
+    {% block main %}{% endblock %}
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <p>{{ site.tagline }}</p>
+            <p>BlackMesa — conseil et ingénierie logicielle.</p>
+        </div>
+    </footer>
+</body>
+</html>

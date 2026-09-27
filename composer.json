@@ -1,0 +1,20 @@
+{
+    "name": "blackmesa/labs",
+    "description": "Static site generator for the BlackMesa Labs blog: markdown in, HTML out, no runtime in production.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.3",
+        "league/commonmark": "^2.5",
+        "symfony/yaml": "^7.1",
+        "twig/twig": "^3.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "BlackMesa\\Labs\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
