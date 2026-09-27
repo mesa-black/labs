@@ -96,6 +96,11 @@ Trois familles, trois rôles : **Archivo** pour les titres, **Newsreader** pour 
 La couleur porte du sens plutôt que de décorer : le sarcelle est l'accent, l'ambre est
 réservé à ce qui a mal tourné (un brouillon, un avertissement).
 
+Le corps des articles est **justifié avec césure automatique** — la justification seule,
+sur une colonne étroite, creuse des rivières blanches. La césure s'appuie sur le `lang` de
+la page, d'où sa présence sur `<html>`. Les titres ne sont jamais justifiés : ils se
+répartissent avec `text-wrap: balance`.
+
 Thème clair et sombre gérés par jetons CSS, y compris quand le visiteur laisse son système
 décider.
 

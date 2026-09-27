@@ -194,6 +194,18 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 
 .prose > :first-child { margin-top: 0; }
 .prose > :last-child { margin-bottom: 0; }
+
+/* Texte justifié, avec césure : sans elle, une colonne étroite se remplit de
+   rivières blanches. Le `lang` de la page permet au navigateur de couper au bon
+   endroit — c'est pour ça qu'il est posé sur <html>. Les titres, eux, ne sont
+   jamais justifiés : ils se répartissent avec `text-wrap: balance`. */
+.prose p,
+.prose li {
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
 .prose p { margin: 0 0 1.15rem; }
 
 .prose h2 {
