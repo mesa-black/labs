@@ -1,6 +1,7 @@
 ---
 title: "Construire un SaaS complet, prêt pour la production, avec un agent de code"
 standfirst: "Déploiement sans interruption, paiements réels, authentification sans mot de passe — en binôme avec une IA."
+key: saas-complet-avec-un-agent-de-code
 date: 2026-09-26
 slug: saas-complet-avec-un-agent-de-code
 pointer: true

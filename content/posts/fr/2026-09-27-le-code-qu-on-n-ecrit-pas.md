@@ -1,6 +1,7 @@
 ---
 title: "La fonctionnalité la moins chère est celle qu'on ne construit pas"
 standfirst: "Trois signaux qui disent « n'écris pas ce code », et ce qu'ils nous ont fait économiser en une seule journée."
+key: le-code-qu-on-n-ecrit-pas
 date: 2026-09-27
 slug: le-code-qu-on-n-ecrit-pas
 draft: true

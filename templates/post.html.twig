@@ -1,19 +1,39 @@
 {% extends 'base.html.twig' %}
 
+{% set siblings = translations[post.key]|default({}) %}
+
 {% block title %}{{ post.title }} — {{ site.name }}{% endblock %}
-{% block description %}{{ post.standfirst ?: site.tagline }}{% endblock %}
-{% block canonical %}{% if post.canonical %}
-    <link rel="canonical" href="{{ post.canonical }}">{% endif %}{% endblock %}
+{% block description %}{{ post.standfirst ?: t.tagline }}{% endblock %}
+
+{% block canonical %}{% if post.canonical %}<link rel="canonical" href="{{ post.canonical }}">{% endif %}{% endblock %}
+
+{% block alternates %}
+    {% for loc, url in siblings %}
+    <link rel="alternate" hreflang="{{ loc }}" href="{{ site.url }}{{ url }}">
+    {% endfor %}
+{% endblock %}
+
+{# On an article, the switcher jumps to the same piece rather than the home page. #}
+{% block langswitch %}
+    {% for loc in locales %}
+        {% if siblings[loc] is defined %}
+            <a class="lang{{ loc == locale ? ' is-current' : '' }}" hreflang="{{ loc }}"
+               href="{{ siblings[loc] }}" {{ loc == locale ? 'aria-current="true"' : '' }}>{{ loc|upper }}</a>
+        {% else %}
+            <span class="lang is-missing" title="{{ loc|upper }}">{{ loc|upper }}</span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
 
 {% block main %}
     <main class="wrap">
         <article>
             <header class="post-header">
                 <p class="post-meta">
-                    <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|date_fr }}</time>
+                    <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|long_date(locale) }}</time>
                     <span aria-hidden="true">·</span>
-                    <span>{{ post.minutes }} min de lecture</span>
-                    {% if post.draft %}<span class="draft">brouillon</span>{% endif %}
+                    <span>{{ post.minutes }} {{ t.reading }}</span>
+                    {% if post.draft %}<span class="draft">{{ t.draft }}</span>{% endif %}
                 </p>
                 <h1>{{ post.title }}</h1>
                 {% if post.standfirst %}<p class="standfirst">{{ post.standfirst }}</p>{% endif %}
@@ -23,16 +43,15 @@
 
             {% if post.rex %}
                 <aside class="crossover">
-                    <p class="crossover-label">{{ post.pointer ? 'Publié sur Show me the REX' : 'Aussi publié comme REX' }}</p>
+                    <p class="crossover-label">{{ post.pointer ? t.crossover_pointer : t.crossover_also }}</p>
                     <a class="crossover-link" href="{{ post.rex }}">
-                        {{ post.pointer ? 'Lire le retour d’expérience complet' : 'Voir la fiche REX' }}
-                        <span aria-hidden="true">→</span>
+                        {{ post.pointer ? t.crossover_read : t.crossover_see }} <span aria-hidden="true">→</span>
                     </a>
-                    <p class="crossover-note">Show me the REX est la plateforme de retours d’expérience Tech, data et IA que nous éditons.</p>
+                    <p class="crossover-note">{{ t.crossover_note }}</p>
                 </aside>
             {% endif %}
         </article>
 
-        <p class="back"><a href="/">← Tous les articles</a></p>
+        <p class="back"><a href="{{ home }}">← {{ t.back }}</a></p>
     </main>
 {% endblock %}

@@ -1,6 +1,7 @@
 ---
 title: "Garantir des retours d'expérience légitimes sans équipe de modération"
 standfirst: "Miser sur l'identité vérifiée plutôt que sur la censure — et les deux bugs qui nous ont fait douter."
+key: legitimite-sans-moderation
 date: 2026-09-25
 slug: legitimite-sans-moderation
 pointer: true

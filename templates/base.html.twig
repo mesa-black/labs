@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ site.locale }}">
+<html lang="{{ locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ site.name }}{% endblock %}</title>
-    <meta name="description" content="{% block description %}{{ site.tagline }}{% endblock %}">
-{% block canonical %}{% endblock %}
-    <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
+    <meta name="description" content="{% block description %}{{ t.tagline }}{% endblock %}">
+    {% block canonical %}{% endblock %}
+    {% block alternates %}{% endblock %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}{{ feed_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -15,8 +16,17 @@
 <body>
     <header class="masthead">
         <div class="wrap masthead-in">
-            <a class="wordmark" href="/">{{ site.name }}</a>
-            <a class="feed" href="/feed.xml">Flux</a>
+            <a class="wordmark" href="{{ home }}">{{ site.name }}</a>
+            <nav class="masthead-nav" aria-label="{{ t.language }}">
+                {% block langswitch %}
+                    {% for loc in locales %}
+                        <a class="lang{{ loc == locale ? ' is-current' : '' }}" hreflang="{{ loc }}"
+                           href="{{ loc == 'fr' ? '/' : '/' ~ loc ~ '/' }}"
+                           {{ loc == locale ? 'aria-current="true"' : '' }}>{{ loc|upper }}</a>
+                    {% endfor %}
+                {% endblock %}
+                <a class="feed" href="{{ feed_url }}">{{ t.feed }}</a>
+            </nav>
         </div>
     </header>
 
@@ -24,10 +34,9 @@
 
     <footer class="site-footer">
         <div class="wrap">
-            <p>{{ site.tagline }}</p>
-            <p>BlackMesa — conseil et ingénierie logicielle.</p>
-            <p>Nos retours d'expérience clients sont publiés sur
-               <a href="https://showmetherex.com">Show me the REX</a>.</p>
+            <p>{{ t.tagline }}</p>
+            <p>{{ t.footer_agency }}</p>
+            <p>{{ t.footer_smtr }} <a href="https://showmetherex.com">Show me the REX</a>.</p>
         </div>
     </footer>
 </body>

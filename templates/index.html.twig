@@ -2,18 +2,18 @@
 
 {% block main %}
     <main class="wrap">
-        <p class="tagline">{{ site.tagline }}</p>
+        <p class="tagline">{{ t.tagline }}</p>
 
         <ol class="posts">
             {% for post in posts %}
                 <li class="post-item">
-                    <a class="post-link" href="/{{ post.slug }}/">
+                    <a class="post-link" href="{{ post.url }}">
                         <p class="post-meta">
-                            <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|date_fr }}</time>
+                            <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|long_date(locale) }}</time>
                             <span aria-hidden="true">·</span>
-                            <span>{{ post.minutes }} min</span>
-                            {% if post.draft %}<span class="draft">brouillon</span>{% endif %}
-                            {% if post.pointer %}<span class="elsewhere">sur Show me the REX</span>{% endif %}
+                            <span>{{ post.minutes }} {{ t.minutes }}</span>
+                            {% if post.draft %}<span class="draft">{{ t.draft }}</span>{% endif %}
+                            {% if post.pointer %}<span class="elsewhere">{{ t.elsewhere }}</span>{% endif %}
                         </p>
                         <h2 class="post-title">{{ post.title }}</h2>
                         {% if post.standfirst %}<p class="post-standfirst">{{ post.standfirst }}</p>{% endif %}

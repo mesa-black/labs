@@ -1,6 +1,7 @@
 ---
 title: "Monter l'OS sous Docker : ce qui reste couplé, et ce que rien ne valide"
 standfirst: "L'application vit dans une image, donc la distribution ne peut rien lui faire. Restent quatre points de couplage — et l'un d'eux se trouve dans un angle mort qu'aucune chaîne d'intégration ne couvre."
+key: monter-l-os-sous-docker
 date: 2026-09-27
 slug: monter-l-os-sous-docker
 draft: true

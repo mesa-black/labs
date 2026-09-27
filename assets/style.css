@@ -78,9 +78,32 @@ a { color: inherit; }
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
+    gap: .75rem 1rem;
+    flex-wrap: wrap;          /* le bandeau se replie plutôt que de déborder */
     padding-block: 1.1rem;
 }
+
+.masthead-nav {
+    display: flex;
+    align-items: baseline;
+    gap: .55rem;
+}
+
+.lang {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-decoration: none;
+}
+.lang:hover { color: var(--ink); }
+.lang.is-current { color: var(--ink); font-weight: 500; }
+
+/* Une langue dans laquelle l'article n'existe pas : affichée, mais inerte —
+   plus honnête que de la masquer ou de renvoyer vers une page absente. */
+.lang.is-missing { opacity: .35; cursor: default; }
+
+.masthead-nav .feed { padding-left: .55rem; border-left: 1px solid var(--rule); }
 
 .wordmark {
     font-family: var(--display);
@@ -327,6 +350,26 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     border-radius: 2px;
     padding: .05rem .35rem;
     letter-spacing: .08em;
+}
+
+/* Les tableaux sont le seul bloc qui peut dépasser un écran de téléphone :
+   chacun défile dans son propre conteneur, la page ne glisse jamais de côté. */
+.scroll { overflow-x: auto; margin: 0 0 1.4rem; }
+.scroll table { margin: 0; }
+
+/* ---------------------------------------------------------------- mobile */
+
+@media (max-width: 34rem) {
+    body { font-size: 1rem; }
+
+    /* Sur une colonne étroite, la justification creuse des trous même avec la
+       césure : on repasse en fer à gauche là où elle dessert la lecture. */
+    .prose p,
+    .prose li { text-align: left; }
+
+    .tagline { margin-bottom: 2rem; }
+    .post-link { padding-block: 1.35rem; }
+    .crossover { padding: 1.15rem 1.2rem; }
 }
 
 /* ---------------------------------------------------------------- footer */

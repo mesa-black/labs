@@ -11,10 +11,11 @@ pas tomber pour une raison applicative, et il n'a pas de surface d'attaque propr
 à payer est qu'on écrit dans un éditeur de texte plutôt que dans un navigateur — ce qu'on
 faisait déjà.
 
-**Le seuil de bascule est écrit** : le jour où il faut de la pagination, des tags, du
-multilingue et une recherche, on arrête d'étendre `bin/build.php` et on passe à un
-générateur du marché (Hugo). Tant qu'on publie une liste et des articles, ~150 lignes de
-PHP coûtent moins cher qu'une dépendance de plus.
+**Le seuil de bascule est écrit, et il a déjà bougé une fois.** Il disait : pagination,
+tags, multilingue et recherche → on passe à Hugo. Le multilingue est arrivé et a coûté
+~80 lignes, soit moins que la migration qu'il aurait déclenchée. On l'a donc fait ici, et
+le seuil se resserre : **pagination, tags ou recherche → on arrête et on bascule.** Écrit
+pour que la prochaine fois la question se tranche en une minute au lieu d'être rediscutée.
 
 ## Démarrer
 
@@ -35,12 +36,13 @@ déployer un site vide sans s'en apercevoir.
 
 ## Écrire un article
 
-Un fichier dans `content/posts/`, nommé `AAAA-MM-JJ-slug.md` :
+Un fichier dans `content/posts/<langue>/`, nommé `AAAA-MM-JJ-slug.md` :
 
 ```markdown
 ---
 title: "Le titre, tel qu'il s'affichera"
 standfirst: "Une phrase de chapeau. Optionnelle mais recommandée."
+key: mon-article           # lie les traductions entre elles
 date: 2026-09-27
 slug: mon-article          # optionnel : sinon déduit du nom de fichier
 draft: true                # retirer pour publier
@@ -70,8 +72,20 @@ moteurs en ignorent un**. Un pointeur émet donc une balise `canonical` vers SMT
 la source. Les nouveaux sujets d'ingénierie, eux, sont canoniques ici et ne partent pas sur
 SMTR — c'est toute la raison d'être de ce blog.
 
-`title` et `date` sont obligatoires — la construction s'arrête avec le nom du fichier
-fautif plutôt que de publier un article sans titre.
+`title`, `date` et `key` sont obligatoires — la construction s'arrête avec le nom du
+fichier fautif plutôt que de publier un article incomplet.
+
+### Trois langues
+
+Français à la racine, anglais sous `/en/`, espagnol sous `/es/` — **le même schéma d'URL
+que showmetherex.com**, pour qu'un lecteur qui passe d'un site à l'autre ne soit pas perdu.
+
+Les traductions d'un même article se reconnaissent par leur `key` commune, et chacune a son
+propre `slug` : un titre anglais mérite une URL anglaise. Le sélecteur de langue saute
+alors vers la traduction du même article, pas vers l'accueil. Une langue dans laquelle
+l'article n'existe pas reste affichée mais inerte — plus honnête que de la masquer.
+
+Les balises `hreflang` sont générées à partir des traductions réellement présentes.
 
 Le temps de lecture est calculé sur le texte rendu, pas sur le markdown : la syntaxe que
 le lecteur ne voit jamais ne compte pas.
@@ -80,7 +94,7 @@ le lecteur ne voit jamais ne compte pas.
 
 ```
 bin/build.php     le générateur, en entier
-content/posts/    les articles, en markdown
+content/posts/    les articles, en markdown, un dossier par langue
 templates/        les gabarits Twig (base, liste, article, flux Atom)
 assets/style.css  une feuille de style, sans étape de compilation
 public/           la sortie — généré, jamais versionné
@@ -95,6 +109,9 @@ Trois familles, trois rôles : **Archivo** pour les titres, **Newsreader** pour 
 **IBM Plex Mono** pour tout ce qui vient d'une machine — horodatages, versions, commandes.
 La couleur porte du sens plutôt que de décorer : le sarcelle est l'accent, l'ambre est
 réservé à ce qui a mal tourné (un brouillon, un avertissement).
+
+Sur mobile, la justification est **désactivée sous 34rem** : même avec la césure, une
+colonne de téléphone se remplit de trous. Le reste du style ne change pas.
 
 Le corps des articles est **justifié avec césure automatique** — la justification seule,
 sur une colonne étroite, creuse des rivières blanches. La césure s'appuie sur le `lang` de
