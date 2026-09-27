@@ -105,35 +105,24 @@ survivre à la génération suivante.
 
 ## Le design
 
-**Registre institutionnel français** : bleu marine sur crème, le filet tricolore courant le
-long de la marge, des yeux en capitales espacées, et **une seule famille jouée sur les
-graisses** plutôt qu'une police de titre et une police de texte.
+**Une seule famille jouée sur les graisses** plutôt qu'une police de titre et une police de
+texte : la hiérarchie vient du poids et du serrage. **Archivo** sert aux titres comme au
+corps. **IBM Plex Mono** est strictement réservé à ce qui vient d'une machine — commandes,
+versions, extraits de code — pour que le lecteur apprenne qu'un texte en chasse fixe n'a
+pas été écrit pour lui.
 
-La police de l'État, *Marianne*, n'est pas librement licenciable hors communication
-publique. **Archivo** en est le plus proche parent libre — même néo-grotesque, mêmes
-terminaisons droites — et sert donc aux titres comme au texte. **IBM Plex Mono** est
-strictement réservé à ce qui vient d'une machine : commandes, versions, extraits de code.
-Le lecteur apprend ainsi qu'un texte en chasse fixe n'a pas été écrit pour lui.
-
-**Le rouge est un budget, pas une couleur.** Il n'apparaît qu'à cinq endroits : le filet
-tricolore, le badge « brouillon », le survol des liens. Tout le reste est marine. Une
-couleur qui signale partout ne signale plus rien.
-
-Le filet tricolore est décoratif, donc posé en `::before` et invisible aux lecteurs
-d'écran. Sous 34rem il bascule en bandeau horizontal : à la verticale il volerait de la
-largeur de lecture sur un téléphone.
-
-Sur mobile, la justification est **désactivée sous 34rem** : même avec la césure, une
-colonne de téléphone se remplit de trous.
+Fond **crème**, encre presque noire. **Le sarcelle est l'accent** (liens, intertitres,
+surlignage des passages importants), **l'ambre signale ce qui ne va pas** ou n'est pas
+fini : un brouillon, un avertissement. Aucune couleur n'est décorative.
 
 Le corps des articles est **justifié avec césure automatique** — la justification seule,
 sur une colonne étroite, creuse des rivières blanches. La césure s'appuie sur le `lang` de
 la page, d'où sa présence sur `<html>`. Les titres ne sont jamais justifiés : ils se
-répartissent avec `text-wrap: balance`.
+répartissent avec `text-wrap: balance`. Sous 34rem la justification est désactivée : même
+avec la césure, une colonne de téléphone se remplit de trous.
 
 Thème clair et sombre gérés par jetons CSS, y compris quand le visiteur laisse son système
-décider. Le bleu du filet a son propre jeton : en thème sombre l'encre devient crème, et
-le drapeau y aurait perdu son bleu.
+décider. Le sombre est chaud lui aussi, pour rester cohérent avec le crème.
 
 ## SEO et moteurs de réponse
 
