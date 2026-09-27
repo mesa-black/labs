@@ -16,6 +16,7 @@
     --ink:     #14181a;
     --muted:   #6b6558;
     --accent:  #0d6b63;
+    --blue:    #1c3f8c;   /* survol des titres, uniquement */
     --warn:    #9c5510;
     --rule:    #e2ddd1;
     --chip:    #efe9dd;
@@ -34,6 +35,7 @@
         --ink:     #ece7dc;
         --muted:   #9d9687;
         --accent:  #56b9ac;
+        --blue:    #8aa8f2;
         --warn:    #dd9750;
         --rule:    #2e2a22;
         --chip:    #241f18;
@@ -46,6 +48,7 @@
     --ink:     #ece7dc;
     --muted:   #9d9687;
     --accent:  #56b9ac;
+    --blue:    #8aa8f2;
     --warn:    #dd9750;
     --rule:    #2e2a22;
     --chip:    #241f18;
@@ -160,7 +163,10 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     padding-block: 1.7rem;
     text-decoration: none;
 }
-.post-link:hover .post-title { color: var(--accent); }
+/* Le survol d'un titre est la seule chose qui passe au bleu : il ne concurrence
+   donc pas le sarcelle, qui reste la couleur des liens de texte. */
+.post-link:hover .post-title,
+.post-link:focus-visible .post-title { color: var(--blue); }
 
 .post-meta {
     display: flex;
