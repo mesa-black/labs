@@ -2,6 +2,8 @@
 
 {% block title %}{{ post.title }} — {{ site.name }}{% endblock %}
 {% block description %}{{ post.standfirst ?: site.tagline }}{% endblock %}
+{% block canonical %}{% if post.canonical %}
+    <link rel="canonical" href="{{ post.canonical }}">{% endif %}{% endblock %}
 
 {% block main %}
     <main class="wrap">
@@ -18,6 +20,17 @@
             </header>
 
             <div class="prose">{{ post.html|raw }}</div>
+
+            {% if post.rex %}
+                <aside class="crossover">
+                    <p class="crossover-label">{{ post.pointer ? 'Publié sur Show me the REX' : 'Aussi publié comme REX' }}</p>
+                    <a class="crossover-link" href="{{ post.rex }}">
+                        {{ post.pointer ? 'Lire le retour d’expérience complet' : 'Voir la fiche REX' }}
+                        <span aria-hidden="true">→</span>
+                    </a>
+                    <p class="crossover-note">Show me the REX est la plateforme de retours d’expérience Tech, data et IA que nous éditons.</p>
+                </aside>
+            {% endif %}
         </article>
 
         <p class="back"><a href="/">← Tous les articles</a></p>

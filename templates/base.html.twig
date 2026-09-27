@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ site.name }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{{ site.tagline }}{% endblock %}">
+{% block canonical %}{% endblock %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +26,8 @@
         <div class="wrap">
             <p>{{ site.tagline }}</p>
             <p>BlackMesa — conseil et ingénierie logicielle.</p>
+            <p>Nos retours d'expérience clients sont publiés sur
+               <a href="https://showmetherex.com">Show me the REX</a>.</p>
         </div>
     </footer>
 </body>

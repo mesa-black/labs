@@ -49,6 +49,27 @@ draft: true                # retirer pour publier
 Le corps en markdown. Les `##` deviennent les intertitres.
 ```
 
+### Deux natures d'article
+
+Un **article complet** vit ici et fait autorité ici.
+
+Un **pointeur** présente en quelques paragraphes un REX publié sur
+[Show me the REX](https://showmetherex.com) et y renvoie, sans recopier le texte :
+
+```markdown
+---
+title: "…"
+date: 2026-09-25
+pointer: true
+rex: https://showmetherex.com/feedback/le-slug
+---
+```
+
+C'est volontaire et ce n'est pas cosmétique : **le même texte publié sur deux domaines, les
+moteurs en ignorent un**. Un pointeur émet donc une balise `canonical` vers SMTR, qui reste
+la source. Les nouveaux sujets d'ingénierie, eux, sont canoniques ici et ne partent pas sur
+SMTR — c'est toute la raison d'être de ce blog.
+
 `title` et `date` sont obligatoires — la construction s'arrête avec le nom du fichier
 fautif plutôt que de publier un article sans titre.
 

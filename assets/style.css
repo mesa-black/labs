@@ -272,6 +272,51 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .back a { color: var(--muted); text-decoration: none; }
 .back a:hover { color: var(--accent); }
 
+/* ------------------------------------------------------------- crossover */
+
+/* Un article « pointeur » ne recopie pas le REX : il le présente et y renvoie.
+   Le texte intégral reste sur showmetherex.com, qui garde la balise canonique. */
+.crossover {
+    margin-top: 2.8rem;
+    padding: 1.4rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+}
+
+.crossover-label {
+    margin: 0 0 .5rem;
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.crossover-link {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.08rem;
+    color: var(--accent);
+    text-decoration: none;
+}
+.crossover-link:hover { text-decoration: underline; text-underline-offset: .2em; }
+
+.crossover-note {
+    margin: .6rem 0 0;
+    font-size: .92rem;
+    color: var(--muted);
+}
+
+.elsewhere {
+    color: var(--accent);
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    padding: .05rem .35rem;
+    letter-spacing: .08em;
+}
+
 /* ---------------------------------------------------------------- footer */
 
 .site-footer {
@@ -283,6 +328,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     color: var(--muted);
 }
 .site-footer p { margin: 0 0 .3rem; }
+.site-footer a { color: var(--accent); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }

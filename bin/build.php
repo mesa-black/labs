@@ -69,6 +69,19 @@ foreach (glob(ROOT.'/content/posts/*.md') ?: [] as $file) {
     }
 
     $html = (string) $rendered;
+
+    // Two kinds of post. A full article lives here and is canonical here. A
+    // "pointer" carries only its context and sends the reader to the REX on
+    // showmetherex.com, which stays canonical: the same text on two domains is
+    // one of them ignored by search engines, so we never duplicate it.
+    $rexUrl = (string) ($meta['rex'] ?? '');
+    $pointer = (bool) ($meta['pointer'] ?? false);
+
+    if ($pointer && $rexUrl === '') {
+        fwrite(\STDERR, sprintf("✗ %s: a pointer post needs a \"rex\" URL\n", basename($file)));
+        exit(1);
+    }
+
     $posts[] = [
         'slug' => $meta['slug'] ?? preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', basename($file, '.md')),
         'title' => (string) $meta['title'],
@@ -79,6 +92,10 @@ foreach (glob(ROOT.'/content/posts/*.md') ?: [] as $file) {
             ? (new DateTimeImmutable())->setTimestamp($meta['date'])
             : new DateTimeImmutable((string) $meta['date']),
         'draft' => $draft,
+        'rex' => $rexUrl,
+        'pointer' => $pointer,
+        // A pointer is canonical on showmetherex.com; a full article is canonical here.
+        'canonical' => $pointer ? $rexUrl : '',
         'html' => $html,
         // Reading time from the rendered text: the only honest source, since the
         // markdown still carries syntax the reader never sees.
