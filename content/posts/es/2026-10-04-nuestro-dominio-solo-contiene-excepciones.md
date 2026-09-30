@@ -1,6 +1,6 @@
 ---
 title: "Nuestra capa de dominio solo contiene excepciones. A propósito."
-standfirst: "Nueve contextos, veintinueve comandos, un único manejador de consultas, cero puertos. Qué conservamos de DDD y de la arquitectura hexagonal, qué rechazamos, y los cinco puntos por donde la infraestructura cruza igualmente la frontera."
+standfirst: "Nueve contextos, veintinueve comandos, un único manejador de consultas, cero puertos. Qué conservamos de DDD y de la arquitectura hexagonal, qué rechazamos, y los cinco puntos por donde la infraestructura cruza igualmente la frontera. Esto no es DDD purista, es time to market."
 key: domaine-sans-ports
 date: 2026-10-04
 slug: nuestro-dominio-solo-contiene-excepciones
@@ -124,6 +124,20 @@ Nada, mientras nadie lo toque. La política está escrita: **CQRS para las escri
 
 Porque la homogeneidad no es un resultado de negocio. Reescribir un servicio que funciona para que se parezca a sus vecinos produce riesgo sin producir valor, y es exactamente el tipo de trabajo que se justifica solo, indefinidamente, porque su criterio de parada es estético.
 
+## Esto no es DDD purista, es time to market
+
+Hay que nombrar la razón de verdad, porque todo lo anterior se lee de otra manera una vez puesta sobre la mesa.
+
+Ya hemos escrito aquí que [la funcionalidad más barata es la que no se construye](/es/el-codigo-que-no-escribimos/). Un puerto es una funcionalidad. Un agregado también, un objeto de valor también, una capa anticorrupción también. Cada uno cuesta escribirlo, cuesta leerlo a quien llegue después, y cuesta mantenerlo mientras el código siga vivo. Una abstracción no es gratis por ser inmaterial.
+
+La pregunta útil no es, por tanto, «¿esto es DDD correcto?». Es: ¿qué compra esta abstracción hoy y qué se limita a aplazar? Un repositorio detrás de una interfaz compra la posibilidad de cambiar de almacenamiento — no vamos a dejar PostgreSQL. Compra también pruebas sin base de datos, y eso sí es un beneficio real: es el único argumento que quizá nos haga pagar la factura algún día.
+
+Lo que hicimos en su lugar cabe en una frase: entregar, y conservar solo las fronteras que se pagan solas. El bus de comandos cuesta tres archivos y sirve el mismo día. Los puertos cuestan una capa entera y quizá sirvan, más adelante, a un equipo que todavía no existe.
+
+El riesgo de esta postura es conocido, y escribirlo forma parte del precio: se parece muchísimo a la pereza. La diferencia está en un solo detalle — sabemos nombrar lo que no construimos, y por qué.
+
+Y lo asumimos. Estas decisiones son nuestras, no accidentes que descubriríamos al releer. Las corregimos cuando podemos y cuando tenemos tiempo: el día en que una molestia se vuelve real y medible, no el día en que un artículo de arquitectura nos explica que son incorrectas. Una deuda escrita, fechada y argumentada no es una deuda negada: es la única que uno es capaz de devolver en el momento adecuado.
+
 ## Lo que dio de sí
 
 - **Nueve contextos con nombre**, cuyo acoplamiento mutuo se lee en las importaciones y no en un diagrama caducado.
@@ -134,6 +148,7 @@ Porque la homogeneidad no es un resultado de negocio. Reescribir un servicio que
 
 ## Buenas prácticas
 
+- Tratar cada abstracción como una funcionalidad: tiene que decir qué compra hoy, no qué permitiría algún día.
 - Adoptar las piezas por separado. El bus de comandos aporta algo sin el resto; los puertos, los agregados y los objetos de valor son compras distintas, cada una con su factura.
 - Elegir el valor por defecto más estricto: el bus por defecto es el que muta el estado, y la ausencia de manejador hace fallar el arranque en lugar de la producción.
 - Usar los espacios de nombres como detector de acoplamiento y no como barrera: no protegen de nada, hacen visible.

@@ -1,6 +1,6 @@
 ---
 title: "Notre couche Domaine ne contient que des exceptions. C'est délibéré."
-standfirst: "Neuf contextes, vingt-neuf commandes, un seul gestionnaire de requête, aucun port. Ce qu'on a gardé de DDD et de l'architecture hexagonale, ce qu'on a refusé, et les cinq endroits où l'infrastructure traverse la frontière quand même."
+standfirst: "Neuf contextes, vingt-neuf commandes, un seul gestionnaire de requête, aucun port. Ce qu'on a gardé de DDD et de l'architecture hexagonale, ce qu'on a refusé, et les cinq endroits où l'infrastructure traverse la frontière quand même. Ce n'est pas du DDD puriste, c'est du time to market."
 key: domaine-sans-ports
 date: 2026-10-04
 slug: notre-domaine-ne-contient-que-des-exceptions
@@ -124,6 +124,20 @@ Rien, tant que personne ne le touche. La politique est écrite : **CQRS pour les
 
 Parce que l'homogénéité n'est pas un résultat métier. Réécrire un service qui fonctionne pour qu'il ressemble à ses voisins, c'est produire du risque sans produire de valeur — et c'est exactement le genre de travail qui se justifie tout seul, indéfiniment, parce que son critère d'arrêt est esthétique.
 
+## Ce n'est pas du DDD puriste, c'est du time to market
+
+Il faut nommer la vraie raison, parce que tout ce qui précède se lit autrement une fois qu'elle est posée.
+
+On a déjà écrit ici que [la fonctionnalité la moins chère est celle qu'on ne construit pas](/le-code-qu-on-n-ecrit-pas/). Un port est une fonctionnalité. Un agrégat aussi, un objet-valeur aussi, une couche anticorruption aussi. Chacun a un coût d'écriture, un coût de lecture pour celui qui arrivera après, et un coût d'entretien qui court aussi longtemps que le code vit. Une abstraction n'est pas gratuite parce qu'elle est immatérielle.
+
+La question utile n'est donc pas « est-ce du DDD correct ». C'est : qu'est-ce que cette abstraction achète aujourd'hui, et qu'est-ce qu'elle se contente de repousser ? Un dépôt derrière une interface achète la possibilité de changer de stockage — nous ne quitterons pas PostgreSQL. Il achète aussi des tests sans base de données, et ça, c'est un vrai bénéfice : c'est le seul argument qui nous fera peut-être payer la facture un jour.
+
+Ce qu'on a fait à la place tient en une phrase : livrer, et ne garder que les frontières qui se paient toutes seules. Le bus de commandes coûte trois fichiers et rend service le jour même. Les ports coûtent une couche entière et rendront peut-être service, plus tard, à une équipe qui n'existe pas encore.
+
+Le risque de cette position est connu, et l'écrire fait partie du prix : elle ressemble à s'y méprendre à de la paresse. La différence tient à un seul détail — on sait nommer ce qu'on n'a pas construit, et pourquoi.
+
+Et on assume. Ces choix sont les nôtres, pas des accidents qu'on découvrirait en relisant. On les corrige quand on peut et quand on a le temps : le jour où une gêne devient réelle et mesurable, pas le jour où un article d'architecture nous explique qu'ils sont incorrects. Une dette écrite, datée et argumentée n'est pas une dette niée — c'est la seule qu'on soit capable de rembourser au bon moment.
+
 ## Ce que ça a donné
 
 - **Neuf contextes nommés**, dont le couplage mutuel se lit dans les imports plutôt que dans un diagramme périmé.
@@ -134,6 +148,7 @@ Parce que l'homogénéité n'est pas un résultat métier. Réécrire un service
 
 ## Bonnes pratiques
 
+- Traiter chaque abstraction comme une fonctionnalité : elle doit dire ce qu'elle achète aujourd'hui, pas ce qu'elle permettrait un jour.
 - Adopter les morceaux séparément. Le bus de commandes apporte quelque chose sans le reste ; les ports, les agrégats et les objets-valeurs sont des achats distincts, avec chacun leur facture.
 - Choisir la valeur par défaut la plus contraignante : le bus par défaut est celui qui mute l'état, et l'absence de gestionnaire fait échouer le démarrage plutôt que la production.
 - Se servir des espaces de noms comme d'un révélateur de couplage plutôt que comme d'une barrière : ils ne protègent de rien, ils rendent visible.

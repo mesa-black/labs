@@ -1,6 +1,6 @@
 ---
 title: "Our domain layer contains nothing but exceptions. On purpose."
-standfirst: "Nine contexts, twenty-nine commands, a single query handler, zero ports. What we kept of DDD and hexagonal architecture, what we turned down, and the five places infrastructure crosses the boundary anyway."
+standfirst: "Nine contexts, twenty-nine commands, a single query handler, zero ports. What we kept of DDD and hexagonal architecture, what we turned down, and the five places infrastructure crosses the boundary anyway. This is not purist DDD, it is time to market."
 key: domaine-sans-ports
 date: 2026-10-04
 slug: our-domain-layer-is-only-exceptions
@@ -124,6 +124,20 @@ Nothing, as long as nobody touches it. The policy is written down: **CQRS for ne
 
 Because consistency is not a business outcome. Rewriting a service that works so it resembles its neighbours produces risk without producing value — and it is exactly the kind of work that justifies itself indefinitely, because its stopping criterion is aesthetic.
 
+## This is not purist DDD, it is time to market
+
+The real reason has to be named, because everything above reads differently once it is on the table.
+
+We have already written here that [the cheapest feature is the one you don't build](/en/the-code-we-dont-write/). A port is a feature. So is an aggregate, so is a value object, so is an anti-corruption layer. Each one costs writing, costs reading for whoever arrives next, and costs upkeep for as long as the code lives. An abstraction is not free because it is immaterial.
+
+So the useful question is not "is this correct DDD". It is: what does this abstraction buy today, and what is it merely postponing? A repository behind an interface buys the ability to change storage — we are not leaving PostgreSQL. It also buys tests without a database, and that one is a real benefit: it is the single argument that may yet make us pay the bill.
+
+What we did instead fits in one sentence: ship, and keep only the boundaries that pay for themselves. The command bus costs three files and helps the same day. Ports cost a whole layer and may help, later, a team that does not exist yet.
+
+The risk in that position is well known, and writing it down is part of the price: it is indistinguishable from laziness at a glance. The difference comes down to one detail — we can name what we did not build, and why.
+
+And we own it. These are our choices, not accidents we would discover on a re-read. We correct them when we can and when we have the time: the day a friction becomes real and measurable, not the day an architecture article explains that they are incorrect. A debt that is written down, dated and argued is not a denied debt — it is the only kind you are able to repay at the right moment.
+
 ## What it produced
 
 - **Nine named contexts**, whose mutual coupling is read in the imports rather than in an out-of-date diagram.
@@ -134,6 +148,7 @@ Because consistency is not a business outcome. Rewriting a service that works so
 
 ## Good practices
 
+- Treat every abstraction as a feature: it has to say what it buys today, not what it would allow one day.
 - Adopt the pieces separately. A command bus delivers something without the rest; ports, aggregates and value objects are distinct purchases, each with its own bill.
 - Pick the strictest default: the default bus is the one that mutates state, and a missing handler fails the boot rather than production.
 - Use namespaces as a coupling detector rather than a barrier: they protect nothing, they make things visible.
