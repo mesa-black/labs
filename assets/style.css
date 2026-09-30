@@ -1,10 +1,16 @@
 /*
  * BlackMesa Labs — one stylesheet, no build step.
  *
- * One neo-grotesque played on weight rather than a display/body pair, on a warm
- * cream ground. IBM Plex Mono is reserved for anything that came out of a
- * machine — commands, versions, code — so monospace itself tells the reader this
- * was not written for them.
+ * Two families with a job each. A serif carries what is written — titles,
+ * standfirsts — and a neo-grotesque carries everything the interface says about
+ * the text: dates, labels, navigation. The eye separates the two before reading
+ * a word. IBM Plex Mono is reserved for anything that came out of a machine —
+ * commands, versions, code — so monospace itself tells the reader this was not
+ * written for them.
+ *
+ * The serif is set at 400 because that is the only weight it has, and that
+ * turns out to be the point: a heading that does not shout sits better on a
+ * cream ground than a bold one.
  *
  * Colour carries meaning: teal is the accent, amber marks what went wrong or is
  * unfinished. Nothing is coloured for decoration.
@@ -21,6 +27,7 @@
     --rule:    #e2ddd1;
     --chip:    #efe9dd;
 
+    --serif:   "Instrument Serif", "Iowan Old Style", Georgia, serif;
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --body:    "Archivo", "Helvetica Neue", Arial, sans-serif;
     --mono:    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -137,8 +144,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
    mais il se lit comme un chapeau. D'où la graisse normale, explicite : sans elle,
    le navigateur applique le gras des titres. */
 .tagline {
-    font-family: var(--body);
-    font-size: clamp(1.05rem, 2.3vw, 1.28rem);
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 2.6vw, 1.5rem);
     font-weight: 400;
     line-height: 1.45;
     color: var(--muted);
@@ -191,11 +198,11 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 }
 
 .post-title {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: clamp(1.3rem, 3.2vw, 1.7rem);
-    line-height: 1.12;
-    letter-spacing: -.026em;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.6vw, 1.95rem);
+    line-height: 1.16;
+    letter-spacing: -.004em;
     margin: 0;
     text-wrap: balance;
     transition: color .15s;
@@ -212,18 +219,19 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .post-header { margin-bottom: 2.6rem; }
 
 .post-header h1 {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: clamp(1.9rem, 5.6vw, 3rem);
-    line-height: 1.02;
-    letter-spacing: -.032em;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 6.2vw, 3.5rem);
+    line-height: 1.06;
+    letter-spacing: -.006em;
     margin: .6rem 0 0;
     text-wrap: balance;
 }
 
 .standfirst {
-    font-size: clamp(1.1rem, 2.4vw, 1.3rem);
-    line-height: 1.5;
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2.7vw, 1.52rem);
+    line-height: 1.42;
     color: var(--muted);
     font-style: italic;
     margin: 1rem 0 0;
@@ -247,20 +255,20 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .prose p { margin: 0 0 1.15rem; }
 
 .prose h2 {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: 1.42rem;
-    line-height: 1.24;
-    letter-spacing: -.014em;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.68rem;
+    line-height: 1.22;
+    letter-spacing: 0;
     margin: 2.8rem 0 1rem;
     text-wrap: balance;
 }
 .prose h2::before { content: "—"; color: var(--accent); margin-right: .5rem; font-weight: 500; }
 
 .prose h3 {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: 1.15rem;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.32rem;
     margin: 2rem 0 .8rem;
 }
 
