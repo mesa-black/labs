@@ -93,9 +93,42 @@ $months = [
 ];
 
 $withDrafts = \in_array('--drafts', $argv, true);
+
+// --as-of=AAAA-MM-JJ construit le site tel qu'il sera ce jour-là. C'est ce qui
+// permet de préparer les parutions futures depuis le poste et de les vérifier
+// avant qu'elles ne sortent : le serveur ne construit rien, il bascule.
+$asOf = 'today';
+foreach ($argv as $arg) {
+    if (str_starts_with($arg, '--as-of=')) {
+        $asOf = substr($arg, 8);
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $asOf) !== 1) {
+            $fail("--as-of attend une date AAAA-MM-JJ, reçu \"$asOf\"");
+        }
+    }
+}
 // Figé une fois pour toutes : un build qui chevauche minuit ne doit pas publier
 // la moitié des traductions d'un article programmé.
-$now = new DateTimeImmutable('today 23:59:59');
+$now = new DateTimeImmutable($asOf.' 23:59:59');
+
+// --release-dates ne construit rien : il liste les dates de parution encore à
+// venir, une par ligne. Le déploiement s'en sert pour savoir combien de
+// versions datées il doit préparer.
+if (\in_array('--release-dates', $argv, true)) {
+    $dates = [];
+    foreach (glob(ROOT.'/content/posts/*/*.md') ?: [] as $file) {
+        $head = (string) file_get_contents($file, false, null, 0, 2048);
+        if (preg_match('/^draft:\s*true\s*$/m', $head) === 1) {
+            continue;
+        }
+        if (preg_match('/^date:\s*(\d{4}-\d{2}-\d{2})/m', $head, $m) === 1 && $m[1] > date('Y-m-d')) {
+            $dates[$m[1]] = true;
+        }
+    }
+    $dates = array_keys($dates);
+    sort($dates);
+    echo implode("\n", $dates), $dates === [] ? '' : "\n";
+    exit(0);
+}
 
 $fail = static function (string $message): void {
     fwrite(\STDERR, "✗ $message\n");

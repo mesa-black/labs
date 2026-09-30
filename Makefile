@@ -12,6 +12,7 @@ install: ## Install the dependencies
 # pas partager la même valeur par défaut. Tant qu'aucun domaine n'est choisi,
 # c'est l'IP du serveur ; le jour où il l'est, une seule ligne à changer.
 SITE_URL ?= http://164.132.255.21
+SITE_ROOT ?= /var/www/labs
 
 build: ## Build the site into public/ (published posts only)
 	@php bin/build.php
@@ -44,11 +45,16 @@ unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublis
 # `provision` décrit la machine, `deploy` y dépose le site. Un outil, un rôle.
 
 provision: ## Mettre le serveur dans l'état attendu (relançable)
-	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' bash -s" < deploy/provision.sh
+	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
+	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' SITE_ROOT='$(SITE_ROOT)' bash /tmp/labs-deploy/provision.sh"
 
-deploy: ## Construire (sans brouillons) et publier sur le serveur
-	@SITE_URL="$(SITE_URL)" php bin/build.php
-	@rsync -az --delete --checksum \
-		--exclude '.DS_Store' \
-		public/ mesa.black:/var/www/labs/
-	@echo "✓ publié — $$(find public -name '*.html' | wc -l | tr -d ' ') pages" 
+deploy: ## Publier : une version du site par date de parution, puis bascule
+	@ssh mesa.black "mkdir -p $(SITE_ROOT)/releases"
+	@for d in $$(php bin/build.php --release-dates) $$(date +%F); do \
+		SITE_URL="$(SITE_URL)" php bin/build.php --as-of=$$d >/dev/null; \
+		rsync -az --delete --checksum --exclude '.DS_Store' \
+			public/ mesa.black:$(SITE_ROOT)/releases/$$d/; \
+		printf '  version %s — %s pages\n' "$$d" \
+			"$$(find public -name '*.html' | wc -l | tr -d ' ')"; \
+	done
+	@ssh mesa.black /usr/local/bin/labs-release

@@ -109,6 +109,23 @@ prévient d'ailleurs si une langue manque.
 Il ne réécrit que la ligne `draft` : un aller-retour publier/dépublier rend le fichier
 octet pour octet identique.
 
+### Programmer une parution
+
+Le champ `date` du front matter **est** la date de parution. Un article daté du futur est
+écarté du build et sort tout seul le jour dit :
+
+```bash
+make drafts-list      # les brouillons, et à part, les articles programmés
+```
+
+Brouillon et article programmé sont deux états distincts, et les confondre mène à
+réécrire un texte déjà relu. Un brouillon n'est pas fini ; un article programmé l'est, il
+attend son tour.
+
+Tout publier le même jour est le meilleur moyen de faire fuir un lecteur : il en lit un,
+voit qu'il en reste six, et referme l'onglet. Étaler les parutions donne une raison de
+revenir.
+
 Le temps de lecture est calculé sur le texte rendu, pas sur le markdown : la syntaxe que
 le lecteur ne voit jamais ne compte pas.
 
@@ -177,7 +194,7 @@ Une machine Ubuntu, un Caddy, un dossier de fichiers. Rien d'autre.
 ```bash
 make provision                        # met le serveur dans l'état attendu
 SITE_DOMAIN=exemple.fr make provision # idem, avec certificat automatique
-make deploy                           # construit sans brouillons et publie
+make deploy                           # construit chaque version datée et publie
 ```
 
 `deploy/provision.sh` décrit l'état de la machine : paquets, correctifs de sécurité
@@ -188,6 +205,41 @@ par une vérification : il dit ce qu'il a obtenu, il ne le suppose pas.
 
 Le périmètre s'arrête là où commence la publication. `make deploy` fait le reste, par
 `rsync`.
+
+### Comment une parution programmée arrive en ligne
+
+Le serveur ne construit rien. Il n'a ni PHP, ni composer, ni dépôt : lui donner une chaîne
+de construction, c'est accepter qu'une parution échoue un samedi matin à cause d'une
+dépendance cassée.
+
+À la place, `make deploy` construit **une version complète du site par date de parution**
+— aujourd'hui, et une par article programmé — et les dépose toutes :
+
+```
+/var/www/labs/releases/2026-09-30/   la version du jour
+/var/www/labs/releases/2026-10-04/   celle qui sortira samedi
+/var/www/labs/current -> releases/2026-09-30
+```
+
+Caddy sert le lien `current`. Chaque matin à 7 h, `labs-release.timer` déclenche un script
+de quinze lignes qui fait pointer ce lien sur la version la plus récente dont la date est
+arrivée, puis purge les anciennes en en gardant trois. Le remplacement passe par un
+renommage : aucune requête ne peut tomber sur une racine inexistante.
+
+Trois conséquences qui valent le détour :
+
+- ce qui sortira samedi est **déjà construit et consultable** aujourd'hui, donc vérifiable
+  avant de partir ;
+- revenir en arrière, c'est refaire pointer un lien ;
+- le minuteur est `Persistent=true` : si la machine était éteinte à 7 h, la bascule se fait
+  au démarrage suivant plutôt que d'être sautée.
+
+On peut répéter une parution future sans attendre, et c'est la seule preuve qui compte :
+
+```bash
+ssh mesa.black 'LABS_TODAY=2026-10-04 /usr/local/bin/labs-release'   # avance
+ssh mesa.black '/usr/local/bin/labs-release'                         # revient au jour réel
+```
 
 **On a essayé Ansible d'abord, et on l'a jeté.** Pour une machine qui sert des fichiers
 statiques, il apportait l'idempotence et une dépendance Python, contre trente lignes de

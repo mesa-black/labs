@@ -1,0 +1,12 @@
+[Unit]
+Description=Bascule quotidienne du blog sur sa version du jour
+
+[Timer]
+# Le matin, heure de Paris. Persistent : si la machine était éteinte à l'heure
+# dite, la bascule se fait au démarrage suivant plutôt que d'être sautée — un
+# article programmé ne doit pas rater sa parution parce qu'un serveur a redémarré.
+OnCalendar=*-*-* 07:00:00 Europe/Paris
+Persistent=true
+
+[Install]
+WantedBy=timers.target

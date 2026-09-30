@@ -13,6 +13,8 @@
 # machine, `make deploy` y dépose les fichiers.
 set -euo pipefail
 
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
 SITE_ROOT=${SITE_ROOT:-/var/www/labs}
 SITE_DOMAIN=${SITE_DOMAIN:-}
 SITE_USER=${SITE_USER:-ubuntu}
@@ -61,16 +63,40 @@ apt-get install -y -qq caddy
 
 say "Racine du site : $SITE_ROOT"
 install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT"
-if [ ! -e "$SITE_ROOT/index.html" ]; then
-	cat > "$SITE_ROOT/index.html" <<'HTML'
+install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT/releases"
+
+say "Parution datée"
+# Le poste dépose une version complète du site par date de parution. Caddy sert
+# le lien `current`, qu'un minuteur fait avancer chaque matin. Conséquence
+# voulue : aucune chaîne de construction ici, donc aucune parution qui échoue
+# à cause d'une dépendance cassée sur le serveur.
+if [ ! -L "$SITE_ROOT/current" ]; then
+	seed="$SITE_ROOT/releases/$(date +%F)"
+	install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$seed"
+	if [ -f "$SITE_ROOT/index.html" ]; then
+		# Reprise de l'existant : ce qui était servi jusqu'ici devient la
+		# version du jour, sans interruption.
+		find "$SITE_ROOT" -mindepth 1 -maxdepth 1 \
+			! -name releases ! -name current -exec mv {} "$seed/" \;
+	else
+		cat > "$seed/index.html" <<'HTML'
 <!DOCTYPE html>
 <html lang="fr"><meta charset="utf-8"><title>BlackMesa Labs</title>
 <body style="font:16px system-ui;margin:4rem auto;max-width:32rem;padding:0 1rem">
 <p>Rien n’est encore publié ici.</p>
 </body></html>
 HTML
-	chown "$SITE_USER:$SITE_USER" "$SITE_ROOT/index.html"
+	fi
+	chown -R "$SITE_USER:$SITE_USER" "$seed"
+	ln -sfn "$seed" "$SITE_ROOT/current"
+	chown -h "$SITE_USER:$SITE_USER" "$SITE_ROOT/current"
 fi
+
+install -m 0755 "$HERE/release.sh" /usr/local/bin/labs-release
+install -m 0644 "$HERE/labs-release.service" /etc/systemd/system/labs-release.service
+install -m 0644 "$HERE/labs-release.timer" /etc/systemd/system/labs-release.timer
+systemctl daemon-reload
+systemctl enable --now labs-release.timer >/dev/null
 
 say "Configuration de Caddy"
 if [ -n "$SITE_DOMAIN" ]; then
@@ -90,7 +116,7 @@ cat > /etc/caddy/Caddyfile <<CONF
 # Généré par deploy/provision.sh — toute modification à la main sera écrasée.
 $REDIRECT
 $SITE_BLOCK
-	root * $SITE_ROOT
+	root * $SITE_ROOT/current
 	encode zstd gzip
 	file_server
 
@@ -129,6 +155,8 @@ say "Vérification"
 code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/)
 [ "$code" = "200" ] || { echo "✗ le site répond $code"; exit 1; }
 
-printf '\n✓ Caddy sert %s — %s\n' "$SITE_ROOT" \
+printf '\n✓ Caddy sert %s (version %s) — %s\n' "$SITE_ROOT/current" \
+	"$(basename "$(readlink -f "$SITE_ROOT/current")")" \
 	"${SITE_DOMAIN:+TLS pour $SITE_DOMAIN}${SITE_DOMAIN:-pas de domaine : HTTP seul, sur IP}"
 printf '  Pare-feu actif, correctifs de sécurité automatiques, fail2ban en service\n'
+printf '  Bascule quotidienne : %s\n' "$(systemctl show -p NextElapseUSecRealtime --value labs-release.timer || echo 'labs-release.timer')"
