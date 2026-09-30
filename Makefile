@@ -7,6 +7,12 @@ help: ## Show this help
 install: ## Install the dependencies
 	@composer install
 
+# Adresse publique du site. Sert aux URL canoniques, aux hreflang, au sitemap et
+# aux métadonnées de partage — donc le build local et le build déployé ne peuvent
+# pas partager la même valeur par défaut. Tant qu'aucun domaine n'est choisi,
+# c'est l'IP du serveur ; le jour où il l'est, une seule ligne à changer.
+SITE_URL ?= http://164.132.255.21
+
 build: ## Build the site into public/ (published posts only)
 	@php bin/build.php
 
@@ -40,7 +46,8 @@ unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublis
 provision: ## Mettre le serveur dans l'état attendu (relançable)
 	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' bash -s" < deploy/provision.sh
 
-deploy: build ## Construire (sans brouillons) et publier sur le serveur
+deploy: ## Construire (sans brouillons) et publier sur le serveur
+	@SITE_URL="$(SITE_URL)" php bin/build.php
 	@rsync -az --delete --checksum \
 		--exclude '.DS_Store' \
 		public/ mesa.black:/var/www/labs/
