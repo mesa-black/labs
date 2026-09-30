@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 const ROOT = __DIR__.'/..';
 
-/** @return list<array{file: string, locale: string, key: string, title: string, draft: bool}> */
+/** @return list<array{file: string, locale: string, key: string, title: string, draft: bool, date: string}> */
 function posts(): array
 {
     $found = [];
@@ -28,9 +28,9 @@ function posts(): array
             continue;
         }
 
-        $meta = ['key' => '', 'title' => '', 'draft' => false];
+        $meta = ['key' => '', 'title' => '', 'draft' => false, 'date' => ''];
         for ($i = 1; $i < \count($lines) && $lines[$i] !== '---'; ++$i) {
-            if (preg_match('/^(key|title|draft):\s*(.*)$/', $lines[$i], $m) === 1) {
+            if (preg_match('/^(key|title|draft|date):\s*(.*)$/', $lines[$i], $m) === 1) {
                 $meta[$m[1]] = $m[1] === 'draft' ? trim($m[2]) === 'true' : trim($m[2], " \"'");
             }
         }
@@ -48,6 +48,25 @@ $toDraft = \in_array('--draft', $argv, true);
 // ---------------------------------------------------------------- listing
 if ($key === null || str_starts_with($key, '--')) {
     $drafts = array_filter($all, static fn (array $p): bool => $p['draft']);
+
+    // Un article daté du futur n'est pas un brouillon : il est écrit, relu, et
+    // il attend sa date. Le confondre avec un brouillon, c'est le réécrire.
+    $today = date('Y-m-d');
+    $scheduled = array_filter($all, static fn (array $p): bool => !$p['draft'] && $p['date'] > $today);
+    if ($scheduled !== []) {
+        $byDate = [];
+        foreach ($scheduled as $p) {
+            $byDate[$p['date']][$p['key']][] = $p['locale'];
+        }
+        ksort($byDate);
+        echo "Programmés :\n\n";
+        foreach ($byDate as $day => $keys) {
+            foreach ($keys as $k => $locales) {
+                printf("  %-34s %s — langues : %s\n", $k, $day, implode(', ', $locales));
+            }
+        }
+        echo "\n  Ils sortiront au premier `make deploy` fait à partir de leur date.\n\n";
+    }
 
     if ($drafts === []) {
         echo "Aucun brouillon.\n";

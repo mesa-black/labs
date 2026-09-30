@@ -16,7 +16,7 @@ declare(strict_types=1);
  * this, we stop extending it and move to an off-the-shelf generator.
  *
  *   php bin/build.php            build into public/
- *   php bin/build.php --drafts   include posts marked draft: true
+ *   php bin/build.php --drafts   include drafts and posts dated in the future
  */
 
 require __DIR__.'/../vendor/autoload.php';
@@ -93,6 +93,9 @@ $months = [
 ];
 
 $withDrafts = \in_array('--drafts', $argv, true);
+// Figé une fois pour toutes : un build qui chevauche minuit ne doit pas publier
+// la moitié des traductions d'un article programmé.
+$now = new DateTimeImmutable('today 23:59:59');
 
 $fail = static function (string $message): void {
     fwrite(\STDERR, "✗ $message\n");
@@ -176,6 +179,18 @@ foreach (LOCALES as $locale) {
             continue;
         }
 
+        $date = \is_int($meta['date'])
+            ? (new DateTimeImmutable())->setTimestamp($meta['date'])
+            : new DateTimeImmutable((string) $meta['date']);
+
+        // La date est une date de parution : un article daté du futur attend son
+        // jour. C'est ce qui permet d'écrire à l'avance sans tenir un état
+        // « prêt mais pas publié » ailleurs que dans le fichier lui-même. Il
+        // sort au premier build effectué à partir de cette date.
+        if ($date > $now && !$withDrafts) {
+            continue;
+        }
+
         $rexUrl = (string) ($meta['rex'] ?? '');
         $pointer = (bool) ($meta['pointer'] ?? false);
         if ($pointer && $rexUrl === '') {
@@ -195,9 +210,7 @@ foreach (LOCALES as $locale) {
             'url' => ($locale === DEFAULT_LOCALE ? '' : "/$locale")."/$slug/",
             'title' => (string) $meta['title'],
             'standfirst' => (string) ($meta['standfirst'] ?? ''),
-            'date' => \is_int($meta['date'])
-                ? (new DateTimeImmutable())->setTimestamp($meta['date'])
-                : new DateTimeImmutable((string) $meta['date']),
+            'date' => $date,
             'draft' => $draft,
             'rex' => $rexUrl,
             'pointer' => $pointer,
