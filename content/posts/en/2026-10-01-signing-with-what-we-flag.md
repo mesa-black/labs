@@ -8,7 +8,7 @@ slug: signing-with-what-we-flag
 
 We wrote a tool that inventories a project's cryptography and says, for each use, how long the protection will hold. It is called Sablier, it is [open](https://github.com/mesa-black/sablier), and it files Ed25519 under algorithms to migrate: it is an elliptic curve, so Shor's algorithm finishes it.
 
-Then comes the moment to sign its own reports. PHP ships exactly one signature scheme: Ed25519.
+Then comes the moment to sign its own reports. And there is no way out: **PHP offers no post-quantum signature at all.** RSA, ECDSA, Ed25519 — the three available schemes fall to the same algorithm of Shor's. The choice was never "Ed25519 or nothing", it was "Ed25519 or equally exposed". We took the soundest of the three: modern, compact, with no parameter to get wrong.
 
 So the tool signs with the very thing it points at. The temptation is to hide the problem — sign without mentioning it, or not sign at all. We did the opposite: the report prints the contradiction, with the expiry year filled into it. Because looking straight at it lands you on the distinction that nearly all post-quantum discourse skips.
 

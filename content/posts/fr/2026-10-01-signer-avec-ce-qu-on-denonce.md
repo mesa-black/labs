@@ -8,7 +8,7 @@ slug: signer-avec-ce-qu-on-denonce
 
 On écrit un outil qui inventorie la cryptographie d'un projet et qui dit, pour chaque usage, combien de temps la protection tiendra. Il s'appelle Sablier, il est [ouvert](https://github.com/mesa-black/sablier), et il classe Ed25519 parmi les algorithmes à migrer : c'est une courbe elliptique, donc l'algorithme de Shor en vient à bout.
 
-Puis vient le moment de signer ses propres rapports. PHP ne fournit qu'une signature : Ed25519.
+Puis vient le moment de signer ses propres rapports. Et là, aucune issue : **PHP ne propose aucune signature post-quantique.** RSA, ECDSA, Ed25519 — les trois schémas disponibles tombent devant le même algorithme de Shor. Le choix n'était donc pas « Ed25519 ou rien », mais « Ed25519 ou tout aussi exposé ». On a pris le plus sain des trois : moderne, compact, sans paramètre à rater.
 
 L'outil signe donc avec exactement ce qu'il pointe du doigt. La tentation est de masquer le problème — signer sans le dire, ou ne pas signer du tout. On a fait l'inverse : le rapport imprime la contradiction, avec l'année de péremption remplie dedans. Parce qu'en la regardant en face, on tombe sur la distinction que la quasi-totalité du discours post-quantique escamote.
 

@@ -8,7 +8,7 @@ slug: firmar-con-lo-que-denunciamos
 
 Escribimos una herramienta que inventaría la criptografía de un proyecto y dice, para cada uso, cuánto tiempo aguantará la protección. Se llama Sablier, es [abierta](https://github.com/mesa-black/sablier), y clasifica Ed25519 entre los algoritmos que hay que migrar: es una curva elíptica, así que el algoritmo de Shor acaba con ella.
 
-Después llega el momento de firmar sus propios informes. PHP trae exactamente un esquema de firma: Ed25519.
+Después llega el momento de firmar sus propios informes. Y ahí no hay salida: **PHP no ofrece ninguna firma post-cuántica.** RSA, ECDSA, Ed25519: los tres esquemas disponibles caen ante el mismo algoritmo de Shor. La elección nunca fue «Ed25519 o nada», sino «Ed25519 u otra igual de expuesta». Tomamos el más sano de los tres: moderno, compacto, sin parámetros que equivocar.
 
 La herramienta firma, por tanto, con aquello mismo que señala. La tentación es ocultar el problema: firmar sin decirlo, o no firmar. Hicimos lo contrario: el informe imprime la contradicción, con el año de caducidad dentro. Porque mirarla de frente lleva directo a la distinción que casi todo el discurso post-cuántico se salta.
 
