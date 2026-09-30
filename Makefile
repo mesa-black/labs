@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts serve clean provision provision-check deploy
+.PHONY: help install build drafts serve clean provision deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -22,11 +22,8 @@ clean: ## Remove the generated site
 # --- serveur -----------------------------------------------------------------
 # `provision` décrit la machine, `deploy` y dépose le site. Un outil, un rôle.
 
-provision-check: ## Montrer ce que le playbook changerait, sans rien changer
-	@cd deploy && ansible-playbook playbook.yml --check --diff
-
-provision: ## Appliquer l'état du serveur
-	@cd deploy && ansible-playbook playbook.yml
+provision: ## Mettre le serveur dans l'état attendu (relançable)
+	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' bash -s" < deploy/provision.sh
 
 deploy: build ## Construire (sans brouillons) et publier sur le serveur
 	@rsync -az --delete --checksum \

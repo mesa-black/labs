@@ -148,8 +148,31 @@ mieux qu'un texte fluide.
 vignette vide. Il faut soit un visuel unique pour tout le site, soit une carte générée par
 article — la seconde option vaut le coup le jour où la publication devient régulière.
 
-## Déploiement
+## Le serveur
 
-Pas encore branché. La cible est le Caddy qui sert déjà `mesa.black` : `make build` en CI,
-puis dépôt du contenu de `public/`. Rien à installer sur le serveur, aucun service à
-patcher.
+Une machine Ubuntu, un Caddy, un dossier de fichiers. Rien d'autre.
+
+```bash
+make provision                        # met le serveur dans l'état attendu
+SITE_DOMAIN=exemple.fr make provision # idem, avec certificat automatique
+make deploy                           # construit sans brouillons et publie
+```
+
+`deploy/provision.sh` décrit l'état de la machine : paquets, correctifs de sécurité
+automatiques, pare-feu réduit à 22/80/443, fail2ban, dépôt Caddy **déclaré** et non ajouté
+à la main — une montée de version de distribution supprime les sources tierces sans le
+dire, et relancer le script les rétablit. Il est relançable autant qu'on veut et se termine
+par une vérification : il dit ce qu'il a obtenu, il ne le suppose pas.
+
+Le périmètre s'arrête là où commence la publication. `make deploy` fait le reste, par
+`rsync`.
+
+**On a essayé Ansible d'abord, et on l'a jeté.** Pour une machine qui sert des fichiers
+statiques, il apportait l'idempotence et une dépendance Python, contre trente lignes de
+shell qui font la même chose. Il redeviendra pertinent le jour où il y aura une vraie
+configuration serveur à posséder — fichiers compose, secrets, plusieurs machines. Pas
+avant.
+
+**Le certificat n'est demandé qu'une fois le DNS pointé sur la machine.** Sans domaine, le
+site est servi en HTTP sur l'IP : appeler Let's Encrypt pour un domaine mal pointé ne donne
+rien et finit par limiter les tentatives.

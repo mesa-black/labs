@@ -1,5 +1,0 @@
-# Les collections dont le playbook dépend, déclarées plutôt que supposées
-# installées : `ansible-galaxy collection install -r requirements.yml`.
-collections:
-  - name: community.general
-    version: ">=10.0.0"
