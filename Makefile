@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts serve clean provision deploy
+.PHONY: help install build drafts serve clean drafts-list publish unpublish provision deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -18,6 +18,21 @@ serve: drafts ## Build with drafts and serve on http://localhost:8000
 
 clean: ## Remove the generated site
 	@rm -rf public
+
+# --- publication -------------------------------------------------------------
+
+drafts-list: ## Lister les brouillons et leur clé
+	@php bin/publish.php
+
+publish: ## Publier un article dans toutes ses langues, puis déployer : make publish KEY=slug
+	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
+	@php bin/publish.php "$(KEY)"
+	@$(MAKE) --no-print-directory deploy
+
+unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublish KEY=slug
+	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
+	@php bin/publish.php "$(KEY)" --draft
+	@echo "  → 'make deploy' pour le retirer réellement du site"
 
 # --- serveur -----------------------------------------------------------------
 # `provision` décrit la machine, `deploy` y dépose le site. Un outil, un rôle.

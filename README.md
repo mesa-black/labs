@@ -87,6 +87,22 @@ l'article n'existe pas reste affichée mais inerte — plus honnête que de la m
 
 Les balises `hreflang` sont générées à partir des traductions réellement présentes.
 
+### Publier
+
+```bash
+make drafts-list                              # quels brouillons, quelles clés
+make publish KEY=le-code-qu-on-n-ecrit-pas    # retire draft: true partout, puis déploie
+make unpublish KEY=...                        # remet en brouillon (ne déploie pas)
+```
+
+`publish` agit sur **toutes les langues d'un même article** en une fois, via leur `key`
+commune. C'est le but : un article oublié en brouillon dans une seule langue s'affiche en
+grisé dans le sélecteur, et on ne s'en aperçoit que des semaines plus tard. Le script
+prévient d'ailleurs si une langue manque.
+
+Il ne réécrit que la ligne `draft` : un aller-retour publier/dépublier rend le fichier
+octet pour octet identique.
+
 Le temps de lecture est calculé sur le texte rendu, pas sur le markdown : la syntaxe que
 le lecteur ne voit jamais ne compte pas.
 
