@@ -14,7 +14,10 @@ set -eu
 
 ROOT=${SITE_ROOT:-/var/www/labs}
 RELEASES="$ROOT/releases"
-TODAY=${LABS_TODAY:-$(date +%F)}
+# The publication calendar is the author's, not the server's. The host runs in
+# UTC, so an article dated today in Paris would have waited two more hours
+# before existing — and the daily timer already fires on Paris time.
+TODAY=${LABS_TODAY:-$(TZ=Europe/Paris date +%F)}
 KEEP=${LABS_KEEP:-3}
 
 [ -d "$RELEASES" ] || { echo "aucune version déposée dans $RELEASES"; exit 1; }
