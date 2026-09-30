@@ -47,8 +47,26 @@ else
 	echo "version $target en ligne${previous:+ (précédente : $(basename "$previous"))}"
 fi
 
+# Versions futures devenues caduques. Un article programmé puis retiré laisse
+# derrière lui une version datée qui, le jour venu, serait servie avec le texte
+# supprimé dedans. Le poste dépose la liste de ce qu'il attend ; tout ce qui est
+# à venir et absent de cette liste n'a plus de raison d'exister.
+if [ -f "$RELEASES/.expected" ]; then
+	for dir in "$RELEASES"/*/; do
+		name=$(basename "$dir")
+		case "$name" in
+		????-??-??) ;;
+		*) continue ;;
+		esac
+		[ "$name" \> "$TODAY" ] || continue
+		grep -qx "$name" "$RELEASES/.expected" && continue
+		rm -rf "${RELEASES:?}/$name"
+		echo "  version à venir $name retirée : plus aucun article ne la réclame"
+	done
+fi
+
 # Purge : on garde la version active et les précédentes, pour pouvoir revenir
-# en arrière d'un seul lien. Les versions futures ne sont jamais touchées.
+# en arrière d'un seul lien. Les versions futures encore attendues sont gardées.
 kept=0
 for dir in $(ls -1r "$RELEASES"); do
 	[ "$dir" \> "$target" ] && continue

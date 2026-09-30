@@ -57,4 +57,6 @@ deploy: ## Publier : une version du site par date de parution, puis bascule
 		printf '  version %s — %s pages\n' "$$d" \
 			"$$(find public -name '*.html' | wc -l | tr -d ' ')"; \
 	done
+	@printf '%s\n' $$(php bin/build.php --release-dates) $$(date +%F) \
+		| ssh mesa.black "cat > $(SITE_ROOT)/releases/.expected"
 	@ssh mesa.black /usr/local/bin/labs-release
