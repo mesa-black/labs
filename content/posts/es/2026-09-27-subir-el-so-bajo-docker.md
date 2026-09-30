@@ -4,7 +4,6 @@ standfirst: "La aplicación vive en una imagen, así que la distribución no pue
 date: 2026-09-27
 key: monter-l-os-sous-docker
 slug: subir-el-so-bajo-docker
-draft: true
 ---
 
 Show me the REX funciona en un único anfitrión: un Postgres, un Redis, un proxy frontal y la aplicación desplegada en blue-green — dos instancias idénticas, «azul» y «verde», de las que solo una sirve tráfico a la vez. La nueva versión se arranca en la que está en reposo y, cuando responde bien, se conmuta el proxy. Cuando escribimos esto, ese anfitrión sirve 52 casos publicados y algo más de 16.000 visualizaciones acumuladas.

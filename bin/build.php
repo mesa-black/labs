@@ -106,6 +106,56 @@ $env->addExtension(new FrontMatterExtension());
 $env->addExtension(new SmartPunctExtension());
 $markdown = new MarkdownConverter($env);
 
+
+/**
+ * Lie la PREMIÈRE mention de « Show me the REX » d'un article vers la plateforme,
+ * dans la langue du lecteur. Pas toutes : dix fois le même lien dans une page se
+ * lit mal et les moteurs y voient du bourrage.
+ *
+ * Le HTML est parcouru en séparant balises et texte, pour ne jamais écrire un
+ * lien dans un lien, ni à l'intérieur d'un bloc de code.
+ */
+function linkBrandOnce(string $html, string $locale): string
+{
+    $url = 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/");
+    $parts = preg_split('/(<[^>]+>)/', $html, -1, \PREG_SPLIT_DELIM_CAPTURE) ?: [];
+    $inside = 0;
+    $done = false;
+
+    foreach ($parts as $i => $part) {
+        if ($part === '') {
+            continue;
+        }
+
+        if ($part[0] === '<') {
+            if (preg_match('#^<(a|code|pre)[\s>]#i', $part) === 1) {
+                ++$inside;
+            } elseif (preg_match('#^</(a|code|pre)>#i', $part) === 1) {
+                $inside = max(0, $inside - 1);
+            }
+
+            continue;
+        }
+
+        if ($done || $inside > 0) {
+            continue;
+        }
+
+        $parts[$i] = preg_replace_callback(
+            '/Show me the REX/i',
+            static function (array $m) use ($url, &$done): string {
+                $done = true;
+
+                return sprintf('<a href="%s">%s</a>', $url, $m[0]);
+            },
+            $part,
+            1,
+        );
+    }
+
+    return implode('', $parts);
+}
+
 // ---------------------------------------------------------------- read posts
 $byLocale = array_fill_keys(LOCALES, []);
 
@@ -135,6 +185,7 @@ foreach (LOCALES as $locale) {
         // A table is the one block that can outgrow a phone screen: give each its
         // own scroll container rather than letting the whole page slide sideways.
         $html = str_replace(['<table>', '</table>'], ['<div class="scroll"><table>', '</table></div>'], (string) $rendered);
+        $html = linkBrandOnce($html, $locale);
 
         $slug = (string) ($meta['slug'] ?? preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', basename($file, '.md')));
 
@@ -233,6 +284,9 @@ foreach (LOCALES as $locale) {
         't' => $strings[$locale],
         'home' => $prefix.'/',
         'feed_url' => $prefix.'/feed.xml',
+        // La plateforme est trilingue elle aussi : on renvoie le lecteur dans sa
+        // langue plutôt que de le faire atterrir en français.
+        'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
         'translations' => $translations,
     ];
 
@@ -269,6 +323,7 @@ $write('robots.txt', implode("\n", [
 $write('404.html', $twig->render('404.html.twig', [
     'site' => $site, 'locale' => DEFAULT_LOCALE, 'locales' => LOCALES,
     't' => $strings[DEFAULT_LOCALE], 'home' => '/', 'feed_url' => '/feed.xml',
+    'smtr_url' => 'https://showmetherex.com/',
     'translations' => $translations, 'page_url' => '/404.html',
 ]));
 

@@ -67,6 +67,12 @@ rex: https://showmetherex.com/feedback/le-slug
 ---
 ```
 
+La **première** mention de « Show me the REX » dans le corps d'un article devient
+automatiquement un lien vers la plateforme, dans la langue du lecteur. La première
+seulement : dix fois le même lien dans une page se lit mal, et les moteurs y voient du
+bourrage. Le HTML est parcouru en séparant balises et texte, pour ne jamais écrire un lien
+dans un lien ni à l'intérieur d'un bloc de code.
+
 C'est volontaire et ce n'est pas cosmétique : **le même texte publié sur deux domaines, les
 moteurs en ignorent un**. Un pointeur émet donc une balise `canonical` vers SMTR, qui reste
 la source. Les nouveaux sujets d'ingénierie, eux, sont canoniques ici et ne partent pas sur

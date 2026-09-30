@@ -4,7 +4,6 @@ standfirst: "L'application vit dans une image, donc la distribution ne peut rien
 key: monter-l-os-sous-docker
 date: 2026-09-27
 slug: monter-l-os-sous-docker
-draft: true
 ---
 
 Show me the REX tourne sur un hôte unique : un Postgres, un Redis, un proxy frontal, et l'application déployée en blue-green — deux instances identiques, « bleue » et « verte », dont une seule sert le trafic à la fois. La nouvelle version est démarrée sur celle qui dort, et quand elle répond correctement, on bascule le proxy dessus. Au moment où nous écrivons, cet hôte sert 52 REX publiés et un peu plus de 16 000 vues cumulées.

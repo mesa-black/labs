@@ -4,7 +4,6 @@ standfirst: "The application lives in an image, so the distribution cannot touch
 date: 2026-09-27
 key: monter-l-os-sous-docker
 slug: upgrading-the-os-under-docker
-draft: true
 ---
 
 Show me the REX runs on a single host: one Postgres, one Redis, one front proxy, and the application deployed blue-green — two identical instances, "blue" and "green", of which only one serves traffic at a time. A new version is started on the idle one, and once it answers correctly the proxy is switched over. At the time of writing, that host serves 52 published case studies and a little over 16,000 cumulative views.
