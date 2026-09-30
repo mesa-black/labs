@@ -1,0 +1,11 @@
+# Un serveur, une raison d'être : servir le blog.
+all:
+  hosts:
+    labs:
+      ansible_host: mesa.black        # résolu par ~/.ssh/config
+      ansible_user: ubuntu
+  vars:
+    # Le domaine n'est pas arrêté (.black coûte trop cher au renouvellement).
+    # Tant qu'il ne l'est pas, on sert par IP et on n'appelle pas Let's Encrypt.
+    site_domain: ""                   # ex. blackmesalabs.fr — vide = pas de TLS
+    site_root: /var/www/labs
