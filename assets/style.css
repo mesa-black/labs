@@ -26,6 +26,11 @@
     --warn:    #9c5510;
     --rule:    #e2ddd1;
     --chip:    #efe9dd;
+    /* Surlignage du gras : un lavis posé sous la ligne. En clair il s'agit
+       d'assombrir à peine le papier ; en sombre, surtout pas d'éclaircir le
+       fond sous un texte déjà clair — le bandeau doit rester plus sombre que
+       le texte, sinon le contraste s'effondre là où on voulait insister. */
+    --mark:    rgba(13, 107, 99, .14);
 
     --serif:   "Instrument Serif", "Iowan Old Style", Georgia, serif;
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -46,6 +51,7 @@
         --warn:    #dd9750;
         --rule:    #2e2a22;
         --chip:    #241f18;
+        --mark:    rgba(86, 185, 172, .22);
     }
 }
 
@@ -59,6 +65,7 @@
     --warn:    #dd9750;
     --rule:    #2e2a22;
     --chip:    #241f18;
+    --mark:    rgba(86, 185, 172, .22);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -280,7 +287,10 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .prose strong { font-weight: 700; }
 .prose p strong {
     font-weight: 500;
-    background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 20%, transparent) 62%);
+    /* Le lavis ne monte qu'au tiers bas de la ligne : assez pour marquer, pas
+       assez pour faire un pavé de couleur derrière la phrase. */
+    background: linear-gradient(transparent 64%, var(--mark) 64%);
+    padding-bottom: .04em;
 }
 .prose em { font-style: italic; color: var(--muted); }
 
