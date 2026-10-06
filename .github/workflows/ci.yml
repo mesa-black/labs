@@ -105,7 +105,7 @@ jobs:
       -
         # A tag, not a branch: this decides whether the build passes.
         name: Get Sablier
-        run: git clone --depth 1 --branch v0.6.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+        run: git clone --depth 1 --branch v0.7.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
       -
         # The reference records zero findings, which is the point: a static site
         # generator contains no cryptography, and this job exists to notice the
@@ -125,6 +125,7 @@ jobs:
             --baseline=.sablier/baseline.json \
             --out="$RUNNER_TEMP/report.html" \
             --audit="$RUNNER_TEMP/audit.html" \
+            --lang=en \
             --no-probe
       -
         # if: always() — the run you most want to read is the one that failed.
@@ -158,12 +159,17 @@ jobs:
           coverage: none
       -
         name: Get Sablier
-        run: git clone --depth 1 --branch v0.6.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+        run: git clone --depth 1 --branch v0.7.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
       -
         # Its own reference, separate from the source one: these findings come
         # from a handshake rather than from a file, so mixing them into the source
         # baseline would make a certificate renewal look like a commit that added
         # cryptography.
+        #
+        # --lang=en because the reference is committed and read in review: every
+        # machine field is language-independent, and `because` is prose that
+        # follows the report's language, so capturing in one language and running
+        # in another would leave a diff that is pure translation.
         #
         # And the reference is captured *here*, from this image, not from a
         # laptop. The first run of this job proved why: locally the handshake
@@ -185,6 +191,7 @@ jobs:
           php "$RUNNER_TEMP/sablier/bin/sablier" scan . \
             --baseline=.sablier/wire.json \
             --json="$RUNNER_TEMP/observed.json" \
+            --lang=en \
             --out="$RUNNER_TEMP/wire.html"
       -
         name: Keep the report
