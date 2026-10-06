@@ -60,7 +60,9 @@ Un verdict ci-dessus dit « à garder confidentiel jusqu'en 2036 ». Ce 2036 ne 
 
 C'est la charnière de tout l'outil, et aucun logiciel ne peut la deviner. Une session de connexion dure quelques heures, une facture dix ans, un contrat trente — et ce n'est pas une information technique. Alors l'outil la demande, en une question, à quelqu'un qui connaît le métier : *combien de temps ceci doit-il rester secret ?*
 
-Le 2 octobre, un texte publié ici se terminait sur une phrase inconfortable : tous les outils de ce domaine, le nôtre compris, supposent que cette durée est une information *obtenable*, et personne n'a l'air d'avoir vérifié qu'une entreprise sait l'énoncer. Il finissait en reconnaissant que cette conclusion-là non plus n'avait été validée auprès de personne.
+Un texte écrit pour ce blog début octobre se terminait sur une phrase inconfortable : tous les outils de ce domaine, le nôtre compris, supposent que cette durée est une information *obtenable*, et personne n'a l'air d'avoir vérifié qu'une entreprise sait l'énoncer. Il finissait en reconnaissant que cette conclusion-là non plus n'avait été validée auprès de personne.
+
+Ce texte n'a jamais paru — il était programmé pour le 2 octobre et nous l'avons retiré la veille, avec un autre, pour des raisons qui ne tiennent pas ici. Sa dernière ligne, elle, a tenu.
 
 Elle l'a été cette semaine. Trois fois, auprès du dirigeant d'une entreprise qui utilise nos outils tous les jours. Le résultat tient en une phrase, la sienne :
 

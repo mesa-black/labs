@@ -60,7 +60,9 @@ Uno de los veredictos anteriores dice «a conservar confidencial hasta 2036». E
 
 Es el eje de toda la herramienta, y ningún software puede adivinarlo. Una sesión de conexión dura horas, una factura diez años, un contrato treinta — y nada de eso es un hecho técnico. Así que la herramienta lo pregunta, en una sola pregunta, a alguien que conoce el negocio: *¿cuánto tiempo debe esto seguir siendo secreto?*
 
-El 2 de octubre, un texto publicado aquí terminaba con una frase incómoda: todas las herramientas de este campo, la nuestra incluida, suponen que la duración de confidencialidad de los datos es un hecho *obtenible*, y nadie parece haber comprobado que una empresa real sepa enunciarla. Cerraba admitiendo que esa conclusión tampoco había sido validada con nadie.
+Un texto escrito para este blog a principios de octubre terminaba con una frase incómoda: todas las herramientas de este campo, la nuestra incluida, suponen que la duración de confidencialidad de los datos es un hecho *obtenible*, y nadie parece haber comprobado que una empresa real sepa enunciarla. Cerraba admitiendo que esa conclusión tampoco había sido validada con nadie.
+
+Ese texto nunca salió — estaba programado para el 2 de octubre y lo retiramos el día anterior, junto con otro, por razones que no caben aquí. Su última línea, en cambio, se mantuvo.
 
 Lo fue esta semana. Tres veces, con el directivo de una empresa que usa nuestras herramientas a diario. El resultado cabe en una frase, la suya:
 

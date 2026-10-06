@@ -60,7 +60,9 @@ One verdict above says "to be kept confidential until 2036". That 2036 does not 
 
 That is the hinge of the whole tool, and no software can guess it. A login session lasts hours, an invoice ten years, a contract thirty — and none of that is a technical fact. So the tool asks for it, in one question, of somebody who knows the business: *how long must this stay secret?*
 
-On 2 October, a piece published here ended on an uncomfortable sentence: every tool in this field, ours included, assumes the confidentiality lifetime of data is an *obtainable* fact, and nobody appears to have checked that a real business can state it. It closed by admitting that this conclusion too had been validated with nobody.
+A piece written for this blog in early October ended on an uncomfortable sentence: every tool in this field, ours included, assumes the confidentiality lifetime of data is an *obtainable* fact, and nobody appears to have checked that a real business can state it. It closed by admitting that this conclusion too had been validated with nobody.
+
+That piece never ran — it was scheduled for 2 October and we withdrew it the day before, along with another, for reasons that do not belong here. Its last line held.
 
 It was validated this week. Three times, with the director of a company that uses our tools every day. The result fits in one sentence, his:
 
