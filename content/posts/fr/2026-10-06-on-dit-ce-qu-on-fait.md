@@ -2,7 +2,7 @@
 title: "« On dit ce qu'on fait » : trois fois en deux jours, ce blog a dit faux."
 standfirst: "Une signature qui ne couvrait pas la page qu'elle scellait. Trois empreintes là où le document en promettait une. Un article cité comme publié et jamais paru. Chacune trouvée en faisant ce que la phrase décrivait, et ce texte raconte comment — parce que la transparence n'est pas une intention, c'est un dispositif."
 key: on-dit-ce-qu-on-fait
-date: 2026-10-10
+date: 2026-10-06
 slug: on-dit-ce-qu-on-fait
 ---
 
@@ -53,7 +53,7 @@ Partout ailleurs dans cet outil, la preuve d'un constat est une ligne de code so
 
 ## 3. Un article cité comme publié, et jamais paru
 
-Le texte du 8 octobre s'ouvrait sur : *« Le 2 octobre, un texte publié ici se terminait sur une phrase inconfortable… »*
+Le texte programmé pour le 8 octobre — pas encore paru quand ces lignes sont écrites — s'ouvrait sur : *« Le 2 octobre, un texte publié ici se terminait sur une phrase inconfortable… »*
 
 Ce texte n'a jamais paru. Il était écrit, programmé pour le 2 octobre, et retiré la veille avec un autre. Vérification : absent du sitemap, absent des quatre versions déposées sur le serveur, et son URL répond 404.
 

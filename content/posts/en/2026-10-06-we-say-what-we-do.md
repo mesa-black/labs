@@ -2,7 +2,7 @@
 title: "\"We say what we do\": three times in two days, this blog said something false."
 standfirst: "A signature that did not cover the page it sealed. Three digests where the document promised one. A piece cited as published that never ran. Each found by doing what the sentence described, and this is how — because transparency is not an intention, it is an apparatus."
 key: on-dit-ce-qu-on-fait
-date: 2026-10-10
+date: 2026-10-06
 slug: we-say-what-we-do
 ---
 
@@ -53,7 +53,7 @@ Everywhere else in that tool, the evidence for a finding is a line of source cod
 
 ## 3. A piece cited as published, and never run
 
-The 10 October piece before this one opened on: *"On 2 October, a piece published here ended on an uncomfortable sentence…"*
+The piece scheduled for 8 October — not out yet as these lines are written — opened on: *"On 2 October, a piece published here ended on an uncomfortable sentence…"*
 
 That piece never ran. It was written, scheduled for 2 October, and withdrawn the day before along with another. Checked: absent from the sitemap, absent from the four versions uploaded to the server, and its URL answers 404.
 

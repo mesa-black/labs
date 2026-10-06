@@ -2,7 +2,7 @@
 title: "«Decimos lo que hacemos»: tres veces en dos días, este blog dijo algo falso."
 standfirst: "Una firma que no cubría la página que sellaba. Tres huellas donde el documento prometía una. Un artículo citado como publicado que nunca salió. Cada una encontrada haciendo lo que la frase describía, y así es como — porque la transparencia no es una intención, es un dispositivo."
 key: on-dit-ce-qu-on-fait
-date: 2026-10-10
+date: 2026-10-06
 slug: decimos-lo-que-hacemos
 ---
 
@@ -53,7 +53,7 @@ En todo lo demás de esa herramienta, la prueba de un hallazgo es una línea de 
 
 ## 3. Un artículo citado como publicado, y nunca salido
 
-El texto del 8 de octubre se abría con: *«El 2 de octubre, un texto publicado aquí terminaba con una frase incómoda…»*
+El texto programado para el 8 de octubre — aún sin salir cuando se escriben estas líneas — se abría con: *«El 2 de octubre, un texto publicado aquí terminaba con una frase incómoda…»*
 
 Ese texto nunca salió. Estaba escrito, programado para el 2 de octubre, y lo retiramos el día anterior junto con otro. Comprobado: ausente del sitemap, ausente de las cuatro versiones subidas al servidor, y su URL responde 404.
 
