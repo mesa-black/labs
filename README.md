@@ -188,10 +188,14 @@ the page, explicit subheadings, short paragraphs. Extractable text is cited bett
 flowing text.
 
 **Sharing cards are generated, one per piece and per language.** `bin/cards.php` draws a
-1200×630 PNG at build time with gd and the two vendored faces — title, standfirst, date,
-domain — and `og:image` points at it. Nothing to design per article, nothing to forget: a
-piece that exists has a card, and a piece that is withdrawn takes its card with it. The
-site-wide visual that was the alternative here was never built, and does not need to be.
+1200×630 PNG at build time with gd and the two vendored faces: a kicker, the piece's
+title, and the date with the reading time. `og:image` points at it. Nothing to design per
+article, nothing to forget: a piece that exists has a card, and a piece that is withdrawn
+takes its card with it.
+
+The three home pages have one too, carrying the tagline rather than a title — they had
+none for days, so the link people actually paste, the site itself, was the one that
+unfurled as an empty rectangle while every article had an image.
 
 ## This site's own cryptographic inventory
 

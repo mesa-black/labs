@@ -2,6 +2,13 @@
 
 {% block og_title %}{{ site.name }}{% endblock %}
 
+{% block alternates %}
+    {% for loc, url in homes %}
+    <link rel="alternate" hreflang="{{ loc }}" href="{{ site.url }}{{ url }}">
+    {% endfor %}
+    {% if homes['fr'] is defined %}<link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ homes['fr'] }}">{% endif %}
+{% endblock %}
+
 {% block schema %}
     <script type="application/ld+json">{{ {
         '@context': 'https://schema.org',

@@ -348,7 +348,10 @@ $write = static function (string $path, string $html): void {
     $full = OUT.'/'.ltrim($path, '/');
     @mkdir(\dirname($full), 0o755, true);
     file_put_contents($full, $html);
-    echo '  ', str_pad($path, 48), number_format(\strlen($html) / 1024, 1), " KB\n";
+    // str_pad does not truncate, so a long slug glued the size onto the path and
+    // the column stopped being a column. One space is kept whatever the length.
+    $size = number_format(\strlen($html) / 1024, 1).' KB';
+    echo '  ', str_pad(mb_strimwidth($path, 0, 48, '…'), 49), str_pad($size, 9, ' ', \STR_PAD_LEFT), "\n";
 };
 
 // A fresh public/ every time: no stale page survives a renamed slug.
@@ -394,7 +397,34 @@ foreach (LOCALES as $locale) {
     ];
 
     echo "Building $locale (", \count($posts), " post(s))\n";
-    $write(ltrim($prefix.'/index.html', '/'), $twig->render('index.html.twig', $context + ['posts' => $posts, 'page_url' => $prefix.'/']));
+
+    // The home page had no card, so every link to the site itself — the one
+    // people actually paste — unfurled as an empty rectangle while every article
+    // had an image. It carries the tagline rather than a title, because that is
+    // what the page is: there is no single article to name.
+    $homeCard = '/cards/'.$locale.'/index.png';
+    @mkdir(\dirname(OUT.$homeCard), 0o755, true);
+    // The host as the kicker and nothing in the foot: the card already carries
+    // the house name in its bottom corner, and the first version put it there
+    // twice — read on the rendered image, which is the only place that kind of
+    // mistake is visible.
+    draw([
+        'title' => $strings[$locale]['tagline'],
+        'kicker' => parse_url($site['url'], \PHP_URL_HOST) ?: $site['name'],
+        'footer' => '',
+        'out' => OUT.$homeCard,
+    ]);
+
+    $write(ltrim($prefix.'/index.html', '/'), $twig->render('index.html.twig', $context + [
+        'posts' => $posts,
+        'page_url' => $prefix.'/',
+        'og_image' => $homeCard,
+        // Already computed for the sitemap, and never rendered in the page: the
+        // three home pages declared no alternates, so nothing told a search
+        // engine they were the same page in three languages. Every article said
+        // so; the page they all link back to did not.
+        'homes' => $homes,
+    ]));
     $pages[] = ['url' => $prefix.'/', 'lastmod' => $posts[0]['date']->format('Y-m-d'), 'alternates' => $homes];
 
     foreach ($posts as $post) {
