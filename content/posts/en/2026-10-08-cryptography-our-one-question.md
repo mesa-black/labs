@@ -1,10 +1,64 @@
 ---
-title: "We put our one question to a real company director. He understood none of it."
-standfirst: "Three sessions, three failures, and a measurement: 986 words to read in order to answer two questions. What the answers that came back really said, why a plausible answer is worse than no answer, and the six corrections it forced."
+title: "Cryptography: we put our one question to a real company director. He understood none of it."
+standfirst: "Our tool reads a project, says how long each protection will hold, and asks the business for one thing only. Here is what it produces, and what happened when we put that question to somebody who is not an engineer: three sessions, three failures, and 986 words to read in order to answer two questions."
 key: la-seule-question-ne-passe-pas
 date: 2026-10-08
-slug: our-one-question-did-not-get-through
+slug: cryptography-our-one-question
 ---
+
+Almost everything that protects a company's data today rests on sums that are easy one way and impractical the other. A powerful enough quantum computer makes the return trip possible, and states have set dates: today's methods will be discouraged around 2030 and disallowed around 2035.
+
+This is not a problem for 2035, and that is the point almost everyone misses. An adversary does not have to wait: it is enough to **copy a backup or a stream today** and keep it until the day it can be opened. Which means data encrypted this morning that must stay confidential beyond 2035 is already lost — changing method later protects what comes after it, not it.
+
+[Sablier](https://github.com/mesa-black/sablier) is our tool for turning that sentence into figures on a real project. This piece is what it produces, and then the failure of the one thing it asks a human for.
+
+## What the tool does
+
+It reads a repository — running nothing, sending nothing — and records every place the code encrypts, signs or hashes something: library calls, keys and certificates sitting in the tree, server configuration, deployment scripts, declared dependencies, and the infrastructure when it is written in Terraform. Then it crosses that inventory with how long each category of data has to stay confidential, and returns a verdict per place.
+
+Run on an example project, that looks like this:
+
+```
+  /project — 3 files read, 7 findings, 0.0 s
+  declaration: /project/sablier.json
+
+    COMPROMISED              1
+    BROKEN TODAY             1
+    WATCH                    2
+    CLEAR                    2
+    LIKELY NOT CRYPTO        1
+
+  → /project/r.html
+```
+
+Five categories, and two that count. Here is the red finding, as the report writes it:
+
+> **COMPROMISED** — `deploy/backup.sh:3`
+> Encrypted today, to be kept confidential until 2036 — one year after RSA expires. A capture made now will be readable.
+
+And the one that has nothing to do with quantum computing, because an inventory that only talks about 2035 misses what has been broken for twenty years:
+
+> **BROKEN TODAY** — `src/Tokens.php:17`
+> Classically broken, quantum computing aside. The deadline was yesterday.
+> *references CVE-2005-4900*
+
+An inventory that concludes nothing gets filed in a folder, so the report decides and puts things in order. The first item of the plan is never "migrate":
+
+> **Decide what happens to the data already emitted.** This is the decision nobody takes, and it comes before the migration. The domains concerned are protected by an algorithm that will not last out their confidentiality lifetime: what has already been encrypted and transmitted is beyond the reach of a fix. Three outcomes, and one has to be chosen explicitly — re-encrypt the existing stock, rotate the keys and re-issue what can be re-issued, or record in writing that the risk is accepted. Migrating without settling this protects future data and leaves the old exposed without anybody having decided it.
+
+It can also read a breach backwards. Given a date of compromise, it stops reasoning about what an adversary will harvest: it counts what is already in their hands, and for how long it keeps hurting.
+
+> **After the breach of 29/07/2026** — What left is already in somebody's hands. The only protection remaining is the algorithm, and it has an end date.
+> *backups* — confidentiality asked for: 10 years, so until 2036. The algorithm protecting it expires in 2035. 1 year of what was taken will become readable, and no migration reaches it.
+> *session tokens* — protected by cryptography quantum does not reach. Nothing becomes readable on that side.
+
+The report exists in two versions: a technical one, read next to an editor, and a numbered audit document separating facts from opinion, for the exhibit produced in front of a third party. Both print what they did not look at, because an inventory that hides its blind spots manufactures false assurance. Everything runs on the machine of whoever types the command: no data leaves, the code is MIT, and [the example reports](https://github.com/mesa-black/sablier/tree/main/examples) are in the repository.
+
+## The one thing it cannot guess
+
+One verdict above says "to be kept confidential until 2036". That 2036 does not come from the code. It comes from a duration somebody declared: ten years for those backups.
+
+That is the hinge of the whole tool, and no software can guess it. A login session lasts hours, an invoice ten years, a contract thirty — and none of that is a technical fact. So the tool asks for it, in one question, of somebody who knows the business: *how long must this stay secret?*
 
 On 2 October, a piece published here ended on an uncomfortable sentence: every tool in this field, ours included, assumes the confidentiality lifetime of data is an *obtainable* fact, and nobody appears to have checked that a real business can state it. It closed by admitting that this conclusion too had been validated with nobody.
 
@@ -16,9 +70,7 @@ This is not a teaching problem, and it is not a problem with him. It is a measur
 
 ## The measurement
 
-[Sablier](https://github.com/mesa-black/sablier) reads a project, inventories what is encrypted or signed in it, and asks one question per data domain: *how long must this stay secret?* The question is deliberately non-technical, because the answer is a business fact.
-
-To ask it remotely, the tool produces a standalone HTML file: no server, no network, you open it, you answer, you hand back a block of JSON. Built for the rooms a live interview cannot enter — a closed network, a machine nobody may connect to.
+To ask that question remotely, the tool produces a standalone HTML file: no server, no network, you open it, you answer, you hand back a block of JSON. Built for the rooms a live interview cannot enter — a closed network, a machine nobody may connect to.
 
 On the third attempt, I counted what that file gave somebody to read before they could answer. **986 words.** For seven subjects and two questions each. With the word *fingerprint* five times, and *algorithm*, *deadline*, *regime*, *declaration*, *plumbing* on the way.
 

@@ -1,12 +1,66 @@
 ---
-title: "On a posé notre seule question à un vrai dirigeant. Il n'a rien compris."
-standfirst: "Trois séances, trois échecs, et une mesure : 986 mots à lire pour répondre à deux questions. Ce que les réponses revenues disent vraiment, pourquoi une réponse plausible est pire qu'une absence de réponse, et les six corrections que ça a imposées."
+title: "Cryptographie : on a posé notre seule question à un vrai dirigeant. Il n'a rien compris."
+standfirst: "Notre outil lit un projet, dit jusqu'à quand chaque protection tiendra, et ne demande qu'une chose à l'entreprise. Voici ce qu'il produit, et ce qui s'est passé quand nous avons posé cette question à quelqu'un qui n'est pas informaticien : trois séances, trois échecs, et 986 mots à lire pour répondre à deux questions."
 key: la-seule-question-ne-passe-pas
 date: 2026-10-08
-slug: notre-seule-question-ne-passait-pas
+slug: cryptographie-notre-seule-question
 ---
 
-Le 2 octobre, un texte publié ici se terminait sur une phrase inconfortable : tous les outils de ce domaine, le nôtre compris, supposent que la durée de confidentialité des données est une information *obtenable*, et personne n'a l'air d'avoir vérifié qu'une vraie entreprise sait l'énoncer. Il finissait en reconnaissant que cette conclusion-là non plus n'avait été validée auprès de personne.
+Presque tout ce qui protège aujourd'hui les données d'une entreprise repose sur des calculs faciles dans un sens et impraticables dans l'autre. Un calculateur quantique suffisamment puissant rendra le retour possible, et les États ont fixé des dates : les méthodes actuelles seront déconseillées vers 2030, interdites vers 2035.
+
+Ce n'est pas un problème pour 2035, et c'est le point que presque tout le monde manque. Un adversaire n'a pas besoin d'attendre : il lui suffit de **copier aujourd'hui** une sauvegarde ou un flux, et de la garder jusqu'au jour où il pourra l'ouvrir. Autrement dit, une donnée chiffrée ce matin qui doit rester confidentielle au-delà de 2035 est déjà perdue — changer de méthode plus tard protégera ce qui viendra après, pas elle.
+
+[Sablier](https://github.com/mesa-black/sablier) est notre outil pour mettre cette phrase en chiffres sur un projet réel. Ce texte raconte ce qu'il produit, puis l'échec de la seule chose qu'il demande à un humain.
+
+## Ce que l'outil fait
+
+Il lit un dépôt — sans rien exécuter, sans rien envoyer — et relève chaque endroit où le code chiffre, signe ou hache quelque chose : appels de bibliothèques, clés et certificats présents dans l'arborescence, configuration de serveur, scripts de déploiement, dépendances déclarées, et l'infrastructure quand elle est écrite en Terraform. Puis il croise cet inventaire avec la durée pendant laquelle chaque catégorie de données doit rester confidentielle, et rend un verdict par endroit.
+
+Lancé sur un projet d'exemple, ça donne ceci :
+
+```
+  /projet — 3 fichiers lus, 7 constats, 0.0 s
+  déclaration : /projet/sablier.json
+
+    COMPROMIS                1
+    CASSÉ AUJOURD'HUI        1
+    SURVEILLER               2
+    CONFORME                 2
+    PROBABLEMENT HORS SUJET  1
+
+  → /projet/r.html
+```
+
+Cinq catégories, et deux qui comptent. Voici le constat rouge, tel que le rapport l'écrit :
+
+> **COMPROMIS** — `deploy/backup.sh:3`
+> Chiffré aujourd'hui, à garder confidentiel jusqu'en 2036 — soit 1 an après la péremption de RSA. Une capture faite maintenant sera lisible.
+
+Et celui qui n'a rien à voir avec le quantique, parce qu'un inventaire qui ne parle que de 2035 passe à côté de ce qui est cassé depuis vingt ans :
+
+> **CASSÉ AUJOURD'HUI** — `src/Tokens.php:17`
+> Cassé classiquement, indépendamment du quantique. L'échéance était hier.
+> *références CVE-2005-4900*
+
+Un inventaire qui ne conclut rien se range dans un dossier, donc le rapport tranche et met dans l'ordre. Le premier élément du plan n'est jamais « migrer » :
+
+> **Décider du sort des données déjà émises.** C'est la décision que personne ne prend, et elle vient avant la migration. Les domaines concernés sont protégés par un algorithme qui ne tiendra pas jusqu'au bout de leur durée de confidentialité : ce qui a déjà été chiffré et transmis est hors de portée d'un correctif. Trois issues, et il faut en choisir une explicitement — re-chiffrer le stock existant, faire tourner les clés et réémettre ce qui peut l'être, ou acter par écrit qu'on accepte le risque. Migrer sans trancher cette question protège les données futures et laisse les anciennes exposées sans que personne ne l'ait décidé.
+
+Il sait aussi lire une fuite à l'envers. Avec une date de compromission, il ne raisonne plus sur ce qu'un adversaire récoltera : il compte ce qui est déjà entre ses mains et pour combien de temps ça continue de nuire.
+
+> **Après la fuite du 29/07/2026** — Ce qui est sorti est déjà entre les mains de quelqu'un. La seule protection qui reste est l'algorithme, et elle a une date de fin.
+> *backups* — confidentialité demandée : 10 ans, soit jusqu'en 2036. L'algorithme qui protège ces données périme en 2035. 1 année de ce qui a été volé deviendra lisible, et aucune migration ne la rattrape.
+> *session tokens* — protégé par de la cryptographie que le quantique n'atteint pas. Rien ne devient lisible de ce côté.
+
+Le rapport existe en deux versions : une technique, lue à côté d'un éditeur, et un document d'audit numéroté, séparant les faits de l'avis, pour la pièce qu'on produit devant un tiers. Les deux impriment ce qu'ils n'ont pas regardé, parce qu'un inventaire qui tait ses angles morts fabrique de la fausse assurance. Tout tourne sur la machine de qui lance la commande : aucune donnée ne sort, le code est sous licence MIT, et [les rapports d'exemple](https://github.com/mesa-black/sablier/tree/main/examples) sont dans le dépôt.
+
+## La seule chose qu'il ne peut pas deviner
+
+Un verdict ci-dessus dit « à garder confidentiel jusqu'en 2036 ». Ce 2036 ne vient pas du code. Il vient d'une durée que quelqu'un a déclarée : dix ans pour ces sauvegardes.
+
+C'est la charnière de tout l'outil, et aucun logiciel ne peut la deviner. Une session de connexion dure quelques heures, une facture dix ans, un contrat trente — et ce n'est pas une information technique. Alors l'outil la demande, en une question, à quelqu'un qui connaît le métier : *combien de temps ceci doit-il rester secret ?*
+
+Le 2 octobre, un texte publié ici se terminait sur une phrase inconfortable : tous les outils de ce domaine, le nôtre compris, supposent que cette durée est une information *obtenable*, et personne n'a l'air d'avoir vérifié qu'une entreprise sait l'énoncer. Il finissait en reconnaissant que cette conclusion-là non plus n'avait été validée auprès de personne.
 
 Elle l'a été cette semaine. Trois fois, auprès du dirigeant d'une entreprise qui utilise nos outils tous les jours. Le résultat tient en une phrase, la sienne :
 
@@ -16,9 +70,7 @@ Ce n'est pas un problème de pédagogie, et ce n'est pas un problème de lui. C'
 
 ## La mesure
 
-[Sablier](https://github.com/mesa-black/sablier) lit un projet, recense ce qui y est chiffré ou signé, et pose une seule question par domaine de données : *combien de temps ceci doit-il rester secret ?* La question est volontairement non technique, parce que la réponse est métier.
-
-Pour la poser à distance, l'outil produit un fichier HTML autonome : pas de serveur, pas de réseau, on l'ouvre, on répond, on renvoie un bloc de JSON. Conçu pour les salles où un entretien en direct ne peut pas entrer — réseau fermé, machine isolée.
+Pour poser la question à distance, l'outil produit un fichier HTML autonome : pas de serveur, pas de réseau, on l'ouvre, on répond, on renvoie un bloc de JSON. Conçu pour les salles où un entretien en direct ne peut pas entrer — réseau fermé, machine isolée.
 
 À la troisième tentative, j'ai compté ce que ce fichier donnait à lire avant de pouvoir répondre. **986 mots.** Pour sept sujets et deux questions par sujet. Avec le mot « empreinte » cinq fois, et « algorithme », « échéance », « régime », « déclaration », « plomberie » sur le chemin.
 
@@ -50,7 +102,7 @@ Le mode d'échec dangereux de ce genre d'outil n'est donc pas « la personne ne 
 
 ## Les six corrections
 
-**Les sujets sont nommés par leur endroit, plus par la cryptographie qu'ils contiennent.** Les sujets étaient regroupés par famille d'algorithmes, ce qui fait qu'un sujet ne pouvait être nommé que d'après une famille : on demandait combien de temps « Chiffrement à clé publique » et « Empreintes de contenu » devaient rester confidentiels. Ce sont des mécanismes, pas des données. Pire, le seul sujet qu'il aurait su traiter — cinq répertoires métier — avait été écrasé dans l'un des deux.
+**Les sujets sont nommés par leur endroit, plus par la cryptographie qu'ils contiennent.** Ils étaient regroupés par famille d'algorithmes, ce qui fait qu'un sujet ne pouvait être nommé que d'après une famille : on demandait combien de temps « Chiffrement à clé publique » et « Empreintes de contenu » devaient rester confidentiels. Ce sont des mécanismes, pas des données. Pire, le seul sujet qu'il aurait su traiter — cinq répertoires métier — avait été écrasé dans l'un des deux.
 
 **Les durées sont devenues des conséquences.** Plus de boutons 0/1/3/5/10/20/30, mais quatre phrases : *c'est public, ou sans conséquence* / *ça nous gênerait, le temps que ça passe* / *un client pourrait nous le reprocher, ou rompre* / *on nous le reprocherait des années, ou ça finirait au tribunal*. L'arithmétique est à l'outil.
 

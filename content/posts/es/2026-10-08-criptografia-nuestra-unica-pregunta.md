@@ -1,10 +1,64 @@
 ---
-title: "Le hicimos nuestra única pregunta a un directivo real. No entendió nada."
-standfirst: "Tres sesiones, tres fracasos, y una medida: 986 palabras que leer para responder a dos preguntas. Lo que decían de verdad las respuestas recibidas, por qué una respuesta plausible es peor que ninguna, y las seis correcciones que impuso."
+title: "Criptografía: le hicimos nuestra única pregunta a un directivo real. No entendió nada."
+standfirst: "Nuestra herramienta lee un proyecto, dice hasta cuándo aguantará cada protección, y pide a la empresa una sola cosa. Esto es lo que produce, y lo que pasó cuando le hicimos esa pregunta a alguien que no es informático: tres sesiones, tres fracasos, y 986 palabras que leer para responder a dos preguntas."
 key: la-seule-question-ne-passe-pas
 date: 2026-10-08
-slug: nuestra-unica-pregunta-no-pasaba
+slug: criptografia-nuestra-unica-pregunta
 ---
+
+Casi todo lo que protege hoy los datos de una empresa se apoya en cálculos fáciles en un sentido e impracticables en el otro. Un ordenador cuántico lo bastante potente hará posible el camino de vuelta, y los Estados han fijado fechas: los métodos actuales se desaconsejarán hacia 2030 y se prohibirán hacia 2035.
+
+No es un problema para 2035, y ese es el punto que casi todo el mundo pasa por alto. Un adversario no necesita esperar: le basta con **copiar hoy** una copia de seguridad o un flujo, y guardarla hasta el día en que pueda abrirla. Es decir: un dato cifrado esta mañana que deba seguir siendo confidencial más allá de 2035 ya está perdido — cambiar de método más tarde protegerá lo que venga después, no a él.
+
+[Sablier](https://github.com/mesa-black/sablier) es nuestra herramienta para poner esa frase en cifras sobre un proyecto real. Este texto cuenta lo que produce, y luego el fracaso de lo único que pide a un humano.
+
+## Lo que hace la herramienta
+
+Lee un repositorio — sin ejecutar nada, sin enviar nada — y anota cada lugar donde el código cifra, firma o resume algo: llamadas a bibliotecas, claves y certificados presentes en el árbol, configuración de servidor, scripts de despliegue, dependencias declaradas, y la infraestructura cuando está escrita en Terraform. Después cruza ese inventario con el tiempo que cada categoría de datos debe seguir siendo confidencial, y devuelve un veredicto por lugar.
+
+Lanzada sobre un proyecto de ejemplo, esto es lo que da:
+
+```
+  /proyecto — 3 archivos leídos, 7 hallazgos, 0.0 s
+  declaración: /proyecto/sablier.json
+
+    COMPROMETIDO             1
+    ROTO HOY                 1
+    VIGILAR                  2
+    CONFORME                 2
+    PROBABLEMENTE NO CRIPTO  1
+
+  → /proyecto/r.html
+```
+
+Cinco categorías, y dos que cuentan. Este es el hallazgo rojo, tal como lo escribe el informe:
+
+> **COMPROMETIDO** — `deploy/backup.sh:3`
+> Cifrado hoy, a conservar confidencial hasta 2036 — es decir 1 año después de la caducidad de RSA. Una captura hecha ahora será legible.
+
+Y el que no tiene nada que ver con lo cuántico, porque un inventario que solo habla de 2035 se pierde lo que está roto desde hace veinte años:
+
+> **ROTO HOY** — `src/Tokens.php:17`
+> Roto clásicamente, al margen de lo cuántico. El plazo era ayer.
+> *referencias CVE-2005-4900*
+
+Un inventario que no concluye nada se archiva en una carpeta, así que el informe decide y ordena. El primer punto del plan nunca es «migrar»:
+
+> **Decidir qué pasa con los datos ya emitidos.** Es la decisión que nadie toma, y viene antes de la migración. Los dominios afectados están protegidos por un algoritmo que no aguantará hasta el final de su duración de confidencialidad: lo que ya se cifró y transmitió está fuera del alcance de un parche. Tres salidas, y hay que elegir una explícitamente — volver a cifrar el stock existente, rotar las claves y reemitir lo que pueda reemitirse, o dejar por escrito que se acepta el riesgo. Migrar sin resolver esto protege los datos futuros y deja los antiguos expuestos sin que nadie lo haya decidido.
+
+También sabe leer una fuga al revés. Con una fecha de compromiso, deja de razonar sobre lo que un adversario cosechará: cuenta lo que ya está en sus manos, y cuánto tiempo sigue haciendo daño.
+
+> **Después de la fuga del 29/07/2026** — Lo que salió ya está en manos de alguien. La única protección que queda es el algoritmo, y tiene fecha de fin.
+> *backups* — confidencialidad pedida: 10 años, es decir hasta 2036. El algoritmo que la protege caduca en 2035. 1 año de lo robado pasará a ser legible, y ninguna migración lo alcanza.
+> *session tokens* — protegido por criptografía a la que lo cuántico no alcanza. Nada pasa a ser legible por ese lado.
+
+El informe existe en dos versiones: una técnica, leída junto a un editor, y un documento de auditoría numerado que separa los hechos de la opinión, para la pieza que se presenta ante un tercero. Ambos imprimen lo que no miraron, porque un inventario que oculta sus puntos ciegos fabrica falsa seguridad. Todo corre en la máquina de quien lanza el comando: ningún dato sale, el código es MIT, y [los informes de ejemplo](https://github.com/mesa-black/sablier/tree/main/examples) están en el repositorio.
+
+## Lo único que no puede adivinar
+
+Uno de los veredictos anteriores dice «a conservar confidencial hasta 2036». Ese 2036 no viene del código. Viene de una duración que alguien declaró: diez años para esas copias de seguridad.
+
+Es el eje de toda la herramienta, y ningún software puede adivinarlo. Una sesión de conexión dura horas, una factura diez años, un contrato treinta — y nada de eso es un hecho técnico. Así que la herramienta lo pregunta, en una sola pregunta, a alguien que conoce el negocio: *¿cuánto tiempo debe esto seguir siendo secreto?*
 
 El 2 de octubre, un texto publicado aquí terminaba con una frase incómoda: todas las herramientas de este campo, la nuestra incluida, suponen que la duración de confidencialidad de los datos es un hecho *obtenible*, y nadie parece haber comprobado que una empresa real sepa enunciarla. Cerraba admitiendo que esa conclusión tampoco había sido validada con nadie.
 
@@ -16,9 +70,7 @@ No es un problema de pedagogía, y no es un problema suyo. Es una medida sobre e
 
 ## La medida
 
-[Sablier](https://github.com/mesa-black/sablier) lee un proyecto, inventaría lo que en él se cifra o se firma, y hace una sola pregunta por dominio de datos: *¿cuánto tiempo debe esto seguir siendo secreto?* La pregunta es deliberadamente no técnica, porque la respuesta es un hecho de negocio.
-
-Para plantearla a distancia, la herramienta produce un archivo HTML autónomo: sin servidor, sin red, se abre, se responde, se devuelve un bloque de JSON. Pensado para las salas donde una entrevista en directo no puede entrar — una red cerrada, una máquina a la que nadie puede conectarse.
+Para plantear esa pregunta a distancia, la herramienta produce un archivo HTML autónomo: sin servidor, sin red, se abre, se responde, se devuelve un bloque de JSON. Pensado para las salas donde una entrevista en directo no puede entrar — una red cerrada, una máquina a la que nadie puede conectarse.
 
 En el tercer intento conté lo que ese archivo daba a leer antes de poder responder. **986 palabras.** Para siete temas y dos preguntas por tema. Con la palabra *huella* cinco veces, y *algoritmo*, *plazo*, *régimen*, *declaración*, *fontanería* en el camino.
 
