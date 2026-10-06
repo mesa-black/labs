@@ -44,13 +44,19 @@ const DEFAULT_LOCALE = 'fr';
 $site = [
     'name' => 'BlackMesa Labs',
     'url' => rtrim(getenv('SITE_URL') ?: 'http://localhost:8000', '/'),
+    // Where a reader answers. No comment form: that would need a runtime, a
+    // database, moderation and the storage of other people's names — every one
+    // of which this site exists without. An address costs a line, and it
+    // filters on its own: whoever takes the trouble to write has something to
+    // say.
+    'reply' => 'labs@mesa.black',
 ];
 
 /** Everything the templates say in their own voice, per language. */
 $strings = [
     'fr' => [
         'tagline' => "Notes d'ingénierie : ce qu'on a construit, ce qu'on a cassé, ce qu'on en a tiré.",
-        'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'minutes' => 'min', 'reading' => 'min de lecture',
+        'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'reply' => 'Une remarque, une correction, un désaccord ?', 'minutes' => 'min', 'reading' => 'min de lecture',
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
         'back' => 'Tous les articles', 'language' => 'Langue',
         'crossover_pointer' => 'Publié sur Show me the REX',
@@ -65,7 +71,7 @@ $strings = [
     ],
     'en' => [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
-        'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'minutes' => 'min', 'reading' => 'min read',
+        'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'reply' => 'A remark, a correction, a disagreement?', 'minutes' => 'min', 'reading' => 'min read',
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
         'back' => 'All posts', 'language' => 'Language',
         'crossover_pointer' => 'Published on Show me the REX',
@@ -80,7 +86,7 @@ $strings = [
     ],
     'es' => [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
-        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'minutes' => 'min', 'reading' => 'min de lectura',
+        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'reply' => '¿Una observación, una corrección, un desacuerdo?', 'minutes' => 'min', 'reading' => 'min de lectura',
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
         'back' => 'Todos los artículos', 'language' => 'Idioma',
         'crossover_pointer' => 'Publicado en Show me the REX',

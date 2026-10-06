@@ -391,6 +391,17 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 
 /* Tables are the only block that can outgrow a phone screen: each scrolls in
    its own container, so the page itself never slides sideways. */
+/* The reply line: present at the end of a piece, and quiet enough not to read
+   as a call to action. */
+.reply {
+    margin: 3rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-size: .92rem;
+    color: var(--muted);
+}
+.reply a { color: var(--accent); }
+
 .scroll { overflow-x: auto; margin: 0 0 1.4rem; }
 .scroll table { margin: 0; }
 

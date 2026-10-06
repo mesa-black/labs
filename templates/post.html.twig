@@ -75,6 +75,11 @@
             {% endif %}
         </article>
 
+        {# The subject is pre-filled with the title: a reply about one piece
+           should arrive saying which, without the reader having to. #}
+        <p class="reply">{{ t.reply }}
+            <a href="mailto:{{ site.reply }}?subject={{ post.title|url_encode }}">{{ site.reply }}</a></p>
+
         <p class="back"><a href="{{ home }}">← {{ t.back }}</a></p>
     </main>
 {% endblock %}
