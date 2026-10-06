@@ -18,8 +18,8 @@
             ],
             "lifetime_years": 0,
             "note": "Articles, gabarits et générateur. Tout est écrit pour être servi en clair à qui le demande : la confidentialité due est nulle, par construction et pas par négligence.",
-            "declared_by": "",
-            "declared_on": ""
+            "declared_by": "Jérôme Nadaud, BlackMesa",
+            "declared_on": "2026-10-06"
         },
         "chaîne de déploiement": {
             "paths": [
@@ -28,8 +28,8 @@
             ],
             "lifetime_years": 0,
             "note": "Scripts de provisionnement et de publication. Ils décrivent la configuration du serveur, y compris son TLS, et ne contiennent aucun secret : la clé SSH qui les exécute vit sur le poste de travail et n'entre jamais dans le dépôt. Si ces fichiers sortaient, ils n'apprendraient rien à personne — c'est aussi pour ça qu'ils sont lisibles.",
-            "declared_by": "",
-            "declared_on": ""
+            "declared_by": "Jérôme Nadaud, BlackMesa",
+            "declared_on": "2026-10-06"
         }
     },
     "_probe": "La cryptographie réelle de ce site n'est pas dans ses fichiers : elle est négociée par le serveur. Sans cette ligne, le rapport ne verrait rien et le dirait — avec elle, il va voir.",
