@@ -1,17 +1,17 @@
 [
     {
-        "fingerprint": "a5acb0a5",
-        "algorithm": "ml-kem",
+        "fingerprint": "a18505b6",
+        "algorithm": "ecdh",
         "purpose": "confidentiality",
         "file": "tls://mesa.black:443",
         "line": 0,
         "domain": "non déclaré",
         "declared": false,
         "lifetime_years": 0,
-        "verdict": "clear",
+        "verdict": "watch",
         "confidence": "haute",
         "inventory": false,
-        "because": "Normalisé FIPS 203.",
+        "because": "La donnée cesse d'être sensible en 2026, avant la péremption de 2035. Migration à planifier pour le système, pas pour sauver cette donnée.",
         "references": [],
         "accepted_until": ""
     },
