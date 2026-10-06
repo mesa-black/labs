@@ -139,7 +139,12 @@ jobs:
 
   tls:
     name: Cryptography on the wire
-    runs-on: ubuntu-latest
+    # Pinned, where every other job floats. The probe measures a *pair* — what
+    # this client and that server agree on — so a runner image that changes its
+    # OpenSSL changes the findings without anything on mesa.black moving, and the
+    # reference would drift under us. ubuntu-latest becomes Ubuntu 26 on 19
+    # October 2026, which is exactly that event.
+    runs-on: ubuntu-24.04
     steps:
       -
         name: Checkout
@@ -155,18 +160,31 @@ jobs:
         name: Get Sablier
         run: git clone --depth 1 --branch v0.6.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
       -
-        # The probe measures the path from the runner to mesa.black, which for a
-        # public static site is a reader's path and not a detour — the reason the
-        # probe is left out of a pipeline elsewhere does not apply here.
-        #
         # Its own reference, separate from the source one: these findings come
-        # from a handshake and change when the server does, so mixing them into
-        # the source baseline would make every certificate renewal look like a
-        # commit that added cryptography.
+        # from a handshake rather than from a file, so mixing them into the source
+        # baseline would make a certificate renewal look like a commit that added
+        # cryptography.
+        #
+        # And the reference is captured *here*, from this image, not from a
+        # laptop. The first run of this job proved why: locally the handshake
+        # negotiates X25519MLKEM768 and the probe records ml-kem; from the runner
+        # it negotiated plain ECDH, because that client's OpenSSL does not offer
+        # the hybrid group. Nothing was wrong with the server — the probe reports
+        # what two machines agreed on, and a reference taken on one of them says
+        # nothing about the other.
+        #
+        # So this job has a blind spot it cannot close: it cannot see whether
+        # mesa.black still offers ML-KEM, because its client never asks. What it
+        # does see is the rest of the handshake — the certificate's algorithm and
+        # strength, the protocol versions — which is what quietly regresses. The
+        # ML-KEM half is checked at every deploy, by `make audit`, from a client
+        # that offers it. Said here rather than left for somebody to discover in
+        # a green run that proves less than it looks.
         name: Probe the live site
         run: |
           php "$RUNNER_TEMP/sablier/bin/sablier" scan . \
             --baseline=.sablier/wire.json \
+            --json="$RUNNER_TEMP/observed.json" \
             --out="$RUNNER_TEMP/wire.html"
       -
         name: Keep the report
@@ -174,4 +192,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wire
-          path: ${{ runner.temp }}/wire.html
+          path: |
+            ${{ runner.temp }}/wire.html
+            ${{ runner.temp }}/observed.json
