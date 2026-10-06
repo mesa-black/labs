@@ -65,6 +65,18 @@ if [ -f "$RELEASES/.expected" ]; then
 	done
 fi
 
+# Anything that is not a date is not a release. One stray line on the
+# workstation's stdout once became nine directories here, each holding a full
+# copy of the site, and nothing removed them: the pruning below only ever looks
+# at versions older than the live one, and "Warning:" sorts above every date.
+for dir in "$RELEASES"/*/; do
+	name=$(basename "$dir")
+	case "$name" in
+		[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+		*) rm -rf "$dir"; echo "  not a release, removed: $name" ;;
+	esac
+done
+
 # Pruning: the live version and the ones before it are kept, so that rolling
 # back is one link away. Future versions still expected are kept too.
 kept=0

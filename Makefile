@@ -101,13 +101,17 @@ provision: ## Put the server in the expected state (re-runnable)
 
 deploy: audit ## Publier : une version du site par date de parution, puis bascule
 	@ssh mesa.black "mkdir -p $(SITE_ROOT)/releases"
-	@for d in $$(php bin/build.php --release-dates) $$(date +%F); do \
+	@# Filtered to date-shaped tokens: a single stray line on stdout — a PHP
+	@# warning, once — turned every word of it into a release directory on the
+	@# server, each holding a full copy of the site. The loop now ignores
+	@# anything that is not YYYY-MM-DD.
+	@for d in $$(php bin/build.php --release-dates | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$$') $$(date +%F); do \
 		SITE_URL="$(SITE_URL)" php bin/build.php --as-of=$$d >/dev/null; \
 		rsync -az --delete --checksum --exclude '.DS_Store' \
 			public/ mesa.black:$(SITE_ROOT)/releases/$$d/; \
 		printf '  version %s — %s pages\n' "$$d" \
 			"$$(find public -name '*.html' | wc -l | tr -d ' ')"; \
 	done
-	@printf '%s\n' $$(php bin/build.php --release-dates) $$(date +%F) \
+	@printf '%s\n' $$(php bin/build.php --release-dates | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$$') $$(date +%F) \
 		| ssh mesa.black "cat > $(SITE_ROOT)/releases/.expected"
 	@ssh mesa.black /usr/local/bin/labs-release
