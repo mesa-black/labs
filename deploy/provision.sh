@@ -162,12 +162,26 @@ $SITE_BLOCK
 	@assets path *.css *.woff2
 	header @assets Cache-Control "public, max-age=3600"
 
-	# Une signature de Sablier est du JSON, et elle est lisible exprès : qui
-	# vérifie doit pouvoir voir ce qui a été signé sans rien lancer. Caddy
-	# devinait « application/pgp-signature » d'après l'extension, ce qui est faux
-	# et force un téléchargement au lieu d'un affichage.
+	# A Sablier signature is JSON, and it is readable on purpose: whoever checks
+	# it should be able to see what was signed without running anything. Caddy
+	# guessed "application/pgp-signature" from the extension, which is wrong and
+	# makes a browser download the file instead of showing it.
 	@signature path *.sig
 	header @signature Content-Type "application/json; charset=utf-8"
+
+	# The audit documents are self-contained by design — they travel by email, on
+	# a memory stick, into a room with no network — so their stylesheet is inside
+	# them. The site's own policy forbids inline styles, which is right for pages
+	# that load a stylesheet and turns a report into unstyled text. One policy for
+	# this path, then: inline styles allowed, everything else still at zero, and
+	# scripts in particular, because these documents contain none and must not
+	# start to.
+	# `>` rather than a plain set: the block above has already written a policy
+	# for every response, and a second `header` without it leaves the first one
+	# in place. Checked rather than assumed — the first version of this looked
+	# right in the file and changed nothing on the wire.
+	@selfcontained path /audit/*
+	header @selfcontained >Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 
 	# Pas de journal fichier : sous systemd, Caddy écrit dans le journal, qui
 	# tourne et se purge tout seul. Un fichier de log, c'est un dossier à créer,

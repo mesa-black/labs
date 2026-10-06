@@ -5,7 +5,7 @@
 {% block title %}{{ post.title }} — {{ site.name }}{% endblock %}
 {% block description %}{{ post.standfirst ?: t.tagline }}{% endblock %}
 
-{# Un pointeur désigne le REX comme source ; un article complet fait autorité ici. #}
+{# A pointer names the case study as the source; a full piece is authoritative here. #}
 {% block canonical %}<link rel="canonical" href="{{ post.canonical ?: site.url ~ post.url }}">{% endblock %}
 
 {% block og_type %}article{% endblock %}
@@ -67,7 +67,7 @@
             {% if post.rex %}
                 <aside class="crossover">
                     <p class="crossover-label">{{ post.pointer ? t.crossover_pointer : t.crossover_also }}</p>
-                    <a class="crossover-link" href="{{ post.rex }}">
+                    <a class="crossover-link" href="{{ post.rex }}" target="_blank" rel="noopener">
                         {{ post.pointer ? t.crossover_read : t.crossover_see }} <span aria-hidden="true">→</span>
                     </a>
                     <p class="crossover-note">{{ t.crossover_note }}</p>

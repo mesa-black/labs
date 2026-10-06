@@ -3,16 +3,17 @@
 declare(strict_types=1);
 
 /*
- * Passe un article de brouillon à publié — dans toutes ses langues d'un coup,
- * parce qu'un article oublié en brouillon dans une seule langue est le genre
- * d'erreur qu'on ne voit que des semaines plus tard.
+ * Moves a piece from draft to published — in every one of its languages at
+ * once, because a piece left in draft in a single language is the kind of
+ * mistake nobody sees for weeks.
  *
- *   php bin/publish.php                 liste les brouillons
- *   php bin/publish.php <clé>           publie toutes les langues de cet article
- *   php bin/publish.php <clé> --draft   remet en brouillon
+ *   php bin/publish.php                 lists the drafts
+ *   php bin/publish.php <key>           publishes every language of that piece
+ *   php bin/publish.php <key> --draft   puts it back to draft
  *
- * Le front matter est lu à la ligne plutôt que parsé : on ne touche qu'à `draft`
- * et `key`, et le reste du fichier doit ressortir octet pour octet identique.
+ * The front matter is read line by line rather than parsed: only `draft` and
+ * `key` are touched, and the rest of the file has to come out identical byte
+ * for byte.
  */
 
 const ROOT = __DIR__.'/..';
@@ -49,8 +50,8 @@ $toDraft = \in_array('--draft', $argv, true);
 if ($key === null || str_starts_with($key, '--')) {
     $drafts = array_filter($all, static fn (array $p): bool => $p['draft']);
 
-    // Un article daté du futur n'est pas un brouillon : il est écrit, relu, et
-    // il attend sa date. Le confondre avec un brouillon, c'est le réécrire.
+    // A piece dated in the future is not a draft: it is written, reviewed, and
+    // waiting for its date. Confusing the two means rewriting it.
     $today = date('Y-m-d');
     $scheduled = array_filter($all, static fn (array $p): bool => !$p['draft'] && $p['date'] > $today);
     if ($scheduled !== []) {
@@ -81,7 +82,7 @@ if ($key === null || str_starts_with($key, '--')) {
     echo "Brouillons :\n\n";
     foreach ($byKey as $k => $group) {
         $locales = implode(', ', array_column($group, 'locale'));
-        // Titre français de préférence : c'est la langue dans laquelle on écrit.
+        // The French title by preference: that is the language we write in.
         $fr = array_filter($group, static fn (array $p): bool => $p['locale'] === 'fr');
         $title = ($fr !== [] ? reset($fr) : $group[0])['title'];
         printf("  %-34s %s\n", $k, $title);
@@ -132,8 +133,8 @@ if ($changed === 0) {
 
 printf("\n✓ %s : %d fichier(s) %s\n", $key, $changed, $toDraft ? 'remis en brouillon' : 'publié(s)');
 
-// Les langues manquantes valent un avertissement : publier un article dans une
-// seule langue, c'est afficher les autres en grisé sans s'en rendre compte.
+// A missing language is worth a warning: publishing a piece in one language
+// only means showing the others greyed out without noticing.
 $locales = array_column($matching, 'locale');
 if ($missing = array_diff(['fr', 'en', 'es'], $locales)) {
     printf("⚠ pas de version : %s\n", implode(', ', $missing));

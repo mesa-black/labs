@@ -8,7 +8,7 @@
     {% block canonical %}<link rel="canonical" href="{{ site.url }}{{ page_url }}">{% endblock %}
     {% block alternates %}{% endblock %}
 
-    {# Partage : sans ça, un lien collé sur LinkedIn sort nu. #}
+    {# Sharing: without this, a link pasted on LinkedIn comes out bare. #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="{{ site.name }}">
     <meta property="og:locale" content="{{ locale }}">
@@ -47,9 +47,10 @@
         <div class="wrap">
             <p>{{ t.tagline }}</p>
             <p>{{ t.footer_agency }}</p>
-            <p>{{ t.footer_smtr }} <a href="{{ smtr_url }}">Show me the REX</a>.</p>
+            {# Both leave the blog: the platform, and a self-contained document. #}
+            <p>{{ t.footer_smtr }} <a href="{{ smtr_url }}" target="_blank" rel="noopener">Show me the REX</a>.</p>
             {% if audit_published %}<p>{{ t.footer_audit }} :
-                <a href="/audit/report.html">{{ t.footer_audit_hint }}</a>.</p>{% endif %}
+                <a href="/audit/report.html" target="_blank" rel="noopener">{{ t.footer_audit_hint }}</a>.</p>{% endif %}
         </div>
     </footer>
 </body>

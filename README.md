@@ -1,252 +1,295 @@
 # BlackMesa Labs
 
-Le blog d'ingénierie de BlackMesa. **Markdown en entrée, HTML statique en sortie, aucun
-runtime en production.**
+BlackMesa's engineering blog. **Markdown in, static HTML out, no runtime in production.**
 
-## Pourquoi pas un CMS
+## Why not a CMS
 
-Le site publié est un dossier de fichiers. Pas de base de données, pas d'interface
-d'administration, pas d'authentification, pas de sauvegarde à surveiller : le blog ne peut
-pas tomber pour une raison applicative, et il n'a pas de surface d'attaque propre. Le prix
-à payer est qu'on écrit dans un éditeur de texte plutôt que dans un navigateur — ce qu'on
-faisait déjà.
+The published site is a folder of files. No database, no admin interface, no
+authentication, no backup to watch: the blog cannot fall over for an application reason,
+and it has no attack surface of its own. The price is that you write in a text editor
+rather than in a browser — which is what we were doing anyway.
 
-**Le seuil de bascule est écrit, et il a déjà bougé une fois.** Il disait : pagination,
-tags, multilingue et recherche → on passe à Hugo. Le multilingue est arrivé et a coûté
-~80 lignes, soit moins que la migration qu'il aurait déclenchée. On l'a donc fait ici, et
-le seuil se resserre : **pagination, tags ou recherche → on arrête et on bascule.** Écrit
-pour que la prochaine fois la question se tranche en une minute au lieu d'être rediscutée.
+**The threshold for changing our minds is written down, and it has already moved once.** It
+said: pagination, tags, multilingual and search → switch to Hugo. Multilingual arrived and
+cost ~80 lines, which is less than the migration it would have triggered. So we did it
+here, and the threshold tightened: **pagination, tags or search → we stop and switch.**
+Written down so that next time the question is settled in a minute instead of being
+reopened.
 
-## Démarrer
+## Getting started
 
 ```bash
-make install     # dépendances Composer
-make serve       # build avec les brouillons + http://localhost:8000
+make install     # Composer dependencies
+make serve       # build with drafts + http://localhost:8000
 ```
 
-| Commande | Effet |
+| Command | Effect |
 |---|---|
-| `make build` | Construit `public/` — **articles publiés uniquement** |
-| `make drafts` | Idem en incluant les brouillons. À ne jamais déployer |
-| `make serve` | `drafts` + serveur local sur le port 8000 |
-| `make clean` | Supprime `public/` |
+| `make build` | Builds `public/` — **published posts only** |
+| `make drafts` | Same, including drafts. Never deploy this |
+| `make serve` | `drafts` + local server on port 8000 |
+| `make preview` | The site as of a given date, served locally: `make preview DATE=2026-10-08` |
+| `make clean` | Removes `public/` |
 
-`make build` échoue s'il n'y a aucun article publié : c'est volontaire, ça évite de
-déployer un site vide sans s'en apercevoir.
+`make build` fails when no post is published: deliberately, so that an empty site cannot be
+deployed unnoticed.
 
-## Écrire un article
+`make preview` exists because `deploy` rebuilds `public/` once per release date and
+finishes with today's — it silently replaces any preview of a future state, and with the
+deployed site's URLs. With no argument it shows the furthest scheduled date, so a preview
+carries everything queued, and it prints which date it is showing.
 
-Un fichier dans `content/posts/<langue>/`, nommé `AAAA-MM-JJ-slug.md` :
+## Writing a post
+
+A file in `content/posts/<language>/`, named `YYYY-MM-DD-slug.md`:
 
 ```markdown
 ---
-title: "Le titre, tel qu'il s'affichera"
-standfirst: "Une phrase de chapeau. Optionnelle mais recommandée."
-key: mon-article           # lie les traductions entre elles
+title: "The title, as it will be displayed"
+standfirst: "One opening sentence. Optional but recommended."
+key: my-post               # ties the translations together
 date: 2026-09-27
-slug: mon-article          # optionnel : sinon déduit du nom de fichier
-draft: true                # retirer pour publier
+slug: my-post              # optional: otherwise taken from the filename
+draft: true                # remove to publish
 ---
 
-Le corps en markdown. Les `##` deviennent les intertitres.
+The body in markdown. `##` become the subheadings.
 ```
 
-### Deux natures d'article
+### Two kinds of post
 
-Un **article complet** vit ici et fait autorité ici.
+A **full post** lives here and is authoritative here.
 
-Un **pointeur** présente en quelques paragraphes un REX publié sur
-[Show me the REX](https://showmetherex.com) et y renvoie, sans recopier le texte :
+A **pointer** introduces, in a few paragraphs, a case study published on
+[Show me the REX](https://showmetherex.com) and links to it without copying the text:
 
 ```markdown
 ---
 title: "…"
 date: 2026-09-25
 pointer: true
-rex: https://showmetherex.com/feedback/le-slug
+rex: https://showmetherex.com/feedback/the-slug
 ---
 ```
 
-La **première** mention de « Show me the REX » dans le corps d'un article devient
-automatiquement un lien vers la plateforme, dans la langue du lecteur. La première
-seulement : dix fois le même lien dans une page se lit mal, et les moteurs y voient du
-bourrage. Le HTML est parcouru en séparant balises et texte, pour ne jamais écrire un lien
-dans un lien ni à l'intérieur d'un bloc de code.
+The **first** mention of "Show me the REX" in a post's body automatically becomes a link to
+the platform, in the reader's language. The first only: ten identical links on one page
+reads badly, and search engines see stuffing. The HTML is walked with tags and text kept
+apart, so a link is never written inside a link or inside a code block.
 
-C'est volontaire et ce n'est pas cosmétique : **le même texte publié sur deux domaines, les
-moteurs en ignorent un**. Un pointeur émet donc une balise `canonical` vers SMTR, qui reste
-la source. Les nouveaux sujets d'ingénierie, eux, sont canoniques ici et ne partent pas sur
-SMTR — c'est toute la raison d'être de ce blog.
+This is deliberate and it is not cosmetic: **the same text published on two domains, and
+search engines ignore one of them**. A pointer therefore emits a `canonical` tag towards
+SMTR, which stays the source. New engineering subjects are canonical here and do not go to
+SMTR — which is the entire reason this blog exists.
 
-`title`, `date` et `key` sont obligatoires — la construction s'arrête avec le nom du
-fichier fautif plutôt que de publier un article incomplet.
+`title`, `date` and `key` are required — the build stops, naming the offending file, rather
+than publishing an incomplete post.
 
-### Trois langues
+### Three languages
 
-Français à la racine, anglais sous `/en/`, espagnol sous `/es/` — **le même schéma d'URL
-que showmetherex.com**, pour qu'un lecteur qui passe d'un site à l'autre ne soit pas perdu.
+French at the root, English under `/en/`, Spanish under `/es/` — **the same URL scheme as
+showmetherex.com**, so that a reader moving between the two sites is not lost.
 
-Les traductions d'un même article se reconnaissent par leur `key` commune, et chacune a son
-propre `slug` : un titre anglais mérite une URL anglaise. Le sélecteur de langue saute
-alors vers la traduction du même article, pas vers l'accueil. Une langue dans laquelle
-l'article n'existe pas reste affichée mais inerte — plus honnête que de la masquer.
+Translations of one post recognise each other by their shared `key`, and each has its own
+`slug`: an English title deserves an English URL. The language selector then jumps to the
+translation of the same post rather than to the home page. A language the post does not
+exist in stays visible but inert — more honest than hiding it.
 
-Les balises `hreflang` sont générées à partir des traductions réellement présentes.
+`hreflang` tags are generated from the translations actually present.
 
-### Publier
-
-```bash
-make drafts-list                              # quels brouillons, quelles clés
-make publish KEY=le-code-qu-on-n-ecrit-pas    # retire draft: true partout, puis déploie
-make unpublish KEY=...                        # remet en brouillon (ne déploie pas)
-```
-
-`publish` agit sur **toutes les langues d'un même article** en une fois, via leur `key`
-commune. C'est le but : un article oublié en brouillon dans une seule langue s'affiche en
-grisé dans le sélecteur, et on ne s'en aperçoit que des semaines plus tard. Le script
-prévient d'ailleurs si une langue manque.
-
-Il ne réécrit que la ligne `draft` : un aller-retour publier/dépublier rend le fichier
-octet pour octet identique.
-
-### Programmer une parution
-
-Le champ `date` du front matter **est** la date de parution. Un article daté du futur est
-écarté du build et sort tout seul le jour dit :
+### Publishing
 
 ```bash
-make drafts-list      # les brouillons, et à part, les articles programmés
+make drafts-list                              # which drafts, which keys
+make publish KEY=le-code-qu-on-n-ecrit-pas    # removes draft: true everywhere, then deploys
+make unpublish KEY=...                        # back to draft (does not deploy)
 ```
 
-Brouillon et article programmé sont deux états distincts, et les confondre mène à
-réécrire un texte déjà relu. Un brouillon n'est pas fini ; un article programmé l'est, il
-attend son tour.
+`publish` acts on **every language of one post** at once, through their shared `key`. That
+is the point: a post left in draft in a single language shows greyed out in the selector,
+and nobody notices for weeks. The script also warns when a language is missing.
 
-Tout publier le même jour est le meilleur moyen de faire fuir un lecteur : il en lit un,
-voit qu'il en reste six, et referme l'onglet. Étaler les parutions donne une raison de
-revenir.
+It rewrites the `draft` line only: a publish/unpublish round trip leaves the file identical
+byte for byte.
 
-Le temps de lecture est calculé sur le texte rendu, pas sur le markdown : la syntaxe que
-le lecteur ne voit jamais ne compte pas.
+### Scheduling a publication
+
+The front matter's `date` **is** the publication date. A post dated in the future is left
+out of the build and comes out on its own, on the day:
+
+```bash
+make drafts-list      # the drafts, and separately, the scheduled posts
+```
+
+A draft and a scheduled post are two distinct states, and confusing them leads to
+rewriting a text that was already reviewed. A draft is not finished; a scheduled post is,
+and it is waiting its turn.
+
+Publishing everything on the same day is the best way to lose a reader: they read one, see
+six left, and close the tab. Spreading publications out gives a reason to come back.
+
+Reading time is computed on the rendered text rather than on the markdown: syntax the
+reader never sees does not count.
 
 ## Structure
 
 ```
-bin/build.php     le générateur, en entier
-content/posts/    les articles, en markdown, un dossier par langue
-templates/        les gabarits Twig (base, liste, article, flux Atom)
-assets/style.css  une feuille de style, sans étape de compilation
-public/           la sortie — généré, jamais versionné
+bin/build.php     the generator, in full
+content/posts/    the posts, in markdown, one folder per language
+templates/        the Twig templates (base, list, post, Atom feed)
+assets/style.css  one stylesheet, with no build step
+assets/audit/     this site's own cryptographic inventory, signed — see below
+public/           the output — generated, never versioned
 ```
 
-`public/` est vidé à chaque construction : une page dont le slug a changé ne peut pas
-survivre à la génération suivante.
+`public/` is emptied on every build: a page whose slug changed cannot survive the next
+generation.
 
-## Le design
+## The design
 
-**Une seule famille jouée sur les graisses** plutôt qu'une police de titre et une police de
-texte : la hiérarchie vient du poids et du serrage. **Archivo** sert aux titres comme au
-corps. **IBM Plex Mono** est strictement réservé à ce qui vient d'une machine — commandes,
-versions, extraits de code — pour que le lecteur apprenne qu'un texte en chasse fixe n'a
-pas été écrit pour lui.
+**One family played on its weights** rather than a display face and a text face: the
+hierarchy comes from weight and tracking. **Archivo** serves headings and body alike. **IBM
+Plex Mono** is strictly reserved for what comes from a machine — commands, versions, code
+excerpts — so that the reader learns that monospaced text was not written for them.
 
-Fond **crème**, encre presque noire. **Le sarcelle est l'accent** (liens, intertitres,
-surlignage des passages importants), **l'ambre signale ce qui ne va pas** ou n'est pas
-fini : un brouillon, un avertissement. Aucune couleur n'est décorative.
+**Cream** ground, almost-black ink. **Teal is the accent** (links, subheadings, highlighting
+of important passages), **amber marks what is wrong** or unfinished: a draft, a warning. No
+colour is decorative.
 
-Le corps des articles est **justifié avec césure automatique** — la justification seule,
-sur une colonne étroite, creuse des rivières blanches. La césure s'appuie sur le `lang` de
-la page, d'où sa présence sur `<html>`. Les titres ne sont jamais justifiés : ils se
-répartissent avec `text-wrap: balance`. Sous 34rem la justification est désactivée : même
-avec la césure, une colonne de téléphone se remplit de trous.
+Post bodies are **justified with automatic hyphenation** — justification alone, in a narrow
+column, digs white rivers. Hyphenation relies on the page's `lang`, hence its presence on
+`<html>`. Headings are never justified: they are distributed with `text-wrap: balance`.
+Below 34rem justification is switched off: even hyphenated, a phone column fills with
+holes.
 
-Thème clair et sombre gérés par jetons CSS, y compris quand le visiteur laisse son système
-décider. Le sombre est chaud lui aussi, pour rester cohérent avec le crème.
+Light and dark themes through CSS tokens, including when the visitor lets their system
+decide. The dark one is warm too, to stay consistent with the cream.
 
-## SEO et moteurs de réponse
+## SEO and answer engines
 
-Généré à chaque construction, sans rien à maintenir :
+Generated on every build, with nothing to maintain:
 
-- **`sitemap.xml`** couvrant les trois langues, chaque URL portant ses alternates ;
-- **`robots.txt`** qui déclare le sitemap et **autorise explicitement les crawlers des
-  moteurs de réponse** (GPTBot, ClaudeBot, PerplexityBot). C'est un choix : être cité est
-  la raison d'écrire ici. Passer les lignes en `Disallow` suffit à changer d'avis ;
-- **`canonical`** sur chaque page — vers le REX pour un pointeur, auto-référencée sinon ;
-- **`hreflang`** réciproques plus `x-default` vers le français ;
-- **Open Graph** et Twitter Card, pour qu'un lien collé sur LinkedIn ne sorte pas nu ;
-- **JSON-LD** `BlogPosting` sur les articles (titre, chapeau, date, langue, auteur, nombre
-  de mots) et `Blog` sur les accueils. C'est ce qui permet à un moteur de réponse de citer
-  correctement : qui a écrit, quand, pour quelle organisation ;
-- une **page 404** dans le style du site.
+- **`sitemap.xml`** covering the three languages, each URL carrying its alternates;
+- **`robots.txt`** declaring the sitemap and **explicitly allowing the answer engines'
+  crawlers** (GPTBot, ClaudeBot, PerplexityBot). That is a choice: being cited is the
+  reason to write here. Turning those lines into `Disallow` is all it takes to change our
+  minds;
+- **`canonical`** on every page — towards the case study for a pointer, self-referencing
+  otherwise;
+- reciprocal **`hreflang`** plus `x-default` towards French;
+- **Open Graph** and Twitter Card, so a link pasted on LinkedIn does not come out bare;
+- **JSON-LD** `BlogPosting` on posts (title, standfirst, date, language, author, word
+  count) and `Blog` on the home pages. That is what lets an answer engine cite correctly:
+  who wrote it, when, for which organisation;
+- a **404 page** in the site's style.
 
-Ce qui aide autant sans être une balise : un chapeau qui résume l'article dès le haut de
-page, des sous-titres explicites, des paragraphes courts. Un texte extractible se cite
-mieux qu'un texte fluide.
+What helps as much without being a tag: a standfirst that sums the post up at the top of
+the page, explicit subheadings, short paragraphs. Extractable text is cited better than
+flowing text.
 
-**Le manque restant : aucune image de partage.** Sans `og:image`, LinkedIn affichera une
-vignette vide. Il faut soit un visuel unique pour tout le site, soit une carte générée par
-article — la seconde option vaut le coup le jour où la publication devient régulière.
+**What is still missing: no sharing image.** Without `og:image`, LinkedIn shows an empty
+thumbnail. It needs either one visual for the whole site or a card generated per post — the
+second is worth it the day publication becomes regular.
 
-## Le serveur
+## This site's own cryptographic inventory
 
-Une machine Ubuntu, un Caddy, un dossier de fichiers. Rien d'autre.
+The blog that writes about [Sablier](https://github.com/mesa-black/sablier) is read by it,
+and publishes the result:
 
 ```bash
-make provision                        # met le serveur dans l'état attendu
-SITE_DOMAIN=exemple.fr make provision # idem, avec certificat automatique
-make deploy                           # construit chaque version datée et publie
+make audit       # scans this repository, signs the report, verifies it
 ```
 
-`deploy/provision.sh` décrit l'état de la machine : paquets, correctifs de sécurité
-automatiques, pare-feu réduit à 22/80/443, fail2ban, dépôt Caddy **déclaré** et non ajouté
-à la main — une montée de version de distribution supprime les sources tierces sans le
-dire, et relancer le script les rétablit. Il est relançable autant qu'on veut et se termine
-par une vérification : il dit ce qu'il a obtenu, il ne le suppose pas.
+Three artefacts land in `assets/audit/` and the build copies them to `/audit/`, linked from
+the footer of every page. `deploy` depends on `audit`, because a site that displays its own
+inventory has to serve a current one — an inventory published once goes wrong without
+warning.
 
-Le périmètre s'arrête là où commence la publication. `make deploy` fait le reste, par
-`rsync`.
+Scanned with no declaration it returns nothing at all: a static generator encrypts nothing,
+signs nothing, hashes nothing. All of this site's cryptography is in its transport and in
+the ssh key that deploys it, and neither is a file here. So `sablier.json` declares what
+this repository is — almost everything in it is written to be served in the clear, and the
+confidentiality owed is zero, by construction rather than by neglect — and it declares the
+probe host, because the real cryptography is negotiated rather than written.
 
-### Comment une parution programmée arrive en ligne
+The report is signed by the key whose public halves are in `sablier.json`; the private
+halves live outside the repository. Changing the expected key is therefore a commit
+somebody reads, which is what makes the signature worth anything. Anybody can check it
+without us:
 
-Le serveur ne construit rien. Il n'a ni PHP, ni composer, ni dépôt : lui donner une chaîne
-de construction, c'est accepter qu'une parution échoue un samedi matin à cause d'une
-dépendance cassée.
+```bash
+curl -O https://mesa.black/audit/report.html
+curl -O https://mesa.black/audit/report.html.sig
+curl -O https://raw.githubusercontent.com/mesa-black/labs/main/sablier.json
+sablier verify report.html.sig --declare=sablier.json
+```
 
-À la place, `make deploy` construit **une version complète du site par date de parution**
-— aujourd'hui, et une par article programmé — et les dépose toutes :
+What that establishes is printed in the report itself, and so is what it does not: the
+signature covers the digest of the findings, not the bytes of the page. A report displays
+its own signature, so it cannot contain it. Tying the two together means replaying the scan
+on the same state of this repository and comparing the digest — which this repository being
+public is what makes possible.
+
+## The server
+
+One Ubuntu machine, one Caddy, one folder of files. Nothing else.
+
+```bash
+make provision    # puts the server in the expected state, re-runnable
+make deploy       # builds every dated version and publishes
+```
+
+`deploy/provision.sh` describes the state of the machine: packages, automatic security
+updates, a firewall down to 22/80/443, fail2ban, and the Caddy repository **declared**
+rather than added by hand — a distribution upgrade removes third-party sources without
+saying so, and re-running the script puts them back. It is re-runnable as often as you like
+and ends with a verification: it says what it obtained, it does not assume it.
+
+The scope stops where publishing begins. `make deploy` does the rest, over `rsync`.
+
+`SITE_DOMAIN` defaults to `mesa.black` in the Makefile rather than living only in the
+environment: without a default, a `make provision` run without thinking regenerates the
+site block on `:80` and undoes HTTPS without saying anything. The certificate is obtained
+automatically, `www` and the bare IP redirect to the name, and HSTS is set for a year
+without `preload` — that list does not let go in a day.
+
+### How a scheduled publication goes live
+
+The server builds nothing. It has no PHP, no composer, no repository: giving it a build
+chain means accepting that a publication fails on a Saturday morning because of a broken
+dependency.
+
+Instead, `make deploy` builds **one complete version of the site per publication date** —
+today's, and one per scheduled post — and uploads them all:
 
 ```
-/var/www/labs/releases/2026-09-30/   la version du jour
-/var/www/labs/releases/2026-10-04/   celle qui sortira samedi
+/var/www/labs/releases/2026-09-30/   today's version
+/var/www/labs/releases/2026-10-04/   the one coming out on Saturday
 /var/www/labs/current -> releases/2026-09-30
 ```
 
-Caddy sert le lien `current`. Chaque matin à 7 h, `labs-release.timer` déclenche un script
-de quinze lignes qui fait pointer ce lien sur la version la plus récente dont la date est
-arrivée, puis purge les anciennes en en gardant trois. Le remplacement passe par un
-renommage : aucune requête ne peut tomber sur une racine inexistante.
+Caddy serves the `current` link. Every morning at 7, `labs-release.timer` runs a
+fifteen-line script that points that link at the most recent version whose date has come,
+then prunes the old ones, keeping three. The replacement goes through a rename: no request
+can land on a root that does not exist.
 
-Trois conséquences qui valent le détour :
+Three consequences worth the detour:
 
-- ce qui sortira samedi est **déjà construit et consultable** aujourd'hui, donc vérifiable
-  avant de partir ;
-- revenir en arrière, c'est refaire pointer un lien ;
-- le minuteur est `Persistent=true` : si la machine était éteinte à 7 h, la bascule se fait
-  au démarrage suivant plutôt que d'être sautée.
+- what comes out on Saturday is **already built and browsable** today, so it can be checked
+  before leaving;
+- rolling back means pointing a link again;
+- the timer is `Persistent=true`: if the machine was off at 7, the switch happens at the
+  next boot rather than being skipped.
 
-On peut répéter une parution future sans attendre, et c'est la seule preuve qui compte :
+A future publication can be rehearsed without waiting, and that is the only proof that
+counts:
 
 ```bash
-ssh mesa.black 'LABS_TODAY=2026-10-04 /usr/local/bin/labs-release'   # avance
-ssh mesa.black '/usr/local/bin/labs-release'                         # revient au jour réel
+ssh mesa.black 'LABS_TODAY=2026-10-04 /usr/local/bin/labs-release'   # jump forward
+ssh mesa.black '/usr/local/bin/labs-release'                         # back to the real day
 ```
 
-**On a essayé Ansible d'abord, et on l'a jeté.** Pour une machine qui sert des fichiers
-statiques, il apportait l'idempotence et une dépendance Python, contre trente lignes de
-shell qui font la même chose. Il redeviendra pertinent le jour où il y aura une vraie
-configuration serveur à posséder — fichiers compose, secrets, plusieurs machines. Pas
-avant.
-
-**Le certificat n'est demandé qu'une fois le DNS pointé sur la machine.** Sans domaine, le
-site est servi en HTTP sur l'IP : appeler Let's Encrypt pour un domaine mal pointé ne donne
-rien et finit par limiter les tentatives.
+**We tried Ansible first, and threw it away.** For a machine serving static files it
+brought idempotence and a Python dependency, against thirty lines of shell doing the same
+thing. It becomes relevant again the day there is real server configuration to own —
+compose files, secrets, several machines. Not before.

@@ -26,10 +26,11 @@
     --warn:    #9c5510;
     --rule:    #e2ddd1;
     --chip:    #efe9dd;
-    /* Surlignage du gras : un lavis posé sous la ligne. En clair il s'agit
-       d'assombrir à peine le papier ; en sombre, surtout pas d'éclaircir le
-       fond sous un texte déjà clair — le bandeau doit rester plus sombre que
-       le texte, sinon le contraste s'effondre là où on voulait insister. */
+    /* Highlighting of bold text: a wash laid under the line. On the light
+       theme that means darkening the paper a touch; on the dark one it must
+       never lighten the ground under already-light text — the band has to stay
+       darker than the text, or the contrast collapses exactly where the
+       emphasis was wanted. */
     --mark:    rgba(13, 107, 99, .14);
 
     --serif:   "Instrument Serif", "Iowan Old Style", Georgia, serif;
@@ -119,8 +120,8 @@ a { color: inherit; }
 .lang:hover { color: var(--ink); }
 .lang.is-current { color: var(--ink); font-weight: 500; }
 
-/* Une langue dans laquelle l'article n'existe pas : affichée, mais inerte —
-   plus honnête que de la masquer ou de renvoyer vers une page absente. */
+/* A language the piece does not exist in: shown, but inert — more honest than
+   hiding it or pointing at a page that is not there. */
 .lang.is-missing { opacity: .35; cursor: default; }
 
 .masthead-nav .feed { padding-left: .55rem; border-left: 1px solid var(--rule); }
@@ -248,10 +249,10 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .prose > :first-child { margin-top: 0; }
 .prose > :last-child { margin-bottom: 0; }
 
-/* Texte justifié, avec césure : sans elle, une colonne étroite se remplit de
-   rivières blanches. Le `lang` de la page permet au navigateur de couper au bon
-   endroit — c'est pour ça qu'il est posé sur <html>. Les titres, eux, ne sont
-   jamais justifiés : ils se répartissent avec `text-wrap: balance`. */
+/* Justified text, hyphenated: without hyphenation a narrow column fills with
+   white rivers. The page's `lang` is what lets the browser break in the right
+   place — which is why it sits on <html>. Headings are never justified: they
+   are distributed with `text-wrap: balance`. */
 .prose p,
 .prose li {
     text-align: justify;
@@ -342,8 +343,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 
 /* ------------------------------------------------------------- crossover */
 
-/* Un article « pointeur » ne recopie pas le REX : il le présente et y renvoie.
-   Le texte intégral reste sur showmetherex.com, qui garde la balise canonique. */
+/* A "pointer" piece does not copy the case study: it introduces it and links
+   to it. The full text stays on showmetherex.com, which keeps the canonical. */
 .crossover {
     margin-top: 2.8rem;
     padding: 1.4rem 1.5rem;
@@ -385,8 +386,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     letter-spacing: .08em;
 }
 
-/* Les tableaux sont le seul bloc qui peut dépasser un écran de téléphone :
-   chacun défile dans son propre conteneur, la page ne glisse jamais de côté. */
+/* Tables are the only block that can outgrow a phone screen: each scrolls in
+   its own container, so the page itself never slides sideways. */
 .scroll { overflow-x: auto; margin: 0 0 1.4rem; }
 .scroll table { margin: 0; }
 
@@ -395,8 +396,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 @media (max-width: 34rem) {
     body { font-size: 1rem; }
 
-    /* Sur une colonne étroite, la justification creuse des trous même avec la
-       césure : on repasse en fer à gauche là où elle dessert la lecture. */
+    /* In a narrow column, justification digs holes even with hyphenation:
+       back to ragged right where it works against reading. */
     .prose p,
     .prose li { text-align: left; }
 

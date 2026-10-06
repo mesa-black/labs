@@ -7,16 +7,16 @@ help: ## Show this help
 install: ## Install the dependencies
 	@composer install
 
-# Adresse publique du site. Sert aux URL canoniques, aux hreflang, au sitemap et
-# aux métadonnées de partage — donc le build local et le build déployé ne peuvent
-# pas partager la même valeur par défaut.
+# The site's public address. It feeds the canonical URLs, the hreflang tags, the
+# sitemap and the sharing metadata — so a local build and a deployed build cannot
+# share one default.
 SITE_URL ?= https://mesa.black
 
-# Le nom que Caddy sert, et pour lequel il demande un certificat. Avec une valeur
-# par défaut, et pas seulement dans l'environnement : sans elle, un `make
-# provision` lancé sans y penser regénère le bloc en `:80` et défait HTTPS sans
-# rien dire. Le domaine est une décision prise une fois, elle appartient au
-# dépôt.
+# The name Caddy serves, and the one it asks a certificate for. With a default,
+# and not only in the environment: without one, a `make provision` run without
+# thinking regenerates the block on `:80` and undoes HTTPS without saying
+# anything. A domain is decided once, and that decision belongs to the
+# repository.
 SITE_DOMAIN ?= mesa.black
 SITE_ROOT ?= /var/www/labs
 
@@ -26,11 +26,11 @@ build: ## Build the site into public/ (published posts only)
 drafts: ## Build including drafts — never deploy this output
 	@php bin/build.php --drafts
 
-# `deploy` reconstruit public/ pour chaque date de parution et finit par celle du
-# jour : il écrase donc toute prévisualisation d'un état futur, en silence, et
-# avec les URL du site déployé. C'est arrivé deux fois, dont une fois sous les
-# yeux de quelqu'un qui cherchait l'article. Une cible dédiée, qui dit ce qu'elle
-# montre et sur quelle date, coûte quatre lignes.
+# `deploy` rebuilds public/ once per publication date and finishes with today's:
+# it therefore overwrites any preview of a future state, silently, and with the
+# deployed site's URLs. That happened twice, once while somebody was looking for
+# the piece and could not find it. A dedicated target, which says what it shows
+# and for which date, costs four lines.
 PREVIEW_PORT ?= 8000
 
 preview: ## Prévisualiser le site à une date : make preview [DATE=2026-10-08]
@@ -64,10 +64,10 @@ unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublis
 	@echo "  → 'make deploy' pour le retirer réellement du site"
 
 # --- inventaire cryptographique ----------------------------------------------
-# Le site publie ce que Sablier dit de lui, signé par la clé que sa déclaration
-# désigne. Deux raisons de le faire ici et pas à la main : un inventaire publié
-# une fois devient faux sans prévenir, et `deploy` en dépend donc pour que ce qui
-# est servi corresponde toujours à ce qui est en ligne.
+# The site publishes what Sablier says about it, signed by the key its
+# declaration designates. Two reasons to do it here rather than by hand: an
+# inventory published once goes wrong without warning, and `deploy` therefore
+# depends on it so that what is served always matches what is online.
 SABLIER ?= ../sablier/bin/sablier
 SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 
@@ -81,7 +81,8 @@ audit: ## Produire l'inventaire cryptographique signé du site
 	@$(SABLIER) verify assets/audit/report.html.sig --declare=sablier.json
 
 # --- serveur -----------------------------------------------------------------
-# `provision` décrit la machine, `deploy` y dépose le site. Un outil, un rôle.
+# `provision` describes the machine, `deploy` puts the site on it. One tool, one
+# role.
 
 provision: ## Mettre le serveur dans l'état attendu (relançable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/

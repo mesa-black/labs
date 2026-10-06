@@ -100,9 +100,9 @@ $months = [
 
 $withDrafts = \in_array('--drafts', $argv, true);
 
-// --as-of=AAAA-MM-JJ construit le site tel qu'il sera ce jour-là. C'est ce qui
-// permet de préparer les parutions futures depuis le poste et de les vérifier
-// avant qu'elles ne sortent : le serveur ne construit rien, il bascule.
+// --as-of=YYYY-MM-DD builds the site as it will be on that day. That is what
+// lets future publications be prepared from the workstation and checked before
+// they come out: the server builds nothing, it switches a link.
 $asOf = 'today';
 foreach ($argv as $arg) {
     if (str_starts_with($arg, '--as-of=')) {
@@ -112,13 +112,13 @@ foreach ($argv as $arg) {
         }
     }
 }
-// Figé une fois pour toutes : un build qui chevauche minuit ne doit pas publier
-// la moitié des traductions d'un article programmé.
+// Fixed once and for all: a build that straddles midnight must not publish half
+// the translations of a scheduled piece.
 $now = new DateTimeImmutable($asOf.' 23:59:59');
 
-// --release-dates ne construit rien : il liste les dates de parution encore à
-// venir, une par ligne. Le déploiement s'en sert pour savoir combien de
-// versions datées il doit préparer.
+// --release-dates builds nothing: it lists the publication dates still ahead,
+// one per line. The deployment uses it to know how many dated versions it has
+// to prepare.
 if (\in_array('--release-dates', $argv, true)) {
     $dates = [];
     foreach (glob(ROOT.'/content/posts/*/*.md') ?: [] as $file) {
@@ -150,12 +150,12 @@ $markdown = new MarkdownConverter($env);
 
 
 /**
- * Lie la PREMIÈRE mention de « Show me the REX » d'un article vers la plateforme,
- * dans la langue du lecteur. Pas toutes : dix fois le même lien dans une page se
- * lit mal et les moteurs y voient du bourrage.
+ * Links the FIRST mention of "Show me the REX" in a piece to the platform, in
+ * the reader's language. Not every one: ten identical links on a page reads
+ * badly, and search engines see stuffing.
  *
- * Le HTML est parcouru en séparant balises et texte, pour ne jamais écrire un
- * lien dans un lien, ni à l'intérieur d'un bloc de code.
+ * The HTML is walked with tags and text kept apart, so a link is never written
+ * inside a link or inside a code block.
  */
 function linkBrandOnce(string $html, string $locale): string
 {
@@ -188,7 +188,7 @@ function linkBrandOnce(string $html, string $locale): string
             static function (array $m) use ($url, &$done): string {
                 $done = true;
 
-                return sprintf('<a href="%s">%s</a>', $url, $m[0]);
+                return sprintf('<a href="%s" target="_blank" rel="noopener">%s</a>', $url, $m[0]);
             },
             $part,
             1,
@@ -196,6 +196,39 @@ function linkBrandOnce(string $html, string $locale): string
     }
 
     return implode('', $parts);
+}
+
+/**
+ * Opens anything that leaves this site in a new tab.
+ *
+ * Reading a piece and following a link out of it are two different intents, and
+ * a reader who wanted the second rarely wanted to lose the first. Navigation
+ * inside the blog is untouched: moving from the home page to a piece, or back,
+ * is the same intent continuing, and a new tab per article would be a mess of
+ * tabs within a minute.
+ *
+ * `rel="noopener"` because the opened page must not reach back into this one.
+ * Not `noreferrer`: the platform these links mostly point at deserves to see
+ * where its readers came from, and stripping that would hide our own traffic
+ * from ourselves.
+ */
+function externalLinksInNewTab(string $html, string $site): string
+{
+    $host = parse_url($site, \PHP_URL_HOST) ?: '';
+
+    return (string) preg_replace_callback(
+        '#<a\s([^>]*?)href="(https?://[^"]+)"([^>]*)>#i',
+        static function (array $m) use ($host): string {
+            // Already carrying a target, or pointing back at this site: leave it.
+            if (stripos($m[1].$m[3], 'target=') !== false
+                || parse_url($m[2], \PHP_URL_HOST) === $host) {
+                return $m[0];
+            }
+
+            return sprintf('<a %shref="%s"%s target="_blank" rel="noopener">', $m[1], $m[2], $m[3]);
+        },
+        $html,
+    );
 }
 
 // ---------------------------------------------------------------- read posts
@@ -222,10 +255,10 @@ foreach (LOCALES as $locale) {
             ? (new DateTimeImmutable())->setTimestamp($meta['date'])
             : new DateTimeImmutable((string) $meta['date']);
 
-        // La date est une date de parution : un article daté du futur attend son
-        // jour. C'est ce qui permet d'écrire à l'avance sans tenir un état
-        // « prêt mais pas publié » ailleurs que dans le fichier lui-même. Il
-        // sort au premier build effectué à partir de cette date.
+        // The date is a publication date: a piece dated in the future waits for
+        // its day. That is what allows writing ahead without keeping a "ready
+        // but not published" state anywhere but in the file itself. It comes out
+        // on the first build run on or after that date.
         if ($date > $now && !$withDrafts) {
             continue;
         }
@@ -240,6 +273,7 @@ foreach (LOCALES as $locale) {
         // own scroll container rather than letting the whole page slide sideways.
         $html = str_replace(['<table>', '</table>'], ['<div class="scroll"><table>', '</table></div>'], (string) $rendered);
         $html = linkBrandOnce($html, $locale);
+        $html = externalLinksInNewTab($html, $site['url']);
 
         $slug = (string) ($meta['slug'] ?? preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', basename($file, '.md')));
 
@@ -336,8 +370,8 @@ foreach (LOCALES as $locale) {
         't' => $strings[$locale],
         'home' => $prefix.'/',
         'feed_url' => $prefix.'/feed.xml',
-        // La plateforme est trilingue elle aussi : on renvoie le lecteur dans sa
-        // langue plutôt que de le faire atterrir en français.
+        // The platform is trilingual too: send the reader to their own language
+        // rather than landing them in French.
         'audit_published' => is_file(ROOT.'/assets/audit/report.html'), 'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
         'translations' => $translations,
     ];
@@ -382,10 +416,10 @@ $write('404.html', $twig->render('404.html.twig', [
 copy(ROOT.'/assets/style.css', OUT.'/style.css');
 echo '  ', str_pad('style.css', 48), number_format(filesize(OUT.'/style.css') / 1024, 1), " KB\n";
 
-// L'inventaire cryptographique du site, produit par `make audit` et déposé tel
-// quel. Ce sont des documents autonomes, signés : les reconstruire ici les
-// ferait sortir du périmètre de la signature, qui couvre des constatations et
-// pas une mise en page.
+// The site's cryptographic inventory, produced by `make audit` and copied as
+// is. These are self-contained signed documents: rebuilding them here would take
+// them outside the scope of the signature, which covers findings and not a
+// layout.
 if (is_dir(ROOT.'/assets/audit')) {
     @mkdir(OUT.'/audit', 0o755, true);
     foreach (glob(ROOT.'/assets/audit/*') ?: [] as $artefact) {
