@@ -187,9 +187,11 @@ What helps as much without being a tag: a standfirst that sums the post up at th
 the page, explicit subheadings, short paragraphs. Extractable text is cited better than
 flowing text.
 
-**What is still missing: no sharing image.** Without `og:image`, LinkedIn shows an empty
-thumbnail. It needs either one visual for the whole site or a card generated per post — the
-second is worth it the day publication becomes regular.
+**Sharing cards are generated, one per piece and per language.** `bin/cards.php` draws a
+1200×630 PNG at build time with gd and the two vendored faces — title, standfirst, date,
+domain — and `og:image` points at it. Nothing to design per article, nothing to forget: a
+piece that exists has a card, and a piece that is withdrawn takes its card with it. The
+site-wide visual that was the alternative here was never built, and does not need to be.
 
 ## This site's own cryptographic inventory
 

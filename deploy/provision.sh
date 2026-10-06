@@ -184,6 +184,12 @@ $SITE_BLOCK
 	@signature path *.sig
 	header @signature Content-Type "application/json; charset=utf-8"
 
+	# An RFC 3161 token is DER, and this is its registered media type. Caddy had
+	# no guess for the extension and fell back to octet-stream, which works but
+	# tells a client nothing about what it just received.
+	@token path *.tsr
+	header @token Content-Type "application/timestamp-reply"
+
 	# The audit documents are self-contained by design — they travel by email, on
 	# a memory stick, into a room with no network — so their stylesheet is inside
 	# them. The site's own policy forbids inline styles, which is right for pages

@@ -71,6 +71,21 @@ unpublish: ## Put a piece back to draft (does not deploy): make unpublish KEY=sl
 SABLIER ?= ../sablier/bin/sablier
 SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 
+# Who attests the date. The signature says which key signed and what it signed;
+# `signed_at` is read off this laptop's clock, so it is worth nothing against
+# somebody who does not trust us — and "we had inventoried before the deadline"
+# is a claim about a date. The EU roadmap makes the inventory a First Step due
+# 31.12.2026, which is the reason this line exists.
+#
+# Certum (Asseco Data Systems, Poland): inside the EU, free, and its root is in
+# the ordinary certificate store — so a reader verifies the token with stock
+# openssl and nothing of ours. Checked against the alternatives: Sectigo returns
+# a token openssl cannot resolve to its signer, FreeTSA and the Belgian federal
+# authority are self-signed and would need us to ship a root certificate for
+# anybody to check a date. Override it if you would rather trust somebody else:
+# that is the point of it being a variable.
+TSA ?= http://time.certum.pl
+
 audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@test -x "$(SABLIER)" || { echo "✗ sablier not found: $(SABLIER) (SABLIER=<path> make audit)"; exit 1; }
 	@test -f "$(SABLIER_KEY)" || { echo "✗ signing key not found: $(SABLIER_KEY)"; exit 1; }
@@ -78,11 +93,19 @@ audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@# and received a French document learnt nothing. The signature covers the
 	@# findings and not the page, so the three carry the same digest — which the
 	@# check below prints side by side rather than asserting.
+	@# One request per language rather than one token copied three times. The
+	@# digest is identical across the three, so a single token would be the same
+	@# statement about all of them — but a report only prints the attested date
+	@# when it was asked for one, and a document sitting beside a .tsr it never
+	@# mentions is the kind of silent gap this whole site is about. Three requests
+	@# to a free authority cost nothing.
 	@for lang in fr en es; do \
 		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
 		mkdir -p "$$dir"; \
 		$(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
-			--lang=$$lang --sign="$(SABLIER_KEY)" --quiet; \
+			--lang=$$lang --sign="$(SABLIER_KEY)" --timestamp=$(TSA) --quiet; \
+		test -s "$$dir/report.html.tsr" \
+			|| { echo "✗ no token for $$lang: the audit would claim a date nobody attests"; exit 1; }; \
 	done
 	@printf '  digests, one per language:\n'
 	@for lang in fr en es; do \
