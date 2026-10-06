@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 #
-# État du serveur qui sert le blog. À lancer depuis le poste :
+# The state of the server that serves the blog. Run from the workstation:
 #
-#   make provision                      # sans domaine : HTTP sur l'IP
-#   SITE_DOMAIN=exemple.fr make provision
+#   make provision                       # SITE_DOMAIN defaults in the Makefile
+#   SITE_DOMAIN= make provision          # no domain: HTTP on the address
 #
-# Relançable autant de fois qu'on veut : chaque étape vérifie avant d'agir.
-# C'est ce qui le garde vrai — un script de mise en place qu'on n'exécute jamais
-# ne vaut pas mieux que la documentation qu'il remplace.
+# Re-runnable as often as you like: every step checks before acting. That is
+# what keeps it true — a setup script nobody ever runs is worth no more than the
+# documentation it replaces.
 #
-# Le périmètre s'arrête là où commence la publication : ce script décrit la
-# machine, `make deploy` y dépose les fichiers.
+# The scope stops where publishing begins: this script describes the machine,
+# `make deploy` puts the files on it.
 set -euo pipefail
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -27,25 +27,25 @@ apt-get update -qq
 apt-get install -y -qq ca-certificates curl debian-keyring debian-archive-keyring \
 	apt-transport-https ufw fail2ban unattended-upgrades rsync
 
-say "Correctifs de sécurité automatiques"
-# Réponse directe à la dérive trouvée sur l'autre serveur : un service qui tourne
-# sans jamais recevoir de correctif ne se signale pas.
+say "Automatic security updates"
+# A direct answer to the drift found on the other server: a service running
+# without ever receiving a patch never announces itself.
 cat > /etc/apt/apt.conf.d/20auto-upgrades <<'CONF'
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 CONF
 systemctl enable --now fail2ban
 
-say "Pare-feu : 22, 80, 443, le reste fermé"
+say "Firewall: 22, 80, 443, everything else closed"
 ufw allow 22/tcp >/dev/null
 ufw allow 80/tcp >/dev/null
 ufw allow 443/tcp >/dev/null
 ufw --force enable >/dev/null
 
-say "Dépôt Caddy"
-# Déclaré ici, pas ajouté à la main : une montée de version de distribution
-# supprime les sources tierces sans le dire, et relancer ce script les rétablit.
-# Format deb822, celui qu'Ubuntu 26.04 utilise pour ses propres sources.
+say "Caddy repository"
+# Declared here rather than added by hand: a distribution upgrade removes
+# third-party sources without saying so, and re-running this script puts them
+# back. deb822 format, the one Ubuntu 26.04 uses for its own sources.
 install -d -m 0755 /etc/apt/keyrings
 curl -fsSL https://dl.cloudsmith.io/public/caddy/stable/gpg.key \
 	-o /etc/apt/keyrings/caddy-stable.asc
@@ -65,17 +65,17 @@ say "Racine du site : $SITE_ROOT"
 install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT"
 install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT/releases"
 
-say "Parution datée"
-# Le poste dépose une version complète du site par date de parution. Caddy sert
-# le lien `current`, qu'un minuteur fait avancer chaque matin. Conséquence
-# voulue : aucune chaîne de construction ici, donc aucune parution qui échoue
-# à cause d'une dépendance cassée sur le serveur.
+say "Dated releases"
+# The workstation uploads one complete version of the site per publication
+# date. Caddy serves the `current` link, which a timer moves forward every
+# morning. The intended consequence: no build chain here, so no publication can
+# fail because of a broken dependency on the server.
 if [ ! -L "$SITE_ROOT/current" ]; then
 	seed="$SITE_ROOT/releases/$(date +%F)"
 	install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$seed"
 	if [ -f "$SITE_ROOT/index.html" ]; then
-		# Reprise de l'existant : ce qui était servi jusqu'ici devient la
-		# version du jour, sans interruption.
+		# Taking over what is there: whatever was being served becomes
+		# today's version, with no interruption.
 		find "$SITE_ROOT" -mindepth 1 -maxdepth 1 \
 			! -name releases ! -name current -exec mv {} "$seed/" \;
 	else
@@ -83,7 +83,7 @@ if [ ! -L "$SITE_ROOT/current" ]; then
 <!DOCTYPE html>
 <html lang="fr"><meta charset="utf-8"><title>BlackMesa Labs</title>
 <body style="font:16px system-ui;margin:4rem auto;max-width:32rem;padding:0 1rem">
-<p>Rien n’est encore publié ici.</p>
+<p>Nothing is published here yet.</p>
 </body></html>
 HTML
 	fi
@@ -98,12 +98,11 @@ install -m 0644 "$HERE/labs-release.timer" /etc/systemd/system/labs-release.time
 systemctl daemon-reload
 systemctl enable --now labs-release.timer >/dev/null
 
-# Le seul en-tête qui rend HTTPS difficile à défaire : sans lui, un visiteur
-# qui tape le nom sans schéma repart en clair une fois, et c'est la fois qui
-# compte. Un an, les sous-domaines compris — www est le seul qui existe et il
-# est servi par la même machine. Pas de `preload` : l'inscription sur la liste
-# des navigateurs ne se retire pas en une journée, et ce site a un domaine dont
-# le renouvellement n'est pas encore tranché.
+# The one header that makes HTTPS hard to undo: without it, a visitor typing the
+# name with no scheme leaves in the clear once, and that once is the one that
+# counts. A year, subdomains included — www is the only one that exists and it is
+# served by this same machine. No `preload`: getting onto the browsers' list is
+# not undone in a day, and this site has a domain whose renewal is not settled.
 HSTS=""
 if [ -n "$SITE_DOMAIN" ]; then
 	HSTS='Strict-Transport-Security "max-age=31536000; includeSubDomains"
@@ -112,16 +111,15 @@ fi
 
 say "Configuration de Caddy"
 if [ -n "$SITE_DOMAIN" ]; then
-	# Le certificat n'est demandé qu'une fois le DNS pointé sur cette machine :
-	# sinon Let's Encrypt refuse et finit par limiter les tentatives.
+	# The certificate is only requested once DNS points at this machine:
+	# otherwise Let's Encrypt refuses and eventually rate-limits the attempts.
 	SITE_BLOCK="$SITE_DOMAIN {"
-	# www d'un côté, et l'adresse IP de l'autre : le site a vécu des mois sur
-	# son IP nue, des liens la portent encore, et un nom d'hôte dans le bloc
-	# cesse de répondre à tout ce qui n'est pas lui. Rediriger coûte quatre
-	# lignes ; laisser mourir ces liens se verrait pour toujours dans les
-	# journaux de quelqu'un d'autre. Pas de TLS sur l'IP : aucune autorité
-	# ordinaire ne signe pour une adresse, donc le bloc est explicitement en
-	# http et ne sert qu'à envoyer vers le nom.
+	# www on one side, the bare address on the other: the site lived on its
+	# plain IP for months, links still carry it, and a hostname in the block
+	# stops answering to anything that is not it. Redirecting costs four lines;
+	# letting those links die would show up forever in somebody else's logs. No
+	# TLS on the address: no ordinary authority signs for one, so that block is
+	# explicitly http and does nothing but send traffic to the name.
 	REDIRECT="www.$SITE_DOMAIN {
 	redir https://$SITE_DOMAIN{uri} 301
 }
@@ -136,7 +134,7 @@ else
 fi
 
 cat > /etc/caddy/Caddyfile <<CONF
-# Généré par deploy/provision.sh — toute modification à la main sera écrasée.
+# Generated by deploy/provision.sh — any edit made by hand will be overwritten.
 $REDIRECT
 $SITE_BLOCK
 	root * $SITE_ROOT/current
@@ -152,7 +150,7 @@ $SITE_BLOCK
 	}
 
 	header {
-		# Site entièrement statique : rien à exécuter, rien à injecter.
+		# Entirely static site: nothing to execute, nothing to inject.
 		Content-Security-Policy "default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 		X-Content-Type-Options "nosniff"
 		Referrer-Policy "strict-origin-when-cross-origin"
@@ -183,10 +181,10 @@ $SITE_BLOCK
 	@selfcontained path /audit/*
 	header @selfcontained >Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 
-	# Pas de journal fichier : sous systemd, Caddy écrit dans le journal, qui
-	# tourne et se purge tout seul. Un fichier de log, c'est un dossier à créer,
-	# des droits à accorder et une rotation à configurer — pour un site statique,
-	# \`journalctl -u caddy\` suffit.
+	# No log file: under systemd, Caddy writes to the journal, which rotates and
+	# prunes itself. A log file means a directory to create, permissions to grant
+	# and a rotation to configure — for a static site, \`journalctl -u caddy\` is
+	# enough.
 }
 CONF
 
@@ -194,18 +192,17 @@ caddy validate --adapter caddyfile --config /etc/caddy/Caddyfile >/dev/null
 systemctl enable caddy >/dev/null
 systemctl reload-or-restart caddy
 
-say "Vérification"
-# Vérifier plutôt que supposer : le script dit ce qu'il a obtenu. Avec un nom
-# d'hôte, `localhost` ne correspond plus à aucun bloc — la vérification d'avant
-# aurait échoué pour une bonne raison et ressemblé à une panne, alors elle
-# interroge maintenant ce qui est réellement servi : le nom en TLS, et la
-# redirection depuis le clair.
+say "Verification"
+# Check rather than assume: the script says what it obtained. With a hostname,
+# `localhost` no longer matches any block — the previous check would have failed
+# for a good reason and looked like an outage, so it now asks for what is
+# actually served: the name over TLS, and the redirect from the clear.
 if [ -n "$SITE_DOMAIN" ]; then
-	# Le certificat n'existe pas à la seconde où Caddy recharge : il est demandé
-	# à Let's Encrypt, ce qui prend quelques secondes et un aller-retour réseau.
-	# Interroger une fois juste après le rechargement, c'est mesurer la course
-	# plutôt que le résultat — la première version de cette vérification a
-	# échoué sur un serveur qui fonctionnait. On attend, avec une limite.
+	# The certificate does not exist the second Caddy reloads: it is requested
+	# from Let's Encrypt, which takes a few seconds and a network round trip.
+	# Asking once right after the reload measures the race rather than the
+	# result — the first version of this check failed on a server that worked.
+	# So it waits, with a limit.
 	code=000
 	for _ in $(seq 20); do
 		code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 \
@@ -213,18 +210,18 @@ if [ -n "$SITE_DOMAIN" ]; then
 		[ "$code" = "200" ] && break
 		sleep 2
 	done
-	[ "$code" = "200" ] || { echo "✗ le site répond $code en HTTPS après 40 s d'attente du certificat"; exit 1; }
+	[ "$code" = "200" ] || { echo "✗ the site answers $code over HTTPS after waiting 40 s for the certificate"; exit 1; }
 	code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 --resolve "$SITE_DOMAIN:80:127.0.0.1" "http://$SITE_DOMAIN/" || echo 000)
-	[ "$code" = "308" ] || [ "$code" = "301" ] || { echo "✗ le clair répond $code au lieu de rediriger"; exit 1; }
+	[ "$code" = "308" ] || [ "$code" = "301" ] || { echo "✗ cleartext answers $code instead of redirecting"; exit 1; }
 else
 	code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/)
-	[ "$code" = "200" ] || { echo "✗ le site répond $code"; exit 1; }
+	[ "$code" = "200" ] || { echo "✗ the site answers $code"; exit 1; }
 fi
 
-# `${X:+a}${X:-b}` n'est pas un ternaire : `:-` ne substitue que si la variable
-# est vide, donc avec un domaine les deux moitiés s'affichaient — « TLS pour
-# mesa.black » suivi de « mesa.black ». Le défaut dormait depuis l'écriture du
-# script et n'est devenu visible que le jour où un domaine a existé.
+# `${X:+a}${X:-b}` is not a ternary: `:-` only substitutes when the variable is
+# empty, so with a domain both halves showed — "TLS pour mesa.black" followed by
+# "mesa.black". The defect had been dormant since the script was written and
+# could only appear the day a domain existed.
 if [ -n "$SITE_DOMAIN" ]; then
 	SERVED="TLS pour $SITE_DOMAIN"
 else
@@ -234,5 +231,5 @@ fi
 printf '\n✓ Caddy sert %s (version %s) — %s\n' "$SITE_ROOT/current" \
 	"$(basename "$(readlink -f "$SITE_ROOT/current")")" \
 	"$SERVED"
-printf '  Pare-feu actif, correctifs de sécurité automatiques, fail2ban en service\n'
+printf '  Firewall up, automatic security updates, fail2ban running\n'
 printf '  Bascule quotidienne : %s\n' "$(systemctl show -p NextElapseUSecRealtime --value labs-release.timer || echo 'labs-release.timer')"

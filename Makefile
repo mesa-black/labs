@@ -33,13 +33,13 @@ drafts: ## Build including drafts — never deploy this output
 # and for which date, costs four lines.
 PREVIEW_PORT ?= 8000
 
-preview: ## Prévisualiser le site à une date : make preview [DATE=2026-10-08]
+preview: ## Preview the site as of a date: make preview [DATE=2026-10-08]
 	@d="$(DATE)"; \
 	 test -n "$$d" || d=$$(php bin/build.php --release-dates | tail -1); \
 	 test -n "$$d" || d=$$(date +%F); \
 	 SITE_URL="http://localhost:$(PREVIEW_PORT)" php bin/build.php --as-of="$$d" >/dev/null; \
-	 printf '\n  état du site au %s · http://localhost:%s/\n' "$$d" "$(PREVIEW_PORT)"; \
-	 printf '  %s\n\n' "$$(find public -name index.html | wc -l | tr -d ' ') pages, Ctrl-C pour arrêter"; \
+	 printf '\n  the site as of %s · http://localhost:%s/\n' "$$d" "$(PREVIEW_PORT)"; \
+	 printf '  %s\n\n' "$$(find public -name index.html | wc -l | tr -d ' ') pages, Ctrl-C to stop"; \
 	 php -S localhost:$(PREVIEW_PORT) -t public
 
 serve: drafts ## Build with drafts and serve on http://localhost:8000
@@ -50,18 +50,18 @@ clean: ## Remove the generated site
 
 # --- publication -------------------------------------------------------------
 
-drafts-list: ## Lister les brouillons et leur clé
+drafts-list: ## List the drafts and their key
 	@php bin/publish.php
 
-publish: ## Publier un article dans toutes ses langues, puis déployer : make publish KEY=slug
+publish: ## Publish a piece in every language, then deploy: make publish KEY=slug
 	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
 	@php bin/publish.php "$(KEY)"
 	@$(MAKE) --no-print-directory deploy
 
-unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublish KEY=slug
+unpublish: ## Put a piece back to draft (does not deploy): make unpublish KEY=slug
 	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
 	@php bin/publish.php "$(KEY)" --draft
-	@echo "  → 'make deploy' pour le retirer réellement du site"
+	@echo "  → 'make deploy' to actually take it off the site"
 
 # --- inventaire cryptographique ----------------------------------------------
 # The site publishes what Sablier says about it, signed by the key its
@@ -71,9 +71,9 @@ unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublis
 SABLIER ?= ../sablier/bin/sablier
 SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 
-audit: ## Produire l'inventaire cryptographique signé du site
+audit: ## Produce the site's signed cryptographic inventory
 	@test -x "$(SABLIER)" || { echo "✗ sablier introuvable : $(SABLIER) (SABLIER=<chemin> make audit)"; exit 1; }
-	@test -f "$(SABLIER_KEY)" || { echo "✗ clé de signature introuvable : $(SABLIER_KEY)"; exit 1; }
+	@test -f "$(SABLIER_KEY)" || { echo "✗ signing key not found: $(SABLIER_KEY)"; exit 1; }
 	@mkdir -p assets/audit
 	@$(SABLIER) scan . --out=assets/audit/report.html --audit=assets/audit/audit.html \
 		--sign="$(SABLIER_KEY)" --quiet
@@ -84,7 +84,7 @@ audit: ## Produire l'inventaire cryptographique signé du site
 # `provision` describes the machine, `deploy` puts the site on it. One tool, one
 # role.
 
-provision: ## Mettre le serveur dans l'état attendu (relançable)
+provision: ## Put the server in the expected state (re-runnable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
 	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' SITE_ROOT='$(SITE_ROOT)' bash /tmp/labs-deploy/provision.sh"
 

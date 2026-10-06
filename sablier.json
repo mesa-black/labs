@@ -1,11 +1,11 @@
 {
     "project": "BlackMesa Labs",
-    "_regime": "Un blog public, sans compte, sans formulaire, sans base de données. Le régime général suffit : il n'y a ici aucune donnée dont la confidentialité réponde à un cadre particulier.",
+    "_regime": "A public blog: no accounts, no forms, no database. The general regime is enough — nothing here is data whose confidentiality answers to a particular framework.",
     "regime": "general",
-    "_signing": "La clé attendue pour les rapports de ce dépôt, et pour l'endossement de cette déclaration. Sa moitié publique vit ici, donc en changer est un commit qu'on relit ; sa moitié privée vit dans ~/.sablier et n'entre jamais dans le dépôt. Une signature qui vérifie contre n'importe quelle clé livrée avec elle ne prouve que l'existence d'une clé.",
+    "_signing": "The key expected for this repository's reports, and for the endorsement of this declaration. Its public halves live here, so changing it is a commit somebody reads; its private halves live in ~/.sablier and never enter the repository. A signature that verifies against whatever key travelled with it proves only that a key exists.",
     "signing_public_key": "+B/8vbI5Wxt9GVDNdNqhB2A/ouSdu8mYNQeH4b0vJuE=",
     "signing_public_key_pq": "-----BEGIN PUBLIC KEY-----\n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\n9hUVHPfe\n-----END PUBLIC KEY-----\n",
-    "_lifetimes": "Ce dépôt est le cas que l'outil doit savoir traiter sans rien dramatiser : presque tout ce qu'il contient est destiné à être lu par n'importe qui. Déclarer zéro est une réponse, et c'est celle qui évite de traiter du contenu publié comme un problème.",
+    "_lifetimes": "This repository is the case the tool has to handle without dramatising anything: almost everything in it is meant to be read by anybody. Declaring zero is an answer, and it is the one that stops published content being treated as a problem.",
     "default_lifetime_years": 0,
     "domains": {
         "contenu publié": {
@@ -32,10 +32,10 @@
             "declared_on": "2026-10-06"
         }
     },
-    "_probe": "La cryptographie réelle de ce site n'est pas dans ses fichiers : elle est négociée par le serveur. Sans cette ligne, le rapport ne verrait rien et le dirait — avec elle, il va voir.",
+    "_probe": "This site's real cryptography is not in its files: it is negotiated by the server. Without this line the report would see nothing and say so — with it, it goes and looks.",
     "probe": [
         "mesa.black"
     ],
-    "_service_until": "Non déclaré : ce blog n'a pas de date de fin prévue. Le rapport le signale comme l'hypothèse optimiste, ce qui est exact.",
+    "_service_until": "Not declared: this blog has no planned end date. The report flags that as the optimistic assumption, which is exactly what it is.",
     "service_until": 0
 }

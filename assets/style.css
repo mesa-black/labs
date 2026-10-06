@@ -100,7 +100,7 @@ a { color: inherit; }
     align-items: baseline;
     justify-content: space-between;
     gap: .75rem 1rem;
-    flex-wrap: wrap;          /* le bandeau se replie plutôt que de déborder */
+    flex-wrap: wrap;          /* the bar wraps rather than overflowing */
     padding-block: 1.1rem;
 }
 
@@ -148,9 +148,9 @@ a { color: inherit; }
 
 main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 
-/* C'est le <h1> de la page d'accueil — les moteurs ont besoin qu'il en soit un —
-   mais il se lit comme un chapeau. D'où la graisse normale, explicite : sans elle,
-   le navigateur applique le gras des titres. */
+/* This is the home page's <h1> — search engines need it to be one — but it
+   reads as a standfirst. Hence the explicit normal weight: without it, the
+   browser applies the bold of headings. */
 .tagline {
     font-family: var(--serif);
     font-size: clamp(1.2rem, 2.6vw, 1.5rem);
@@ -288,8 +288,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .prose strong { font-weight: 700; }
 .prose p strong {
     font-weight: 500;
-    /* Le lavis ne monte qu'au tiers bas de la ligne : assez pour marquer, pas
-       assez pour faire un pavé de couleur derrière la phrase. */
+    /* The wash only rises to the bottom third of the line: enough to mark, not
+       enough to put a slab of colour behind the sentence. */
     background: linear-gradient(transparent 64%, var(--mark) 64%);
     padding-bottom: .04em;
 }

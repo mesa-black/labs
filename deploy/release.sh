@@ -1,15 +1,15 @@
 #!/bin/sh
 #
-# Bascule le site sur la version datée du jour.
+# Switches the site to the dated version for today.
 #
-# Le poste dépose une version complète du site par date de parution, sous
-# releases/AAAA-MM-JJ/. Ce script choisit la plus récente dont la date est
-# arrivée et fait pointer `current` dessus. Rien n'est construit ici : le
-# serveur reste un hôte statique, il ne sait que déplacer un lien.
+# The workstation uploads one complete version of the site per publication
+# date, under releases/YYYY-MM-DD/. This script picks the most recent one whose
+# date has come and points `current` at it. Nothing is built here: the server
+# stays a static host, and all it knows how to do is move a link.
 #
-# Lancé chaque matin par labs-release.timer, et à chaque déploiement.
+# Run every morning by labs-release.timer, and on every deployment.
 #
-#   LABS_TODAY=2026-10-04 labs-release    # pour vérifier une bascule à venir
+#   LABS_TODAY=2026-10-04 labs-release    # rehearse a switch still ahead
 set -eu
 
 ROOT=${SITE_ROOT:-/var/www/labs}
@@ -20,9 +20,9 @@ RELEASES="$ROOT/releases"
 TODAY=${LABS_TODAY:-$(TZ=Europe/Paris date +%F)}
 KEEP=${LABS_KEEP:-3}
 
-[ -d "$RELEASES" ] || { echo "aucune version déposée dans $RELEASES"; exit 1; }
+[ -d "$RELEASES" ] || { echo "no version uploaded in $RELEASES"; exit 1; }
 
-# Le glob est trié : la dernière version dont la date est arrivée gagne.
+# The glob is sorted: the last version whose date has come wins.
 target=''
 for dir in "$RELEASES"/*/; do
 	name=$(basename "$dir")
@@ -34,23 +34,23 @@ for dir in "$RELEASES"/*/; do
 	target=$name
 done
 
-[ -n "$target" ] || { echo "aucune version dont la date soit arrivée (nous sommes le $TODAY)"; exit 1; }
+[ -n "$target" ] || { echo "no version whose date has come (today is $TODAY)"; exit 1; }
 
 previous=$(readlink "$ROOT/current" 2>/dev/null || echo '')
 if [ "$previous" = "$RELEASES/$target" ]; then
-	echo "déjà sur la version $target"
+	echo "already on version $target"
 else
-	# Lien temporaire puis renommage : le remplacement est atomique, aucune
-	# requête ne peut tomber sur une racine inexistante.
+	# A temporary link then a rename: the replacement is atomic, so no request
+	# can land on a root that does not exist.
 	ln -sfn "$RELEASES/$target" "$ROOT/.current.new"
 	mv -Tf "$ROOT/.current.new" "$ROOT/current"
-	echo "version $target en ligne${previous:+ (précédente : $(basename "$previous"))}"
+	echo "version $target is live${previous:+ (previous: $(basename "$previous"))}"
 fi
 
-# Versions futures devenues caduques. Un article programmé puis retiré laisse
-# derrière lui une version datée qui, le jour venu, serait servie avec le texte
-# supprimé dedans. Le poste dépose la liste de ce qu'il attend ; tout ce qui est
-# à venir et absent de cette liste n'a plus de raison d'exister.
+# Future versions that have become stale. A piece scheduled and then withdrawn
+# leaves a dated version behind which, on the day, would be served with the
+# withdrawn text inside it. The workstation uploads the list of what it still
+# expects; anything ahead and absent from that list has no reason to exist.
 if [ -f "$RELEASES/.expected" ]; then
 	for dir in "$RELEASES"/*/; do
 		name=$(basename "$dir")
@@ -61,12 +61,12 @@ if [ -f "$RELEASES/.expected" ]; then
 		[ "$name" \> "$TODAY" ] || continue
 		grep -qx "$name" "$RELEASES/.expected" && continue
 		rm -rf "${RELEASES:?}/$name"
-		echo "  version à venir $name retirée : plus aucun article ne la réclame"
+		echo "  upcoming version $name dropped: no piece claims it any more"
 	done
 fi
 
-# Purge : on garde la version active et les précédentes, pour pouvoir revenir
-# en arrière d'un seul lien. Les versions futures encore attendues sont gardées.
+# Pruning: the live version and the ones before it are kept, so that rolling
+# back is one link away. Future versions still expected are kept too.
 kept=0
 for dir in $(ls -1r "$RELEASES"); do
 	[ "$dir" \> "$target" ] && continue

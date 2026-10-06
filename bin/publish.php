@@ -60,17 +60,17 @@ if ($key === null || str_starts_with($key, '--')) {
             $byDate[$p['date']][$p['key']][] = $p['locale'];
         }
         ksort($byDate);
-        echo "Programmés :\n\n";
+        echo "Scheduled:\n\n";
         foreach ($byDate as $day => $keys) {
             foreach ($keys as $k => $locales) {
-                printf("  %-34s %s — langues : %s\n", $k, $day, implode(', ', $locales));
+                printf("  %-34s %s — languages: %s\n", $k, $day, implode(', ', $locales));
             }
         }
-        echo "\n  Ils sortiront au premier `make deploy` fait à partir de leur date.\n\n";
+        echo "\n  They come out on the first `make deploy` run on or after their date.\n\n";
     }
 
     if ($drafts === []) {
-        echo "Aucun brouillon.\n";
+        echo "No drafts.\n";
         exit(0);
     }
 
@@ -86,9 +86,9 @@ if ($key === null || str_starts_with($key, '--')) {
         $fr = array_filter($group, static fn (array $p): bool => $p['locale'] === 'fr');
         $title = ($fr !== [] ? reset($fr) : $group[0])['title'];
         printf("  %-34s %s\n", $k, $title);
-        printf("  %-34s langues : %s\n\n", '', $locales);
+        printf("  %-34s languages: %s\n\n", '', $locales);
     }
-    echo "Pour publier :  make publish KEY=<clé>\n";
+    echo "To publish:  make publish KEY=<key>\n";
     exit(0);
 }
 
@@ -96,14 +96,14 @@ if ($key === null || str_starts_with($key, '--')) {
 $matching = array_filter($all, static fn (array $p): bool => $p['key'] === $key);
 
 if ($matching === []) {
-    fwrite(\STDERR, "✗ aucun article avec la clé \"$key\".\n   `php bin/publish.php` liste les brouillons.\n");
+    fwrite(\STDERR, "✗ no piece with key \"$key\".\n   `php bin/publish.php` lists the drafts.\n");
     exit(1);
 }
 
 $changed = 0;
 foreach ($matching as $post) {
     if ($post['draft'] === $toDraft) {
-        printf("  %s/%s — déjà %s\n", $post['locale'], basename($post['file']), $toDraft ? 'en brouillon' : 'publié');
+        printf("  %s/%s — already %s\n", $post['locale'], basename($post['file']), $toDraft ? 'a draft' : 'published');
         continue;
     }
 
@@ -122,16 +122,16 @@ foreach ($matching as $post) {
     }
 
     file_put_contents($post['file'], implode("\n", $lines)."\n");
-    printf("  %s/%s → %s\n", $post['locale'], basename($post['file']), $toDraft ? 'brouillon' : 'publié');
+    printf("  %s/%s → %s\n", $post['locale'], basename($post['file']), $toDraft ? 'draft' : 'published');
     ++$changed;
 }
 
 if ($changed === 0) {
-    echo "\nRien à faire.\n";
+    echo "\nNothing to do.\n";
     exit(0);
 }
 
-printf("\n✓ %s : %d fichier(s) %s\n", $key, $changed, $toDraft ? 'remis en brouillon' : 'publié(s)');
+printf("\n✓ %s: %d file(s) %s\n", $key, $changed, $toDraft ? 'put back to draft' : 'published');
 
 // A missing language is worth a warning: publishing a piece in one language
 // only means showing the others greyed out without noticing.
