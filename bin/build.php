@@ -32,6 +32,9 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 
 const ROOT = __DIR__.'/..';
+
+// The sharing cards: GD and two font files, no browser and no ImageMagick.
+require __DIR__.'/cards.php';
 const OUT = ROOT.'/public';
 
 /** French sits at the root; the others take a prefix, exactly like showmetherex.com. */
@@ -47,7 +50,7 @@ $site = [
 $strings = [
     'fr' => [
         'tagline' => "Notes d'ingénierie : ce qu'on a construit, ce qu'on a cassé, ce qu'on en a tiré.",
-        'feed' => 'Flux', 'nav_audit' => 'Audit', 'minutes' => 'min', 'reading' => 'min de lecture',
+        'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'minutes' => 'min', 'reading' => 'min de lecture',
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
         'back' => 'Tous les articles', 'language' => 'Langue',
         'crossover_pointer' => 'Publié sur Show me the REX',
@@ -62,7 +65,7 @@ $strings = [
     ],
     'en' => [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
-        'feed' => 'Feed', 'nav_audit' => 'Audit', 'minutes' => 'min', 'reading' => 'min read',
+        'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'minutes' => 'min', 'reading' => 'min read',
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
         'back' => 'All posts', 'language' => 'Language',
         'crossover_pointer' => 'Published on Show me the REX',
@@ -77,7 +80,7 @@ $strings = [
     ],
     'es' => [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
-        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'minutes' => 'min', 'reading' => 'min de lectura',
+        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'minutes' => 'min', 'reading' => 'min de lectura',
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
         'back' => 'Todos los artículos', 'language' => 'Idioma',
         'crossover_pointer' => 'Publicado en Show me the REX',
@@ -383,7 +386,21 @@ foreach (LOCALES as $locale) {
     $pages[] = ['url' => $prefix.'/', 'lastmod' => $posts[0]['date']->format('Y-m-d'), 'alternates' => $homes];
 
     foreach ($posts as $post) {
-        $write(ltrim($post['url'], '/').'index.html', $twig->render('post.html.twig', $context + ['post' => $post, 'page_url' => $post['url']]));
+        // The sharing card, drawn here rather than hand-made: one per piece and
+        // per language, carrying that piece's title. A single house card would
+        // say the same thing about every article, and no card at all is an
+        // empty thumbnail on every platform that unfurls a link.
+        $card = '/cards/'.$locale.'/'.basename(rtrim($post['url'], '/')).'.png';
+        @mkdir(\dirname(OUT.$card), 0o755, true);
+        draw([
+            'title' => $post['title'],
+            'kicker' => $strings[$locale]['card_kicker'],
+            'footer' => $twig->getFilter('long_date')->getCallable()($post['date'], $locale)
+                .' · '.$post['minutes'].' '.$strings[$locale]['reading'],
+            'out' => OUT.$card,
+        ]);
+
+        $write(ltrim($post['url'], '/').'index.html', $twig->render('post.html.twig', $context + ['post' => $post, 'page_url' => $post['url'], 'og_image' => $card]));
         $pages[] = ['url' => $post['url'], 'lastmod' => $post['date']->format('Y-m-d'), 'alternates' => $translations[$post['key']]];
     }
 

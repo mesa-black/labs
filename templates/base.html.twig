@@ -15,7 +15,16 @@
     <meta property="og:url" content="{{ site.url }}{{ page_url }}">
     <meta property="og:title" content="{% block og_title %}{{ site.name }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ t.tagline }}{% endblock %}">
-    <meta name="twitter:card" content="summary">
+    {# A card with a title on it, or nothing: an empty thumbnail is worse than a
+       bare link, and a house card repeated on every piece says nothing. #}
+    {% if og_image is defined %}
+        <meta property="og:image" content="{{ site.url }}{{ og_image }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta name="twitter:card" content="summary_large_image">
+    {% else %}
+        <meta name="twitter:card" content="summary">
+    {% endif %}
 
     {% block schema %}{% endblock %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}{{ feed_url }}">
