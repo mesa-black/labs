@@ -1,0 +1,34 @@
+[
+    {
+        "fingerprint": "a5acb0a5",
+        "algorithm": "ml-kem",
+        "purpose": "confidentiality",
+        "file": "tls://mesa.black:443",
+        "line": 0,
+        "domain": "non déclaré",
+        "declared": false,
+        "lifetime_years": 0,
+        "verdict": "clear",
+        "confidence": "haute",
+        "inventory": false,
+        "because": "Normalisé FIPS 203.",
+        "references": [],
+        "accepted_until": ""
+    },
+    {
+        "fingerprint": "4d2a0227",
+        "algorithm": "ecdsa",
+        "purpose": "authenticity",
+        "file": "tls://mesa.black:443",
+        "line": 0,
+        "domain": "non déclaré",
+        "declared": false,
+        "lifetime_years": 0,
+        "verdict": "watch",
+        "confidence": "haute",
+        "inventory": false,
+        "because": "Signature : pas de récolte possible. À migrer avant 2030 pour la conformité, sans urgence de confidentialité.",
+        "references": [],
+        "accepted_until": ""
+    }
+]

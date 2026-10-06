@@ -1,0 +1,177 @@
+# What runs on every push, and why each job can stop the build.
+#
+# This repository ships a static site: there is no runtime in production, so the
+# usual test pyramid has nothing to stand on. What can go wrong is narrower, and
+# these four jobs are the whole of it — the build, the dependencies, the
+# cryptography the source contains, and the cryptography the live server
+# negotiates.
+name: CI
+
+on:
+  push:
+  pull_request:
+  # The TLS job also runs on its own, daily: a certificate is renewed, a cipher
+  # suite is dropped, and neither event is a commit.
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build the site
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        # gd with FreeType is not optional here: the sharing cards are drawn at
+        # build time, and without it every piece ships without its image.
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: gd, mbstring, dom
+          coverage: none
+      -
+        name: Install the dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+      -
+        name: Build
+        run: php bin/build.php
+      -
+        # A build that writes nothing exits 0 just as happily as one that works.
+        name: Check the output exists
+        run: |
+          pages=$(find public -name index.html | wc -l | tr -d ' ')
+          cards=$(find public/cards -name '*.png' | wc -l | tr -d ' ')
+          printf '  %s pages, %s cards\n' "$pages" "$cards"
+          test "$pages" -gt 10
+          test "$cards" -gt 10
+          test -s public/sitemap.xml
+      -
+        # `deploy` turns this list into one directory per publication date on the
+        # server. A single stray line on stdout — a PHP warning, once — became
+        # nine release directories, each holding a full copy of the site. The
+        # list must contain dates and nothing else.
+        name: The release dates are dates
+        run: |
+          php bin/build.php --release-dates | tee /tmp/dates
+          ! grep -qvE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' /tmp/dates
+
+  dependencies:
+    name: Dependencies
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+      -
+        # --locked reads composer.lock, so what is checked is what gets deployed
+        # rather than what a fresh resolution would pick today. Three packages,
+        # and the site's own published inventory names their versions — which is
+        # a claim about them being sound, and this is what checks it.
+        name: Advisories
+        run: |
+          composer validate --strict --no-check-publish
+          composer audit --locked --no-interaction
+
+  cryptography:
+    name: Cryptography in the source
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: sodium, openssl, json
+          coverage: none
+      -
+        # A tag, not a branch: this decides whether the build passes.
+        name: Get Sablier
+        run: git clone --depth 1 --branch v0.6.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+      -
+        # The reference records zero findings, which is the point: a static site
+        # generator contains no cryptography, and this job exists to notice the
+        # day that stops being true. Capture it from what is versioned, never
+        # from a working tree —
+        #   T=$(mktemp -d); git archive HEAD | tar -x -C "$T"
+        #   sablier scan "$T" --json=.sablier/baseline.json --no-probe
+        # — because a tree carrying a built public/ produces findings this job
+        # will never see, and the run then reports them as gone on every push.
+        #
+        # No --sign: the signing key is personal, it is built for one report and
+        # destroyed afterwards, and it has no business on a runner. CI checks the
+        # inventory; a person signs it.
+        name: Inventory the cryptography
+        run: |
+          php "$RUNNER_TEMP/sablier/bin/sablier" scan . \
+            --baseline=.sablier/baseline.json \
+            --out="$RUNNER_TEMP/report.html" \
+            --audit="$RUNNER_TEMP/audit.html" \
+            --no-probe
+      -
+        # if: always() — the run you most want to read is the one that failed.
+        name: Keep both reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptography
+          path: |
+            ${{ runner.temp }}/report.html
+            ${{ runner.temp }}/audit.html
+
+  tls:
+    name: Cryptography on the wire
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: sodium, openssl, json
+          coverage: none
+      -
+        name: Get Sablier
+        run: git clone --depth 1 --branch v0.6.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+      -
+        # The probe measures the path from the runner to mesa.black, which for a
+        # public static site is a reader's path and not a detour — the reason the
+        # probe is left out of a pipeline elsewhere does not apply here.
+        #
+        # Its own reference, separate from the source one: these findings come
+        # from a handshake and change when the server does, so mixing them into
+        # the source baseline would make every certificate renewal look like a
+        # commit that added cryptography.
+        name: Probe the live site
+        run: |
+          php "$RUNNER_TEMP/sablier/bin/sablier" scan . \
+            --baseline=.sablier/wire.json \
+            --out="$RUNNER_TEMP/wire.html"
+      -
+        name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wire
+          path: ${{ runner.temp }}/wire.html

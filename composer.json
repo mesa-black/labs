@@ -5,6 +5,7 @@
     "license": "proprietary",
     "require": {
         "php": ">=8.3",
+        "ext-gd": "*",
         "league/commonmark": "^2.5",
         "symfony/yaml": "^7.1",
         "twig/twig": "^3.14"
