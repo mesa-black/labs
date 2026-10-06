@@ -48,6 +48,8 @@
             <p>{{ t.tagline }}</p>
             <p>{{ t.footer_agency }}</p>
             <p>{{ t.footer_smtr }} <a href="{{ smtr_url }}">Show me the REX</a>.</p>
+            {% if audit_published %}<p>{{ t.footer_audit }} :
+                <a href="/audit/report.html">{{ t.footer_audit_hint }}</a>.</p>{% endif %}
         </div>
     </footer>
 </body>

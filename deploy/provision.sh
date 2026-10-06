@@ -162,6 +162,13 @@ $SITE_BLOCK
 	@assets path *.css *.woff2
 	header @assets Cache-Control "public, max-age=3600"
 
+	# Une signature de Sablier est du JSON, et elle est lisible exprès : qui
+	# vérifie doit pouvoir voir ce qui a été signé sans rien lancer. Caddy
+	# devinait « application/pgp-signature » d'après l'extension, ce qui est faux
+	# et force un téléchargement au lieu d'un affichage.
+	@signature path *.sig
+	header @signature Content-Type "application/json; charset=utf-8"
+
 	# Pas de journal fichier : sous systemd, Caddy écrit dans le journal, qui
 	# tourne et se purge tout seul. Un fichier de log, c'est un dossier à créer,
 	# des droits à accorder et une rotation à configurer — pour un site statique,

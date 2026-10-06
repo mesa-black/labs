@@ -57,6 +57,8 @@ $strings = [
         'crossover_note' => 'Show me the REX est la plateforme de retours d’expérience Tech, data et IA que nous éditons.',
         'footer_agency' => 'BlackMesa — conseil et ingénierie logicielle.',
         'footer_smtr' => 'Nos retours d’expérience clients sont publiés sur',
+        'footer_audit' => 'Inventaire cryptographique de ce site, signé',
+        'footer_audit_hint' => 'vérifiable sans nous',
     ],
     'en' => [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
@@ -70,6 +72,8 @@ $strings = [
         'crossover_note' => 'Show me the REX is the Tech, data and AI case-study platform we run.',
         'footer_agency' => 'BlackMesa — software consulting and engineering.',
         'footer_smtr' => 'Our client case studies are published on',
+        'footer_audit' => 'This site’s cryptographic inventory, signed',
+        'footer_audit_hint' => 'verifiable without us',
     ],
     'es' => [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
@@ -83,6 +87,8 @@ $strings = [
         'crossover_note' => 'Show me the REX es la plataforma de casos de Tech, datos e IA que editamos.',
         'footer_agency' => 'BlackMesa — consultoría e ingeniería de software.',
         'footer_smtr' => 'Nuestros casos de clientes se publican en',
+        'footer_audit' => 'Inventario criptográfico de este sitio, firmado',
+        'footer_audit_hint' => 'verificable sin nosotros',
     ],
 ];
 
@@ -332,7 +338,7 @@ foreach (LOCALES as $locale) {
         'feed_url' => $prefix.'/feed.xml',
         // La plateforme est trilingue elle aussi : on renvoie le lecteur dans sa
         // langue plutôt que de le faire atterrir en français.
-        'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
+        'audit_published' => is_file(ROOT.'/assets/audit/report.html'), 'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
         'translations' => $translations,
     ];
 
@@ -369,11 +375,24 @@ $write('robots.txt', implode("\n", [
 $write('404.html', $twig->render('404.html.twig', [
     'site' => $site, 'locale' => DEFAULT_LOCALE, 'locales' => LOCALES,
     't' => $strings[DEFAULT_LOCALE], 'home' => '/', 'feed_url' => '/feed.xml',
-    'smtr_url' => 'https://showmetherex.com/',
+    'audit_published' => is_file(ROOT.'/assets/audit/report.html'), 'smtr_url' => 'https://showmetherex.com/',
     'translations' => $translations, 'page_url' => '/404.html',
 ]));
 
 copy(ROOT.'/assets/style.css', OUT.'/style.css');
 echo '  ', str_pad('style.css', 48), number_format(filesize(OUT.'/style.css') / 1024, 1), " KB\n";
+
+// L'inventaire cryptographique du site, produit par `make audit` et déposé tel
+// quel. Ce sont des documents autonomes, signés : les reconstruire ici les
+// ferait sortir du périmètre de la signature, qui couvre des constatations et
+// pas une mise en page.
+if (is_dir(ROOT.'/assets/audit')) {
+    @mkdir(OUT.'/audit', 0o755, true);
+    foreach (glob(ROOT.'/assets/audit/*') ?: [] as $artefact) {
+        copy($artefact, OUT.'/audit/'.basename($artefact));
+        echo '  ', str_pad('audit/'.basename($artefact), 48),
+            number_format(filesize($artefact) / 1024, 1), " KB\n";
+    }
+}
 
 echo "\n✓ public/ is ready", $withDrafts ? ' (drafts included — do not deploy)' : '', "\n";

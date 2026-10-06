@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sablier — BlackMesa Labs</title>
+<style>:root{--ink:#16181d;--muted:#5d6470;--paper:#fbfaf8;--line:#e5e2dc;--bad:#a3281f;--warn:#9a5b10;--ok:#1d6b4f;--cool:#2a4c7d;--sand:#c8a44a}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e6e1;--muted:#9aa0aa;--paper:#14161a;--line:#2b2f36;
+    --bad:#e0685c;--warn:#d69a4a;--ok:#5fbb92;--cool:#7aa2d8}}
+*{box-sizing:border-box}
+body{margin:0;padding:2.5rem 1.25rem 4rem;background:var(--paper);color:var(--ink);
+     font:15px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     max-width:52rem;margin-inline:auto}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;
+       border-bottom:2px solid var(--ink);padding-bottom:.6rem;margin-bottom:2rem}
+.brand{font-weight:700;letter-spacing:.22em;font-size:.95rem}
+.meta{color:var(--muted);font-size:.82rem}
+.headline{font-size:1.5rem;line-height:1.32;font-weight:500;margin:0 0 .8rem;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 2.4rem;font-size:.92rem}
+h2{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+   margin:2.6rem 0 1rem;font-weight:600}
+.count{background:var(--ink);color:var(--paper);border-radius:2px;padding:.05em .45em;font-size:.9em;letter-spacing:0}
+.timeline .chart{position:relative;border-left:1px solid var(--line);padding:1.8rem 0 .4rem}
+.mark{position:absolute;top:0;bottom:0;border-left:1px dashed var(--muted);padding-left:.4rem}
+.mark.expiry{border-left:2px solid var(--bad)}
+.mark span{font-size:.68rem;color:var(--muted);line-height:1.2;display:block}
+.mark.expiry span{color:var(--bad)}
+.row{display:grid;grid-template-columns:9rem 1fr 4rem;gap:.6rem;align-items:center;margin:.35rem 0}
+.lbl{font-size:.8rem;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{background:#00000008;height:14px;border-radius:2px;position:relative}
+.bar{height:100%;background:var(--cool);border-radius:2px}
+.bar.over{background:var(--bad)}
+.yrs{font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend{font-size:.8rem;color:var(--muted);margin:.8rem 0 0}
+.crossings{margin-top:1.4rem;border-top:1px solid var(--line);padding-top:.9rem}
+.crossings h3{margin:0 0 .5rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.crossings ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+.crossings li{margin:.2rem 0}
+.crossings li.past{color:var(--bad)}
+article{border-top:1px solid var(--line);padding:1rem 0}
+article h3{margin:0 0 .3rem;font-size:1rem;font-weight:600;display:flex;gap:.55rem;align-items:baseline;flex-wrap:wrap}
+.dom{font-weight:400;color:var(--muted);font-size:.82rem}
+.conf{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);border:1px solid currentColor;border-radius:2px;padding:.05em .35em}
+.loc{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;color:var(--muted)}
+pre{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;background:#00000006;border:1px solid var(--line);
+    border-radius:2px;padding:.5rem .6rem;overflow-x:auto;margin:.5rem 0}
+article p{margin:.4rem 0 0}
+.detail{color:var(--muted)}
+.fix{margin-top:.5rem;font-size:.85rem}
+.fix span{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ok);margin-right:.4rem}
+.verdict.compromised h2 .count,.verdict.urgent h2 .count{background:var(--bad)}
+.verdict.migrate h2 .count{background:var(--warn)}
+.blind{border:1px solid var(--line);border-radius:3px;padding:1.1rem 1.3rem;margin-top:3rem;background:#00000004}
+.blind h2{margin-top:0}
+.blind ul{margin:0;padding-left:1.1rem}
+.blind li{margin-bottom:.4rem}
+.blind p{color:var(--muted);font-size:.85rem;margin:.9rem 0 0}
+.about{border-left:2px solid var(--sand);padding:.1rem 0 .1rem 1rem;margin:0 0 2rem;
+       color:var(--muted);font-size:.88rem;line-height:1.55;
+       text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+@media (max-width:34rem){.about{text-align:left;hyphens:manual}}
+.about strong{color:var(--ink)}
+.stale{color:var(--warn)}
+.projection{border:1px solid var(--warn);color:var(--warn);border-radius:3px;
+            padding:.6rem .85rem;margin:0 0 1.4rem;font-size:.86rem}
+.imported{border:1px solid var(--cool);color:var(--cool);border-radius:3px;
+          padding:.6rem .85rem;margin:0 0 1.4rem;font-size:.86rem}
+.probe{border-top:1px solid var(--line);padding:.9rem 0}
+.probe h3{margin:0 0 .5rem;font-family:ui-monospace,Menlo,monospace;font-size:.85rem;font-weight:600}
+.probe dl{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.35rem 1.2rem}
+.probe dt{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.probe dd{margin:0 0 .3rem;font-size:.88rem;font-variant-numeric:tabular-nums}
+.probe-notes{margin:.7rem 0 0;padding-left:1.1rem;font-size:.82rem;color:var(--warn)}
+.summary details{border-top:1px solid var(--line);padding:.6rem 0}
+.summary summary{cursor:pointer;font-size:.92rem}
+.summary .dom{margin-left:.4rem}
+.files{margin:.6rem 0 0;padding-left:1.1rem;font-family:ui-monospace,Menlo,monospace;font-size:.74rem;color:var(--muted)}
+.seal{margin-top:2.6rem;border-top:1px solid var(--line);padding-top:1.1rem}
+.seal dl,.probe dl{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.35rem 1.2rem}
+.seal dt{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.seal dd{margin:0 0 .3rem;font-size:.84rem;word-break:break-all}
+.seal code{font-family:var(--mono,ui-monospace,Menlo,monospace);font-size:.82em}
+.seal-caveat{border-left:2px solid var(--warn);padding-left:.9rem;color:var(--warn);
+             font-size:.84rem;margin:.9rem 0 0;text-align:justify;hyphens:auto}
+.fp{margin-top:.8rem;font-size:.84rem}
+.fp summary{cursor:pointer;color:var(--muted)}
+.fp summary code{font-size:.92em}
+.fp p{margin:.7rem 0 .2rem}
+.fp-lead{color:var(--muted)}
+.fp-cli{color:var(--muted)}
+.fp-legend{border:1px solid var(--line);border-radius:3px;padding:1.1rem 1.3rem;margin-top:2.6rem;font-size:.86rem}
+.fp-legend h2{margin-top:0}
+.fp-legend p{margin:.8rem 0 .2rem}
+.fp-legend pre{margin:.5rem 0}
+.fp-note{color:var(--muted)}
+.verdict.accepted .count{background:var(--muted)}
+article.accepted h3{opacity:.85}
+.plan{margin-top:3rem;border-top:2px solid var(--ink);padding-top:1.2rem}
+.plan ol{margin:1.4rem 0 0;padding-left:0;list-style:none;counter-reset:step}
+.plan li{counter-increment:step;position:relative;padding:0 0 1.5rem 2.6rem;border-top:1px solid var(--line);padding-top:1.1rem}
+.plan li::before{content:counter(step);position:absolute;left:0;top:1rem;
+                 font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:700;color:var(--sand)}
+.plan h3{margin:0 0 .35rem;font-size:1.02rem;font-weight:600}
+.plan p{margin:0;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.share{margin:1.4rem 0 .3rem!important}
+.share a{display:inline-block;border:1px solid var(--accent-line,var(--ink));border-radius:3px;
+         padding:.45rem .9rem;text-decoration:none;color:var(--ink);font-size:.88rem}
+.share a:hover{background:var(--ink);color:var(--paper)}
+.share-note{color:var(--muted);font-size:.78rem;margin:0!important}
+@media (max-width:34rem){.plan p{text-align:left;hyphens:manual}}
+.share-text{margin:.5rem 0 0}
+.share-text summary{color:var(--muted);font-size:.78rem;cursor:pointer}
+.share-text pre{white-space:pre-wrap;font-size:.8rem;background:#00000008;
+                border-radius:3px;padding:.7rem .9rem;margin:.5rem 0 0;
+                user-select:all;-webkit-user-select:all}
+@media print{.share,.share-note,.share-text{display:none}}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.8rem}
+
+/* Print, and therefore PDF. The palette is forced back to light: a
+   report printed on a dark ground wastes ink and is unreadable on
+   paper, and the viewer's theme must not follow the file to the
+   printer. */
+@page{margin:18mm 15mm}
+@media print{
+    :root{--ink:#16181d;--muted:#55595f;--paper:#fff;--line:#d9d6d0;
+          --bad:#8f241c;--warn:#8a5210;--ok:#1a5f46;--cool:#2a4c7d;--sand:#bb9a45}
+    body{max-width:none;margin:0;padding:0;font-size:10.5pt;background:#fff}
+    header{border-bottom-width:1.5pt}
+    .headline{font-size:1.25rem}
+    section,article,details,.probe{break-inside:avoid}
+    h2{break-after:avoid}
+    .timeline,.probes,.blind{break-inside:avoid}
+    .blind{background:none}
+    /* At 10.5pt the label column is too narrow and the names run
+       into the bars: give them room, not a smaller size. */
+    .row{grid-template-columns:11.5rem 1fr 3.4rem;gap:.5rem}
+    .lbl{font-size:.74rem}
+    .summary details{display:block}
+    .summary details>summary{list-style:none}
+    .files{display:none}
+    /* Paper has no disclosure triangle, so a closed <details>
+       prints as a dead question. Unfold them — the browser that
+       makes the PDF is also told to open them, because this
+       pseudo-element is recent and the export must not depend on
+       which Chrome the machine happens to have. The acceptance
+       block is dropped per finding: the legend carries one, and
+       the command line below it carries the fingerprint. */
+    details::details-content{content-visibility:visible;block-size:auto}
+    .fp,.fp-legend{break-inside:avoid}
+    .fp summary{list-style:none}
+    .fp pre{display:none}
+    pre{white-space:pre-wrap;word-break:break-word}
+    footer{break-before:avoid}
+}</style></head>
+<body>
+<header>
+  <div class="brand">SABLIER</div>
+  <div class="meta">BlackMesa Labs · 06/10/2026 · 75 fichiers lus · analyse en 245 ms</div>
+</header>
+
+<div class="about"><strong>Le post-quantique, en trois phrases.</strong> La cryptographie qui protège aujourd'hui le web repose sur des problèmes faciles dans un sens et infaisables dans l'autre — multiplier deux grands nombres premiers est immédiat, retrouver ces facteurs demanderait des milliers d'années. Un calculateur quantique suffisamment grand rend ce retour possible : RSA et les courbes elliptiques, c'est-à-dire l'essentiel de ce qui chiffre et signe aujourd'hui, tombent d'un coup — la taille des clés n'y change rien. La cryptographie <em>post-quantique</em> désigne les algorithmes conçus pour résister à cette machine, normalisés en 2024 (ML-KEM pour le chiffrement, ML-DSA pour la signature) ; le chiffrement symétrique, lui, AES et ChaCha20, n'est pas menacé.</div>
+<div class="about"><strong>Sablier</strong> inventorie la cryptographie d'un projet et la confronte à une information qu'aucun outil ne possède : <em>combien de temps chaque donnée doit rester confidentielle</em>. Une donnée chiffrée aujourd'hui avec RSA ou une courbe elliptique, et qui doit rester secrète au-delà de la péremption de ces algorithmes, est <em>déjà perdue</em> — un adversaire capture maintenant ce qu'il déchiffrera plus tard, et la migration ne protégera que ce qui viendra après elle.<br><br>Ce rapport distingue donc ce qui se récolte (le chiffrement) de ce qui ne se récolte pas (les signatures), laisse tranquille la cryptographie symétrique, et sépare les problèmes d'aujourd'hui — MD5, SHA-1 — de l'échéance quantique.</div>
+
+
+
+<p class="headline">Aucune donnée dont la durée de confidentialité dépasse la péremption des algorithmes qui la protègent.</p>
+<p class="sub">2 constats retenus sur l'ensemble analysé. Date de péremption retenue : <strong>2035</strong> — c'est l'échéance réglementaire, pas une prédiction de rupture cryptographique. Échéance vérifiée auprès de ses sources le 30/09/2026.</p>
+
+<section class="timeline">
+  <h2>Durée de confidentialité des données, face à la péremption des algorithmes</h2>
+  <template id="chart">{"title":"Durée de confidentialité des données, face à la péremption des algorithmes","start":2026,"end":2046,"marks":[{"year":2030,"label":"dépréciation"},{"year":2035,"label":"péremption"}],"bars":[{"name":"non déclaré","years":0,"exposed":false}]}</template>
+  <div class="chart">
+    <div class="mark" style="left:20%"><span>2030<br>dépréciation</span></div>
+    <div class="mark expiry" style="left:45%"><span>2035<br>péremption</span></div>
+    <div class="row"><div class="lbl">non déclaré</div><div class="track"><div class="bar " style="width:0%"></div></div><div class="yrs">0 an</div></div>
+  </div>
+  <p class="legend">Chaque barre est la durée pendant laquelle la donnée doit rester confidentielle. Elle passe en rouge quand un algorithme récoltable la protège au-delà du trait de péremption — dépasser le trait sans être rouge signifie que la donnée dure longtemps, mais qu&#039;elle est protégée par de la cryptographie qui tiendra.</p>
+  
+</section>
+<section class="probes"><h2>Ce que le serveur négocie réellement</h2><div class="probe"><h3>mesa.black</h3><dl><div><dt>service</dt><dd>HTTPS</dd></div><div><dt>protocole négocié</dt><dd>TLSv1.3</dd></div><div><dt>suite</dt><dd>TLS_AES_128_GCM_SHA256 (128 bits)</dd></div><div><dt>groupe négocié</dt><dd>X25519MLKEM768</dd></div><div><dt>signature du certificat</dt><dd>ecdsa-with-SHA384</dd></div><div><dt>clé du certificat</dt><dd>courbe elliptique 256 bits</dd></div><div><dt>chaîne</dt><dd>4 certificats</dd></div><div><dt>certificat valide jusqu&#039;au</dt><dd>04/01/2027</dd></div><div><dt>versions acceptées</dt><dd>TLSv1.2, TLSv1.3</dd></div></dl></div><p class="legend">Une poignée de main, pas une lecture de fichier : c&#039;est le seul moyen de savoir ce qui protège vraiment le trafic, et cela peut contredire ce que le dépôt déclare.</p></section>
+<section class="verdict watch"><h2>SURVEILLER <span class="count">1</span></h2><article><h3>ECDSA <span class="dom">non déclaré</span> </h3>
+                 <div class="loc">tls://mesa.black:443</div>
+                 <pre>certificat signé en ecdsa-with-SHA384, clé courbe elliptique 256 bits</pre>
+                 <p>Signature : pas de récolte possible. À migrer avant 2030 pour la conformité, sans urgence de confidentialité. <span class="detail">Certificat serveur. Sa durée de vie est courte : le remplacer par une signature post-quantique se fera au renouvellement, sans migration de données.</span></p><div class="fix"><span>Remplacement</span> ML-DSA</div><details class="fp"><summary>Faux positif ? empreinte <code>0c47b74e</code></summary>
+               <p class="fp-lead">Accepter ce constat : <code>sablier accept 0c47b74e --reason=&quot;…&quot; --until=2027-04-06</code></p>
+               <pre>&quot;accepted&quot;: {
+  &quot;0c47b74e&quot;: {
+    &quot;reason&quot;: &quot;…&quot;,
+    &quot;until&quot;: &quot;2027-04-06&quot;
+  }
+}</pre>
+               <p class="fp-lead">L&#039;outil a tort ? <a href="https://github.com/mesa-black/sablier/issues/new?title=Faux%20positif%20%3A%20ecdsa%20dans%20mesa.black%3A443&amp;body=Empreinte%20%3A%200c47b74e%0AAlgorithme%20%3A%20ecdsa%0AVerdict%20%3A%20SURVEILLER%0AFichier%20%3A%20tls%3A%2F%2Fmesa.black%3A443%3A0%0APreuve%20%3A%20certificat%20sign%C3%A9%20en%20ecdsa-with-SHA384%2C%20cl%C3%A9%20courbe%20elliptique%20256%20bits%0A%0APourquoi%20ce%20constat%20est%20faux%20%3A%0A&amp;labels=false-positive">Ouvrir un signalement pré-rempli</a></p>
+             </details></article></section><section class="verdict clear summary"><h2>CONFORME <span class="count">1</span></h2><details><summary><strong>ML-KEM</strong> · 1 usage <span class="dom">Normalisé FIPS 203.</span></summary><ul class="files"><li>tls://mesa.black:443:0</li></ul></details></section>
+<section class="blind"><h2>Ce que ce rapport n&#039;a pas regardé</h2><ul><li>la cryptographie de vos services gérés — base de données, stockage objet, terminaison TLS chez un intermédiaire — n&#039;apparaît dans aucun fichier de ce dépôt</li><li>ce qui est réellement négocié à l&#039;exécution, pour tout hôte non déclaré dans la section « sonde »</li><li>les clés détenues dans un HSM ou chez un fournisseur</li><li>la durée de vie réelle des données : elle vient de votre déclaration, pas du code — un domaine non déclaré est calculé avec une durée par défaut de 0 ans</li><li>L&#039;horizon d&#039;exploitation du système n&#039;est pas déclaré : le calcul suppose qu&#039;il cesse d&#039;écrire des données aujourd&#039;hui. C&#039;est l&#039;hypothèse optimiste — un service encore en production dans dix ans produira dix ans de données de plus à protéger. Ajoutez `service_until` à la déclaration.</li><li>Échéance retenue : 2035, d&#039;après NIST IR 8547. Un autre cadre — institutionnel, défense — donne une autre date : voir `regime` dans la déclaration.</li><li>Les fichiers binaires (images, polices, archives) ne sont lus que sur leurs premiers méga-octets, et seulement pour trois signes vérifiables : un bloc de clé, des octets après la fin de l&#039;image, une extension qui ment sur le contenu. Un message dissimulé dans les bits d&#039;une image n&#039;est pas détecté ici, et ne prétend pas l&#039;être.</li><li>Les vulnérabilités publiées des dépendances n&#039;ont pas été vérifiées : lancez `sablier advisories &lt;chemin&gt;` puis `--advisories=&lt;fichier&gt;`. Sans cela, une bibliothèque trouée aujourd&#039;hui est présentée comme un simple inventaire.</li></ul>
+            <p>Un inventaire qui ne dit pas ce qu&#039;il n&#039;a pas vu n&#039;est pas un inventaire.</p></section>
+<section class="effort"><h2>Ce qu&#039;il y a à changer</h2><p class="lead">1 emplacement(s) à reprendre, dans 1 fichier(s). Les lignes ci-dessous comptent des endroits, pas des semaines.</p><table><thead><tr><th>Algorithme</th><th>Appels</th><th>Fichiers</th><th>Domaines</th><th>Ce que cela change</th></tr></thead><tbody><tr><td>ECDSA</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td></td></tr></tbody></table><p class="legend">La feuille de route européenne compte l&#039;effort de migration parmi les trois facteurs du risque quantique. Cet outil le compte en emplacements parce que c&#039;est ce qu&#039;un dépôt sait dire ; il n&#039;en fait pas une durée. Huit appels dans un fichier derrière une même fonction sont une après-midi ; huit répartis sur six services avec un protocole entre eux sont un trimestre, et rien dans les fichiers ne distingue les deux. Cette estimation vous appartient.</p></section>
+<section class="plan">
+  <h2>Ce qu&#039;il faut faire, dans l&#039;ordre</h2>
+  <p class="legend">Un inventaire qui ne conclut rien se range dans un dossier. Voici l&#039;arbitrage — et l&#039;ordre compte autant que la liste.</p>
+  <ol><li><h3>Rien d&#039;urgent, et c&#039;est un résultat</h3><p>Aucune donnée à longue durée n&#039;est exposée à la récolte, et rien n&#039;est cassé aujourd&#039;hui. Ne rien faire est ici la bonne décision : remplacer de la cryptographie qui tient coûte du temps, introduit du risque et n&#039;améliore rien.</p></li><li><h3>Remettre ce rapport au calendrier</h3><p>La fenêtre se referme d&#039;elle-même : la date de péremption ne bouge pas (2035), mais chaque année qui passe rapproche vos données de cette ligne. Un domaine conforme aujourd&#039;hui avec une durée de neuf ans ne le sera plus l&#039;an prochain. Rejouer l&#039;analyse une fois par an suffit — et vérifier à cette occasion que l&#039;échéance réglementaire n&#039;a pas bougé.</p></li></ol>
+  <p class="share"><a href="threema://compose?text=Sablier%20%E2%80%94%20inventaire%20cryptographique%20de%20BlackMesa%20Labs%20%2806%2F10%2F2026%29%0A%0AAucune%20donn%C3%A9e%20dont%20la%20dur%C3%A9e%20de%20confidentialit%C3%A9%20d%C3%A9passe%20la%20p%C3%A9remption%20des%20algorithmes%20qui%20la%20prot%C3%A8gent.%0A%0A2%20constats%20retenus.%20%C3%89ch%C3%A9ance%20de%20p%C3%A9remption%20retenue%20%3A%202035.%0APremi%C3%A8re%20action%20%3A%20Rien%20d%27urgent%2C%20et%20c%27est%20un%20r%C3%A9sultat">Envoyer le résumé sur Threema</a></p>
+  <p class="share-note">Ouvre Threema sur un téléphone où l&#039;application est installée. Sur un ordinateur, le schéma n&#039;est en général pas enregistré et le navigateur refuse le lien : copiez le texte ci-dessous. Rien n&#039;est transmis à un serveur tiers.</p>
+  <details class="share-text"><summary>Voir le texte à envoyer</summary><pre>Sablier — inventaire cryptographique de BlackMesa Labs (06/10/2026)
+
+Aucune donnée dont la durée de confidentialité dépasse la péremption des algorithmes qui la protègent.
+
+2 constats retenus. Échéance de péremption retenue : 2035.
+Première action : Rien d&#039;urgent, et c&#039;est un résultat</pre></details>
+</section>
+<section class="fp-legend"><h2>Faux positif ?</h2>
+               <p>Deux choses s&#039;appellent « faux positif », et elles ne vont pas au même endroit.</p>
+               <p><strong>1.</strong> L&#039;outil a raison, mais ce constat est accepté ici. C&#039;est une décision de projet : ajoutez ce bloc à votre déclaration, elle est versionnée, donc la relecture se fait en revue de code. La raison et la date d&#039;expiration sont obligatoires.</p>
+               <pre>&quot;accepted&quot;: {
+  &quot;&lt;empreinte&gt;&quot;: {
+    &quot;reason&quot;: &quot;…&quot;,
+    &quot;until&quot;: &quot;2027-04-06&quot;
+  }
+}</pre>
+               <p class="fp-cli">En ligne de commande : <code>sablier accept &lt;empreinte&gt; --reason=&quot;…&quot; --until=2027-04-06</code></p>
+               <p><strong>2.</strong> L&#039;outil a tort. C&#039;est une règle à corriger, et sa place est dans le dépôt de Sablier : <a href="https://github.com/mesa-black/sablier/issues/new">github.com/mesa-black/sablier</a></p>
+               <p class="fp-note">L&#039;empreinte imprimée à côté de chaque constat le désigne, et c&#039;est elle qu&#039;on cite dans les deux cas. Elle est calculée sur la preuve, pas sur le numéro de ligne : elle survit à un déplacement du code, et change le jour où la ligne change vraiment.</p>
+             </section>
+
+<section class="seal"><h2>Empreinte et signature</h2><dl class="probe-facts"><div><dt>empreinte des constats</dt><dd><code>1839cd93b8e933bbaab8e9be303fac1265248fc7d98c09ba722d438dc3875a29</code></dd></div><div><dt>signé le</dt><dd>Ed25519 + ML-DSA-65 · 06/10/2026 07:49</dd></div><div><dt>clé publique</dt><dd><code>+B/8vbI5Wxt9GVDN…</code></dd></div></dl><p class="legend">L&#039;empreinte porte sur les constats, pas sur ce fichier : deux rendus du même inventaire, dans deux langues, donnent la même valeur.</p><p class="seal-caveat">Ce rapport porte deux signatures : Ed25519, vérifiable partout, et ML-DSA-65, qui résiste aux algorithmes quantiques connus. Aucune ne remplace l&#039;autre — c&#039;est l&#039;hybridation que l&#039;ANSSI demande, appliquée ici au document lui-même.</p><p class="legend">Pour vérifier cette signature, avec le fichier .sig déposé à côté de ce rapport : <code>sablier verify &lt;rapport&gt;.sig --declare=&lt;déclaration&gt;</code></p><p class="legend">Ce que la signature ne couvre pas : les octets de cette page. Un rapport affiche sa propre signature, donc il ne peut pas la contenir — ce qui est signé est l&#039;empreinte des constats ci-dessus. Pour lier les deux, rejouez l&#039;analyse sur le même état du dépôt et comparez l&#039;empreinte obtenue : même inventaire, même valeur. Sans ce recalcul, une page modifiée à la main se vérifie quand même.</p><p class="legend">Ce que la signature établit : cette empreinte a été signée par la clé que la déclaration désigne. Ce qui rattache cette clé à quelqu&#039;un n&#039;est pas cette page — c&#039;est l&#039;historique du fichier qui la déclare, où tout changement de clé est un commit daté que n&#039;importe qui peut relire.</p></section>
+<footer>Sablier n'envoie rien, n'enregistre rien et ne dépend de rien. Ce fichier ne charge aucune ressource externe : il peut être lu hors ligne et transmis tel quel.</footer>
+</body></html>

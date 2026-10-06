@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts preview serve clean drafts-list publish unpublish provision deploy
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish audit provision deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -63,6 +63,23 @@ unpublish: ## Remettre un article en brouillon (ne déploie pas) : make unpublis
 	@php bin/publish.php "$(KEY)" --draft
 	@echo "  → 'make deploy' pour le retirer réellement du site"
 
+# --- inventaire cryptographique ----------------------------------------------
+# Le site publie ce que Sablier dit de lui, signé par la clé que sa déclaration
+# désigne. Deux raisons de le faire ici et pas à la main : un inventaire publié
+# une fois devient faux sans prévenir, et `deploy` en dépend donc pour que ce qui
+# est servi corresponde toujours à ce qui est en ligne.
+SABLIER ?= ../sablier/bin/sablier
+SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
+
+audit: ## Produire l'inventaire cryptographique signé du site
+	@test -x "$(SABLIER)" || { echo "✗ sablier introuvable : $(SABLIER) (SABLIER=<chemin> make audit)"; exit 1; }
+	@test -f "$(SABLIER_KEY)" || { echo "✗ clé de signature introuvable : $(SABLIER_KEY)"; exit 1; }
+	@mkdir -p assets/audit
+	@$(SABLIER) scan . --out=assets/audit/report.html --audit=assets/audit/audit.html \
+		--sign="$(SABLIER_KEY)" --quiet
+	@printf '  inventaire : %s\n' "$$(ls -1 assets/audit | tr '\n' ' ')"
+	@$(SABLIER) verify assets/audit/report.html.sig --declare=sablier.json
+
 # --- serveur -----------------------------------------------------------------
 # `provision` décrit la machine, `deploy` y dépose le site. Un outil, un rôle.
 
@@ -70,7 +87,7 @@ provision: ## Mettre le serveur dans l'état attendu (relançable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
 	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' SITE_ROOT='$(SITE_ROOT)' bash /tmp/labs-deploy/provision.sh"
 
-deploy: ## Publier : une version du site par date de parution, puis bascule
+deploy: audit ## Publier : une version du site par date de parution, puis bascule
 	@ssh mesa.black "mkdir -p $(SITE_ROOT)/releases"
 	@for d in $$(php bin/build.php --release-dates) $$(date +%F); do \
 		SITE_URL="$(SITE_URL)" php bin/build.php --as-of=$$d >/dev/null; \
