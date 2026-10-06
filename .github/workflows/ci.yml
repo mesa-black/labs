@@ -63,9 +63,12 @@ jobs:
           php bin/build.php --release-dates | tee /tmp/dates
           ! grep -qvE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' /tmp/dates
 
+  # Runs on the daily schedule as well as on pushes, which is the whole point: a
+  # dependency with no known advisory today is not a dependency with no known
+  # advisory in March, and this site goes weeks without a commit. The build and
+  # the source inventory stay on pushes — they can only change when the files do.
   dependencies:
     name: Dependencies
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       -
