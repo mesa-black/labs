@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts preview serve clean drafts-list publish unpublish audit provision deploy
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish audit deps provision deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -99,7 +99,14 @@ provision: ## Put the server in the expected state (re-runnable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
 	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' SITE_ROOT='$(SITE_ROOT)' bash /tmp/labs-deploy/provision.sh"
 
-deploy: audit ## Publier : une version du site par date de parution, puis bascule
+# The dependencies are three Composer packages, and the site's own inventory
+# names their versions — which is a claim about them being sound, and nothing was
+# checking it. `--locked` reads composer.lock, so the check describes what is
+# actually deployed and runs without an install.
+deps: ## Check the dependencies against the advisory database
+	@composer audit --locked --no-interaction
+
+deploy: deps audit ## Publish: one version of the site per publication date, then switch
 	@ssh mesa.black "mkdir -p $(SITE_ROOT)/releases"
 	@# Filtered to date-shaped tokens: a single stray line on stdout — a PHP
 	@# warning, once — turned every word of it into a release directory on the
