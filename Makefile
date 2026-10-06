@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts serve clean drafts-list publish unpublish provision deploy
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish provision deploy
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -25,6 +25,22 @@ build: ## Build the site into public/ (published posts only)
 
 drafts: ## Build including drafts — never deploy this output
 	@php bin/build.php --drafts
+
+# `deploy` reconstruit public/ pour chaque date de parution et finit par celle du
+# jour : il écrase donc toute prévisualisation d'un état futur, en silence, et
+# avec les URL du site déployé. C'est arrivé deux fois, dont une fois sous les
+# yeux de quelqu'un qui cherchait l'article. Une cible dédiée, qui dit ce qu'elle
+# montre et sur quelle date, coûte quatre lignes.
+PREVIEW_PORT ?= 8000
+
+preview: ## Prévisualiser le site à une date : make preview [DATE=2026-10-08]
+	@d="$(DATE)"; \
+	 test -n "$$d" || d=$$(php bin/build.php --release-dates | tail -1); \
+	 test -n "$$d" || d=$$(date +%F); \
+	 SITE_URL="http://localhost:$(PREVIEW_PORT)" php bin/build.php --as-of="$$d" >/dev/null; \
+	 printf '\n  état du site au %s · http://localhost:%s/\n' "$$d" "$(PREVIEW_PORT)"; \
+	 printf '  %s\n\n' "$$(find public -name index.html | wc -l | tr -d ' ') pages, Ctrl-C pour arrêter"; \
+	 php -S localhost:$(PREVIEW_PORT) -t public
 
 serve: drafts ## Build with drafts and serve on http://localhost:8000
 	@php -S localhost:8000 -t public
