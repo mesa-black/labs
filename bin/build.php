@@ -47,7 +47,7 @@ $site = [
 $strings = [
     'fr' => [
         'tagline' => "Notes d'ingénierie : ce qu'on a construit, ce qu'on a cassé, ce qu'on en a tiré.",
-        'feed' => 'Flux', 'minutes' => 'min', 'reading' => 'min de lecture',
+        'feed' => 'Flux', 'nav_audit' => 'Audit', 'minutes' => 'min', 'reading' => 'min de lecture',
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
         'back' => 'Tous les articles', 'language' => 'Langue',
         'crossover_pointer' => 'Publié sur Show me the REX',
@@ -62,7 +62,7 @@ $strings = [
     ],
     'en' => [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
-        'feed' => 'Feed', 'minutes' => 'min', 'reading' => 'min read',
+        'feed' => 'Feed', 'nav_audit' => 'Audit', 'minutes' => 'min', 'reading' => 'min read',
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
         'back' => 'All posts', 'language' => 'Language',
         'crossover_pointer' => 'Published on Show me the REX',
@@ -77,7 +77,7 @@ $strings = [
     ],
     'es' => [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
-        'feed' => 'Feed', 'minutes' => 'min', 'reading' => 'min de lectura',
+        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'minutes' => 'min', 'reading' => 'min de lectura',
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
         'back' => 'Todos los artículos', 'language' => 'Idioma',
         'crossover_pointer' => 'Publicado en Show me the REX',
@@ -372,7 +372,9 @@ foreach (LOCALES as $locale) {
         'feed_url' => $prefix.'/feed.xml',
         // The platform is trilingual too: send the reader to their own language
         // rather than landing them in French.
-        'audit_published' => is_file(ROOT.'/assets/audit/report.html'), 'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
+        'audit_published' => is_file(ROOT.'/assets/audit/report.html'),
+        'audit_url' => '/audit'.($locale === DEFAULT_LOCALE ? '' : "/$locale").'/report.html',
+        'smtr_url' => 'https://showmetherex.com'.($locale === DEFAULT_LOCALE ? '/' : "/$locale/"),
         'translations' => $translations,
     ];
 
@@ -409,7 +411,9 @@ $write('robots.txt', implode("\n", [
 $write('404.html', $twig->render('404.html.twig', [
     'site' => $site, 'locale' => DEFAULT_LOCALE, 'locales' => LOCALES,
     't' => $strings[DEFAULT_LOCALE], 'home' => '/', 'feed_url' => '/feed.xml',
-    'audit_published' => is_file(ROOT.'/assets/audit/report.html'), 'smtr_url' => 'https://showmetherex.com/',
+    'audit_published' => is_file(ROOT.'/assets/audit/report.html'),
+    'audit_url' => '/audit/report.html',
+    'smtr_url' => 'https://showmetherex.com/',
     'translations' => $translations, 'page_url' => '/404.html',
 ]));
 
@@ -421,12 +425,22 @@ echo '  ', str_pad('style.css', 48), number_format(filesize(OUT.'/style.css') / 
 // them outside the scope of the signature, which covers findings and not a
 // layout.
 if (is_dir(ROOT.'/assets/audit')) {
-    @mkdir(OUT.'/audit', 0o755, true);
-    foreach (glob(ROOT.'/assets/audit/*') ?: [] as $artefact) {
-        copy($artefact, OUT.'/audit/'.basename($artefact));
-        echo '  ', str_pad('audit/'.basename($artefact), 48),
-            number_format(filesize($artefact) / 1024, 1), " KB\n";
-    }
+    // One subdirectory per language beyond the default, so the copy walks.
+    $walk = static function (string $from, string $to) use (&$walk): void {
+        @mkdir($to, 0o755, true);
+        foreach (glob($from.'/*') ?: [] as $artefact) {
+            $target = $to.'/'.basename($artefact);
+            if (is_dir($artefact)) {
+                $walk($artefact, $target);
+
+                continue;
+            }
+            copy($artefact, $target);
+            echo '  ', str_pad(ltrim(str_replace(OUT, '', $target), '/'), 48),
+                number_format(filesize($artefact) / 1024, 1), " KB\n";
+        }
+    };
+    $walk(ROOT.'/assets/audit', OUT.'/audit');
 }
 
 echo "\n✓ public/ is ready", $withDrafts ? ' (drafts included — do not deploy)' : '', "\n";

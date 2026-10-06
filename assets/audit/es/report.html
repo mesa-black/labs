@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sablier — BlackMesa Labs</title>
+<style>:root{--ink:#16181d;--muted:#5d6470;--paper:#fbfaf8;--line:#e5e2dc;--bad:#a3281f;--warn:#9a5b10;--ok:#1d6b4f;--cool:#2a4c7d;--sand:#c8a44a}
+@media (prefers-color-scheme:dark){:root{--ink:#e8e6e1;--muted:#9aa0aa;--paper:#14161a;--line:#2b2f36;
+    --bad:#e0685c;--warn:#d69a4a;--ok:#5fbb92;--cool:#7aa2d8}}
+*{box-sizing:border-box}
+body{margin:0;padding:2.5rem 1.25rem 4rem;background:var(--paper);color:var(--ink);
+     font:15px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     max-width:52rem;margin-inline:auto}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;
+       border-bottom:2px solid var(--ink);padding-bottom:.6rem;margin-bottom:2rem}
+.brand{font-weight:700;letter-spacing:.22em;font-size:.95rem}
+.meta{color:var(--muted);font-size:.82rem}
+.headline{font-size:1.5rem;line-height:1.32;font-weight:500;margin:0 0 .8rem;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 2.4rem;font-size:.92rem}
+h2{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+   margin:2.6rem 0 1rem;font-weight:600}
+.count{background:var(--ink);color:var(--paper);border-radius:2px;padding:.05em .45em;font-size:.9em;letter-spacing:0}
+.timeline .chart{position:relative;border-left:1px solid var(--line);padding:1.8rem 0 .4rem}
+.mark{position:absolute;top:0;bottom:0;border-left:1px dashed var(--muted);padding-left:.4rem}
+.mark.expiry{border-left:2px solid var(--bad)}
+.mark span{font-size:.68rem;color:var(--muted);line-height:1.2;display:block}
+.mark.expiry span{color:var(--bad)}
+.row{display:grid;grid-template-columns:9rem 1fr 4rem;gap:.6rem;align-items:center;margin:.35rem 0}
+.lbl{font-size:.8rem;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{background:#00000008;height:14px;border-radius:2px;position:relative}
+.bar{height:100%;background:var(--cool);border-radius:2px}
+.bar.over{background:var(--bad)}
+.yrs{font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend{font-size:.8rem;color:var(--muted);margin:.8rem 0 0}
+.crossings{margin-top:1.4rem;border-top:1px solid var(--line);padding-top:.9rem}
+.crossings h3{margin:0 0 .5rem;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.crossings ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+.crossings li{margin:.2rem 0}
+.crossings li.past{color:var(--bad)}
+article{border-top:1px solid var(--line);padding:1rem 0}
+article h3{margin:0 0 .3rem;font-size:1rem;font-weight:600;display:flex;gap:.55rem;align-items:baseline;flex-wrap:wrap}
+.dom{font-weight:400;color:var(--muted);font-size:.82rem}
+.conf{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);border:1px solid currentColor;border-radius:2px;padding:.05em .35em}
+.loc{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;color:var(--muted)}
+pre{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;background:#00000006;border:1px solid var(--line);
+    border-radius:2px;padding:.5rem .6rem;overflow-x:auto;margin:.5rem 0}
+article p{margin:.4rem 0 0}
+.detail{color:var(--muted)}
+.fix{margin-top:.5rem;font-size:.85rem}
+.fix span{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ok);margin-right:.4rem}
+.verdict.compromised h2 .count,.verdict.urgent h2 .count{background:var(--bad)}
+.verdict.migrate h2 .count{background:var(--warn)}
+.blind{border:1px solid var(--line);border-radius:3px;padding:1.1rem 1.3rem;margin-top:3rem;background:#00000004}
+.blind h2{margin-top:0}
+.blind ul{margin:0;padding-left:1.1rem}
+.blind li{margin-bottom:.4rem}
+.blind p{color:var(--muted);font-size:.85rem;margin:.9rem 0 0}
+.about{border-left:2px solid var(--sand);padding:.1rem 0 .1rem 1rem;margin:0 0 2rem;
+       color:var(--muted);font-size:.88rem;line-height:1.55;
+       text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+@media (max-width:34rem){.about{text-align:left;hyphens:manual}}
+.about strong{color:var(--ink)}
+.stale{color:var(--warn)}
+.projection{border:1px solid var(--warn);color:var(--warn);border-radius:3px;
+            padding:.6rem .85rem;margin:0 0 1.4rem;font-size:.86rem}
+.imported{border:1px solid var(--cool);color:var(--cool);border-radius:3px;
+          padding:.6rem .85rem;margin:0 0 1.4rem;font-size:.86rem}
+.probe{border-top:1px solid var(--line);padding:.9rem 0}
+.probe h3{margin:0 0 .5rem;font-family:ui-monospace,Menlo,monospace;font-size:.85rem;font-weight:600}
+.probe dl{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.35rem 1.2rem}
+.probe dt{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.probe dd{margin:0 0 .3rem;font-size:.88rem;font-variant-numeric:tabular-nums}
+.probe-notes{margin:.7rem 0 0;padding-left:1.1rem;font-size:.82rem;color:var(--warn)}
+.summary details{border-top:1px solid var(--line);padding:.6rem 0}
+.summary summary{cursor:pointer;font-size:.92rem}
+.summary .dom{margin-left:.4rem}
+.files{margin:.6rem 0 0;padding-left:1.1rem;font-family:ui-monospace,Menlo,monospace;font-size:.74rem;color:var(--muted)}
+.seal{margin-top:2.6rem;border-top:1px solid var(--line);padding-top:1.1rem}
+.seal dl,.probe dl{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.35rem 1.2rem}
+.seal dt{font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.seal dd{margin:0 0 .3rem;font-size:.84rem;word-break:break-all}
+.seal code{font-family:var(--mono,ui-monospace,Menlo,monospace);font-size:.82em}
+.seal-caveat{border-left:2px solid var(--warn);padding-left:.9rem;color:var(--warn);
+             font-size:.84rem;margin:.9rem 0 0;text-align:justify;hyphens:auto}
+.fp{margin-top:.8rem;font-size:.84rem}
+.fp summary{cursor:pointer;color:var(--muted)}
+.fp summary code{font-size:.92em}
+.fp p{margin:.7rem 0 .2rem}
+.fp-lead{color:var(--muted)}
+.fp-cli{color:var(--muted)}
+.fp-legend{border:1px solid var(--line);border-radius:3px;padding:1.1rem 1.3rem;margin-top:2.6rem;font-size:.86rem}
+.fp-legend h2{margin-top:0}
+.fp-legend p{margin:.8rem 0 .2rem}
+.fp-legend pre{margin:.5rem 0}
+.fp-note{color:var(--muted)}
+.verdict.accepted .count{background:var(--muted)}
+article.accepted h3{opacity:.85}
+.plan{margin-top:3rem;border-top:2px solid var(--ink);padding-top:1.2rem}
+.plan ol{margin:1.4rem 0 0;padding-left:0;list-style:none;counter-reset:step}
+.plan li{counter-increment:step;position:relative;padding:0 0 1.5rem 2.6rem;border-top:1px solid var(--line);padding-top:1.1rem}
+.plan li::before{content:counter(step);position:absolute;left:0;top:1rem;
+                 font-variant-numeric:tabular-nums;font-size:.95rem;font-weight:700;color:var(--sand)}
+.plan h3{margin:0 0 .35rem;font-size:1.02rem;font-weight:600}
+.plan p{margin:0;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.share{margin:1.4rem 0 .3rem!important}
+.share a{display:inline-block;border:1px solid var(--accent-line,var(--ink));border-radius:3px;
+         padding:.45rem .9rem;text-decoration:none;color:var(--ink);font-size:.88rem}
+.share a:hover{background:var(--ink);color:var(--paper)}
+.share-note{color:var(--muted);font-size:.78rem;margin:0!important}
+@media (max-width:34rem){.plan p{text-align:left;hyphens:manual}}
+.share-text{margin:.5rem 0 0}
+.share-text summary{color:var(--muted);font-size:.78rem;cursor:pointer}
+.share-text pre{white-space:pre-wrap;font-size:.8rem;background:#00000008;
+                border-radius:3px;padding:.7rem .9rem;margin:.5rem 0 0;
+                user-select:all;-webkit-user-select:all}
+@media print{.share,.share-note,.share-text{display:none}}
+footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.8rem}
+
+/* Print, and therefore PDF. The palette is forced back to light: a
+   report printed on a dark ground wastes ink and is unreadable on
+   paper, and the viewer's theme must not follow the file to the
+   printer. */
+@page{margin:18mm 15mm}
+@media print{
+    :root{--ink:#16181d;--muted:#55595f;--paper:#fff;--line:#d9d6d0;
+          --bad:#8f241c;--warn:#8a5210;--ok:#1a5f46;--cool:#2a4c7d;--sand:#bb9a45}
+    body{max-width:none;margin:0;padding:0;font-size:10.5pt;background:#fff}
+    header{border-bottom-width:1.5pt}
+    .headline{font-size:1.25rem}
+    section,article,details,.probe{break-inside:avoid}
+    h2{break-after:avoid}
+    .timeline,.probes,.blind{break-inside:avoid}
+    .blind{background:none}
+    /* At 10.5pt the label column is too narrow and the names run
+       into the bars: give them room, not a smaller size. */
+    .row{grid-template-columns:11.5rem 1fr 3.4rem;gap:.5rem}
+    .lbl{font-size:.74rem}
+    .summary details{display:block}
+    .summary details>summary{list-style:none}
+    .files{display:none}
+    /* Paper has no disclosure triangle, so a closed <details>
+       prints as a dead question. Unfold them — the browser that
+       makes the PDF is also told to open them, because this
+       pseudo-element is recent and the export must not depend on
+       which Chrome the machine happens to have. The acceptance
+       block is dropped per finding: the legend carries one, and
+       the command line below it carries the fingerprint. */
+    details::details-content{content-visibility:visible;block-size:auto}
+    .fp,.fp-legend{break-inside:avoid}
+    .fp summary{list-style:none}
+    .fp pre{display:none}
+    pre{white-space:pre-wrap;word-break:break-word}
+    footer{break-before:avoid}
+}</style></head>
+<body>
+<header>
+  <div class="brand">SABLIER</div>
+  <div class="meta">BlackMesa Labs · 06/10/2026 · 84 archivos leídos · análisis en 223 ms</div>
+</header>
+
+<div class="about"><strong>Lo post-cuántico, en tres frases.</strong> La criptografía que protege hoy la web se apoya en problemas fáciles en un sentido e inviables en el otro: multiplicar dos números primos grandes es inmediato, recuperar esos factores llevaría miles de años. Un computador cuántico suficientemente grande hace posible ese camino de vuelta: RSA y las curvas elípticas, es decir casi todo lo que cifra y firma hoy, caen de golpe, y el tamaño de las claves no cambia nada. La criptografía <em>post-cuántica</em> son los algoritmos diseñados para resistir a esa máquina, normalizados en 2024 (ML-KEM para el cifrado, ML-DSA para la firma); el cifrado simétrico, AES y ChaCha20, no está amenazado.</div>
+<div class="about"><strong>Sablier</strong> inventaría la criptografía de un proyecto y la confronta con un dato que ninguna herramienta posee: <em>cuánto tiempo debe permanecer confidencial cada dato</em>. Un dato cifrado hoy con RSA o con una curva elíptica, y que debe seguir siendo secreto más allá de la caducidad de esos algoritmos, <em>ya está perdido</em>: un adversario captura ahora lo que descifrará después, y la migración solo protegerá lo que venga tras ella.<br><br>Por eso este informe distingue lo que se recolecta (el cifrado) de lo que no (las firmas), deja en paz la criptografía simétrica, y separa los problemas de hoy —MD5, SHA-1— del plazo cuántico.</div>
+
+
+
+<p class="headline">Ningún dato cuya duración de confidencialidad supere la caducidad de los algoritmos que lo protegen.</p>
+<p class="sub">2 hallazgos retenidos sobre el conjunto analizado. Fecha de caducidad empleada: <strong>2035</strong> — es el plazo reglamentario, no una predicción de ruptura criptográfica. Plazo verificado con sus fuentes el 30/09/2026.</p>
+
+<section class="timeline">
+  <h2>Duración de confidencialidad de los datos, frente a la caducidad de los algoritmos</h2>
+  <template id="chart">{"title":"Duración de confidencialidad de los datos, frente a la caducidad de los algoritmos","start":2026,"end":2046,"marks":[{"year":2030,"label":"depreciación"},{"year":2035,"label":"caducidad"}],"bars":[{"name":"sin declarar","years":0,"exposed":false}]}</template>
+  <div class="chart">
+    <div class="mark" style="left:20%"><span>2030<br>depreciación</span></div>
+    <div class="mark expiry" style="left:45%"><span>2035<br>caducidad</span></div>
+    <div class="row"><div class="lbl">sin declarar</div><div class="track"><div class="bar " style="width:0%"></div></div><div class="yrs">0 año</div></div>
+  </div>
+  <p class="legend">Cada barra es el tiempo durante el cual el dato debe seguir siendo confidencial. Pasa a rojo cuando un algoritmo recolectable lo protege más allá de la línea de caducidad; superar la línea sin ponerse en rojo significa que el dato dura mucho, pero lo protege una criptografía que aguantará.</p>
+  
+</section>
+<section class="probes"><h2>Lo que el servidor negocia realmente</h2><div class="probe"><h3>mesa.black</h3><dl><div><dt>servicio</dt><dd>HTTPS</dd></div><div><dt>protocolo negociado</dt><dd>TLSv1.3</dd></div><div><dt>suite</dt><dd>TLS_AES_128_GCM_SHA256 (128 bits)</dd></div><div><dt>grupo negociado</dt><dd>X25519MLKEM768</dd></div><div><dt>firma del certificado</dt><dd>ecdsa-with-SHA384</dd></div><div><dt>clave del certificado</dt><dd>curva elíptica 256 bits</dd></div><div><dt>cadena</dt><dd>4 certificados</dd></div><div><dt>certificado válido hasta</dt><dd>04/01/2027</dd></div><div><dt>versiones aceptadas</dt><dd>TLSv1.2, TLSv1.3</dd></div></dl></div><p class="legend">Un apretón de manos, no la lectura de un archivo: es la única forma de saber qué protege de verdad el tráfico, y puede contradecir lo que declara el repositorio.</p></section>
+<section class="verdict watch"><h2>VIGILAR <span class="count">1</span></h2><article><h3>ECDSA <span class="dom">sin declarar</span> </h3>
+                 <div class="loc">tls://mesa.black:443</div>
+                 <pre>ecdsa-with-SHA384 · EC-256</pre>
+                 <p>Firma: no se puede recolectar. Migrar antes de 2030 por conformidad, sin urgencia de confidencialidad. <span class="detail">Certificado de servidor. Su vida útil es corta: sustituirlo por una firma post-cuántica se hará en la renovación, sin migrar datos.</span></p><div class="fix"><span>Sustitución</span> ML-DSA</div><details class="fp"><summary>¿Falso positivo? huella <code>4d2a0227</code></summary>
+               <p class="fp-lead">Aceptar este hallazgo: <code>sablier accept 4d2a0227 --reason=&quot;…&quot; --until=2027-04-06</code></p>
+               <pre>&quot;accepted&quot;: {
+  &quot;4d2a0227&quot;: {
+    &quot;reason&quot;: &quot;…&quot;,
+    &quot;until&quot;: &quot;2027-04-06&quot;
+  }
+}</pre>
+               <p class="fp-lead">¿La herramienta se equivoca? <a href="https://github.com/mesa-black/sablier/issues/new?title=Faux%20positif%20%3A%20ecdsa%20dans%20mesa.black%3A443&amp;body=Empreinte%20%3A%204d2a0227%0AAlgorithme%20%3A%20ecdsa%0AVerdict%20%3A%20VIGILAR%0AFichier%20%3A%20tls%3A%2F%2Fmesa.black%3A443%3A0%0APreuve%20%3A%20ecdsa-with-SHA384%20%C2%B7%20EC-256%0A%0APourquoi%20ce%20constat%20est%20faux%20%3A%0A&amp;labels=false-positive">Abrir un aviso precargado</a></p>
+             </details></article></section><section class="verdict clear summary"><h2>CONFORME <span class="count">1</span></h2><details><summary><strong>ML-KEM</strong> · 1 uso <span class="dom">Normalizado como FIPS 203.</span></summary><ul class="files"><li>tls://mesa.black:443:0</li></ul></details></section>
+<section class="blind"><h2>Lo que este informe no ha mirado</h2><ul><li>la criptografía de sus servicios gestionados —base de datos, almacenamiento de objetos, terminación TLS en un intermediario— no aparece en ningún archivo de este repositorio</li><li>lo que realmente se negocia en ejecución, para cualquier host no declarado en la sección de sonda</li><li>las claves custodiadas en un HSM o en un proveedor</li><li>la vida real de los datos: viene de su declaración, no del código; un dominio no declarado se calcula con una duración por defecto de 0 años</li><li>El horizonte de explotación del sistema no está declarado: el cálculo supone que deja de escribir datos hoy. Es la lectura optimista: un servicio todavía en producción dentro de diez años producirá diez años más de datos que proteger. Añada `service_until` a la declaración.</li><li>Caducidad empleada: 2035, según NIST IR 8547. Otro marco —institucional, defensa— da otra fecha: véase `regime` en la declaración.</li><li>Los archivos binarios (imágenes, fuentes, archivos comprimidos) se leen solo en sus primeros megabytes, y solo en busca de tres señales verificables: un bloque de clave, bytes después del final de la imagen, una extensión que miente sobre el contenido. Un mensaje oculto en los bits de una imagen no se detecta aquí, y no se pretende lo contrario.</li><li>No se han comprobado las vulnerabilidades publicadas de las dependencias: ejecute `sablier advisories &lt;ruta&gt;` y luego `--advisories=&lt;archivo&gt;`. Sin eso, una biblioteca con un agujero hoy se presenta como simple inventario.</li></ul>
+            <p>Un inventario que no dice lo que no ha mirado no es un inventario.</p></section>
+<section class="effort"><h2>Lo que hay que cambiar</h2><p class="lead">1 lugar(es) por revisar, en 1 archivo(s). Las filas siguientes cuentan lugares, no semanas.</p><table><thead><tr><th>Algoritmo</th><th>Llamadas</th><th>Archivos</th><th>Dominios</th><th>Qué cambia eso</th></tr></thead><tbody><tr><td>ECDSA</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td></td></tr></tbody></table><p class="legend">La hoja de ruta europea cuenta el esfuerzo de migración entre los tres factores del riesgo cuántico. Esta herramienta lo cuenta en lugares, porque es lo que un repositorio sabe decir; no lo convierte en una duración. Ocho llamadas en un archivo detrás de una misma función son una tarde; ocho repartidas en seis servicios con un protocolo entre ellos son un trimestre, y nada en los archivos distingue ambos casos. Esa estimación es suya.</p></section>
+<section class="plan">
+  <h2>Qué hacer, y en qué orden</h2>
+  <p class="legend">Un inventario que no concluye nada acaba archivado. Aquí está el arbitraje, y el orden importa tanto como la lista.</p>
+  <ol><li><h3>Nada urgente, y eso también es un resultado</h3><p>Ningún dato de larga duración está expuesto a la recolección y nada está roto hoy. No hacer nada es aquí la decisión correcta: sustituir criptografía que aguanta cuesta tiempo, introduce riesgo y no mejora nada.</p></li><li><h3>Volver a poner este informe en el calendario</h3><p>La ventana se cierra sola: la fecha de caducidad no se mueve (2035), pero cada año que pasa acerca sus datos a esa línea. Un dominio conforme hoy con una duración de nueve años dejará de serlo el año que viene. Basta con repetir el análisis una vez al año, y comprobar de paso que el plazo reglamentario no se ha movido.</p></li></ol>
+  <p class="share"><a href="threema://compose?text=Sablier%20%E2%80%94%20inventario%20criptogr%C3%A1fico%20de%20BlackMesa%20Labs%20%2806%2F10%2F2026%29%0A%0ANing%C3%BAn%20dato%20cuya%20duraci%C3%B3n%20de%20confidencialidad%20supere%20la%20caducidad%20de%20los%20algoritmos%20que%20lo%20protegen.%0A%0A2%20hallazgos%20retenidos.%20Fecha%20de%20caducidad%20empleada%3A%202035.%0APrimera%20acci%C3%B3n%3A%20Nada%20urgente%2C%20y%20eso%20tambi%C3%A9n%20es%20un%20resultado">Enviar el resumen por Threema</a></p>
+  <p class="share-note">Abre Threema en un teléfono donde la aplicación esté instalada. En un ordenador el esquema no suele estar registrado y el navegador rechaza el enlace: copie el texto de abajo. No se envía nada a terceros.</p>
+  <details class="share-text"><summary>Ver el texto que enviaría</summary><pre>Sablier — inventario criptográfico de BlackMesa Labs (06/10/2026)
+
+Ningún dato cuya duración de confidencialidad supere la caducidad de los algoritmos que lo protegen.
+
+2 hallazgos retenidos. Fecha de caducidad empleada: 2035.
+Primera acción: Nada urgente, y eso también es un resultado</pre></details>
+</section>
+<section class="fp-legend"><h2>¿Falso positivo?</h2>
+               <p>Dos cosas distintas se llaman «falso positivo», y no van al mismo sitio.</p>
+               <p><strong>1.</strong> La herramienta tiene razón, pero aquí se acepta el hallazgo. Es una decisión del proyecto: añada este bloque a su declaración. Está versionada, así que la revisión ocurre en la revisión de código. El motivo y la fecha de caducidad son obligatorios.</p>
+               <pre>&quot;accepted&quot;: {
+  &quot;&lt;huella&gt;&quot;: {
+    &quot;reason&quot;: &quot;…&quot;,
+    &quot;until&quot;: &quot;2027-04-06&quot;
+  }
+}</pre>
+               <p class="fp-cli">En línea de comandos: <code>sablier accept &lt;huella&gt; --reason=&quot;…&quot; --until=2027-04-06</code></p>
+               <p><strong>2.</strong> La herramienta se equivoca. Es una regla que corregir, y su sitio es el repositorio de Sablier: <a href="https://github.com/mesa-black/sablier/issues/new">github.com/mesa-black/sablier</a></p>
+               <p class="fp-note">La huella impresa junto a cada hallazgo lo identifica, y es lo que se cita en ambos casos. Se calcula a partir de la evidencia, no del número de línea: sobrevive a un desplazamiento del código y cambia el día en que la línea cambia de verdad.</p>
+             </section>
+
+<section class="seal"><h2>Huella y firma</h2><dl class="probe-facts"><div><dt>huella de los hallazgos</dt><dd><code>8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5</code></dd></div><div><dt>firmado el</dt><dd>Ed25519 + ML-DSA-65 · 06/10/2026 08:34</dd></div><div><dt>clave pública</dt><dd><code>+B/8vbI5Wxt9GVDN…</code></dd></div></dl><p class="legend">La huella cubre los hallazgos, no este archivo: dos renderizados del mismo inventario, en dos idiomas, dan el mismo valor.</p><p class="seal-caveat">Este informe lleva dos firmas: Ed25519, verificable en cualquier parte, y ML-DSA-65, que resiste a los algoritmos cuánticos conocidos. Ninguna sustituye a la otra: es la hibridación que pide la ANSSI, aplicada al propio documento.</p><p class="legend">Para comprobar esta firma, con el archivo .sig depositado junto a este informe: <code>sablier verify &lt;informe&gt;.sig --declare=&lt;declaración&gt;</code></p><p class="legend">Lo que la firma no cubre: los bytes de esta página. Un informe muestra su propia firma, así que no puede contenerla — lo que se firma es la huella de los hallazgos anteriores. Para unir ambas cosas, repita el análisis sobre el mismo estado del repositorio y compare la huella obtenida: mismo inventario, mismo valor. Sin ese recálculo, una página editada a mano se verifica igualmente.</p><p class="legend">Lo que la firma establece: esa huella fue firmada por la clave que designa la declaración. Lo que ata esa clave a alguien no es esta página — es el historial del archivo que la declara, donde cualquier cambio de clave es un commit fechado que cualquiera puede leer.</p></section>
+<footer>Sablier no envía nada, no guarda nada y no depende de nada. Este archivo no carga ningún recurso externo: puede leerse sin conexión y reenviarse tal cual.</footer>
+</body></html>

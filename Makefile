@@ -71,13 +71,24 @@ unpublish: ## Put a piece back to draft (does not deploy): make unpublish KEY=sl
 SABLIER ?= ../sablier/bin/sablier
 SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 
-audit: ## Produce the site's signed cryptographic inventory
-	@test -x "$(SABLIER)" || { echo "✗ sablier introuvable : $(SABLIER) (SABLIER=<chemin> make audit)"; exit 1; }
+audit: ## Produce the site's signed cryptographic inventory, in three languages
+	@test -x "$(SABLIER)" || { echo "✗ sablier not found: $(SABLIER) (SABLIER=<path> make audit)"; exit 1; }
 	@test -f "$(SABLIER_KEY)" || { echo "✗ signing key not found: $(SABLIER_KEY)"; exit 1; }
-	@mkdir -p assets/audit
-	@$(SABLIER) scan . --out=assets/audit/report.html --audit=assets/audit/audit.html \
-		--sign="$(SABLIER_KEY)" --quiet
-	@printf '  inventaire : %s\n' "$$(ls -1 assets/audit | tr '\n' ' ')"
+	@# One rendering per language, because a reader who clicked a Spanish word
+	@# and received a French document learnt nothing. The signature covers the
+	@# findings and not the page, so the three carry the same digest — which the
+	@# check below prints side by side rather than asserting.
+	@for lang in fr en es; do \
+		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
+		mkdir -p "$$dir"; \
+		$(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
+			--lang=$$lang --sign="$(SABLIER_KEY)" --quiet; \
+	done
+	@printf '  digests, one per language:\n'
+	@for lang in fr en es; do \
+		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
+		printf '    %s  %s\n' "$$lang" "$$(php -r 'echo json_decode(file_get_contents($$argv[1]), true)["digest"];' "$$dir/report.html.sig")"; \
+	done
 	@$(SABLIER) verify assets/audit/report.html.sig --declare=sablier.json
 
 # --- serveur -----------------------------------------------------------------

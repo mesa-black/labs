@@ -124,7 +124,10 @@ a { color: inherit; }
    hiding it or pointing at a page that is not there. */
 .lang.is-missing { opacity: .35; cursor: default; }
 
+/* Each machine-facing link separated by the same rule as the languages, so the
+   header reads as three groups rather than a row of words. */
 .masthead-nav .feed { padding-left: .55rem; border-left: 1px solid var(--rule); }
+.masthead-nav .feed + .feed { margin-left: .55rem; }
 
 .wordmark {
     font-family: var(--display);
