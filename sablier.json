@@ -1,0 +1,33 @@
+{
+  "project": "BlackMesa Labs",
+
+  "_regime": "Un blog public, sans compte, sans formulaire, sans base de données. Le régime général suffit : il n'y a ici aucune donnée dont la confidentialité réponde à un cadre particulier.",
+  "regime": "general",
+
+  "_lifetimes": "Ce dépôt est le cas que l'outil doit savoir traiter sans rien dramatiser : presque tout ce qu'il contient est destiné à être lu par n'importe qui. Déclarer zéro est une réponse, et c'est celle qui évite de traiter du contenu publié comme un problème.",
+  "default_lifetime_years": 0,
+
+  "domains": {
+    "contenu publié": {
+      "paths": ["content/*", "templates/*", "public/*", "bin/*", "src/*"],
+      "lifetime_years": 0,
+      "note": "Articles, gabarits et générateur. Tout est écrit pour être servi en clair à qui le demande : la confidentialité due est nulle, par construction et pas par négligence.",
+      "declared_by": "",
+      "declared_on": ""
+    },
+
+    "chaîne de déploiement": {
+      "paths": ["deploy/*", "Makefile"],
+      "lifetime_years": 0,
+      "note": "Scripts de provisionnement et de publication. Ils décrivent la configuration du serveur, y compris son TLS, et ne contiennent aucun secret : la clé SSH qui les exécute vit sur le poste de travail et n'entre jamais dans le dépôt. Si ces fichiers sortaient, ils n'apprendraient rien à personne — c'est aussi pour ça qu'ils sont lisibles.",
+      "declared_by": "",
+      "declared_on": ""
+    }
+  },
+
+  "_probe": "La cryptographie réelle de ce site n'est pas dans ses fichiers : elle est négociée par le serveur. Sans cette ligne, le rapport ne verrait rien et le dirait — avec elle, il va voir.",
+  "probe": ["mesa.black"],
+
+  "_service_until": "Non déclaré : ce blog n'a pas de date de fin prévue. Le rapport le signale comme l'hypothèse optimiste, ce qui est exact.",
+  "service_until": 0
+}
