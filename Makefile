@@ -9,9 +9,15 @@ install: ## Install the dependencies
 
 # Adresse publique du site. Sert aux URL canoniques, aux hreflang, au sitemap et
 # aux métadonnées de partage — donc le build local et le build déployé ne peuvent
-# pas partager la même valeur par défaut. Tant qu'aucun domaine n'est choisi,
-# c'est l'IP du serveur ; le jour où il l'est, une seule ligne à changer.
-SITE_URL ?= http://164.132.255.21
+# pas partager la même valeur par défaut.
+SITE_URL ?= https://mesa.black
+
+# Le nom que Caddy sert, et pour lequel il demande un certificat. Avec une valeur
+# par défaut, et pas seulement dans l'environnement : sans elle, un `make
+# provision` lancé sans y penser regénère le bloc en `:80` et défait HTTPS sans
+# rien dire. Le domaine est une décision prise une fois, elle appartient au
+# dépôt.
+SITE_DOMAIN ?= mesa.black
 SITE_ROOT ?= /var/www/labs
 
 build: ## Build the site into public/ (published posts only)

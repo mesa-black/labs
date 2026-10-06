@@ -98,12 +98,35 @@ install -m 0644 "$HERE/labs-release.timer" /etc/systemd/system/labs-release.time
 systemctl daemon-reload
 systemctl enable --now labs-release.timer >/dev/null
 
+# Le seul en-tête qui rend HTTPS difficile à défaire : sans lui, un visiteur
+# qui tape le nom sans schéma repart en clair une fois, et c'est la fois qui
+# compte. Un an, les sous-domaines compris — www est le seul qui existe et il
+# est servi par la même machine. Pas de `preload` : l'inscription sur la liste
+# des navigateurs ne se retire pas en une journée, et ce site a un domaine dont
+# le renouvellement n'est pas encore tranché.
+HSTS=""
+if [ -n "$SITE_DOMAIN" ]; then
+	HSTS='Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		'
+fi
+
 say "Configuration de Caddy"
 if [ -n "$SITE_DOMAIN" ]; then
 	# Le certificat n'est demandé qu'une fois le DNS pointé sur cette machine :
 	# sinon Let's Encrypt refuse et finit par limiter les tentatives.
 	SITE_BLOCK="$SITE_DOMAIN {"
+	# www d'un côté, et l'adresse IP de l'autre : le site a vécu des mois sur
+	# son IP nue, des liens la portent encore, et un nom d'hôte dans le bloc
+	# cesse de répondre à tout ce qui n'est pas lui. Rediriger coûte quatre
+	# lignes ; laisser mourir ces liens se verrait pour toujours dans les
+	# journaux de quelqu'un d'autre. Pas de TLS sur l'IP : aucune autorité
+	# ordinaire ne signe pour une adresse, donc le bloc est explicitement en
+	# http et ne sert qu'à envoyer vers le nom.
 	REDIRECT="www.$SITE_DOMAIN {
+	redir https://$SITE_DOMAIN{uri} 301
+}
+
+http://$(hostname -I | awk '{print $1}') {
 	redir https://$SITE_DOMAIN{uri} 301
 }
 "
@@ -133,7 +156,7 @@ $SITE_BLOCK
 		Content-Security-Policy "default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 		X-Content-Type-Options "nosniff"
 		Referrer-Policy "strict-origin-when-cross-origin"
-		-Server
+		$HSTS-Server
 	}
 
 	@assets path *.css *.woff2
@@ -151,12 +174,44 @@ systemctl enable caddy >/dev/null
 systemctl reload-or-restart caddy
 
 say "Vérification"
-# Vérifier plutôt que supposer : le script dit ce qu'il a obtenu.
-code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/)
-[ "$code" = "200" ] || { echo "✗ le site répond $code"; exit 1; }
+# Vérifier plutôt que supposer : le script dit ce qu'il a obtenu. Avec un nom
+# d'hôte, `localhost` ne correspond plus à aucun bloc — la vérification d'avant
+# aurait échoué pour une bonne raison et ressemblé à une panne, alors elle
+# interroge maintenant ce qui est réellement servi : le nom en TLS, et la
+# redirection depuis le clair.
+if [ -n "$SITE_DOMAIN" ]; then
+	# Le certificat n'existe pas à la seconde où Caddy recharge : il est demandé
+	# à Let's Encrypt, ce qui prend quelques secondes et un aller-retour réseau.
+	# Interroger une fois juste après le rechargement, c'est mesurer la course
+	# plutôt que le résultat — la première version de cette vérification a
+	# échoué sur un serveur qui fonctionnait. On attend, avec une limite.
+	code=000
+	for _ in $(seq 20); do
+		code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 \
+			--resolve "$SITE_DOMAIN:443:127.0.0.1" "https://$SITE_DOMAIN/" || echo 000)
+		[ "$code" = "200" ] && break
+		sleep 2
+	done
+	[ "$code" = "200" ] || { echo "✗ le site répond $code en HTTPS après 40 s d'attente du certificat"; exit 1; }
+	code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 --resolve "$SITE_DOMAIN:80:127.0.0.1" "http://$SITE_DOMAIN/" || echo 000)
+	[ "$code" = "308" ] || [ "$code" = "301" ] || { echo "✗ le clair répond $code au lieu de rediriger"; exit 1; }
+else
+	code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/)
+	[ "$code" = "200" ] || { echo "✗ le site répond $code"; exit 1; }
+fi
+
+# `${X:+a}${X:-b}` n'est pas un ternaire : `:-` ne substitue que si la variable
+# est vide, donc avec un domaine les deux moitiés s'affichaient — « TLS pour
+# mesa.black » suivi de « mesa.black ». Le défaut dormait depuis l'écriture du
+# script et n'est devenu visible que le jour où un domaine a existé.
+if [ -n "$SITE_DOMAIN" ]; then
+	SERVED="TLS pour $SITE_DOMAIN"
+else
+	SERVED="pas de domaine : HTTP seul, sur IP"
+fi
 
 printf '\n✓ Caddy sert %s (version %s) — %s\n' "$SITE_ROOT/current" \
 	"$(basename "$(readlink -f "$SITE_ROOT/current")")" \
-	"${SITE_DOMAIN:+TLS pour $SITE_DOMAIN}${SITE_DOMAIN:-pas de domaine : HTTP seul, sur IP}"
+	"$SERVED"
 printf '  Pare-feu actif, correctifs de sécurité automatiques, fail2ban en service\n'
 printf '  Bascule quotidienne : %s\n' "$(systemctl show -p NextElapseUSecRealtime --value labs-release.timer || echo 'labs-release.timer')"
