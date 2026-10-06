@@ -49,7 +49,13 @@ $site = [
     // of which this site exists without. An address costs a line, and it
     // filters on its own: whoever takes the trouble to write has something to
     // say.
-    'reply' => 'labs@mesa.black',
+    //
+    // Empty until the mailbox exists. iCloud has no catch-all on a custom
+    // domain: every address is created by hand, and verification can take a
+    // day. Publishing one before then would bounce the first reader who wrote,
+    // which is worse than publishing none — so the line below is the switch,
+    // and the block disappears from every page while it is empty.
+    'reply' => '',
 ];
 
 /** Everything the templates say in their own voice, per language. */

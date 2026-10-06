@@ -76,9 +76,13 @@
         </article>
 
         {# The subject is pre-filled with the title: a reply about one piece
-           should arrive saying which, without the reader having to. #}
-        <p class="reply">{{ t.reply }}
-            <a href="mailto:{{ site.reply }}?subject={{ post.title|url_encode }}">{{ site.reply }}</a></p>
+           should arrive saying which, without the reader having to. Absent
+           entirely while no mailbox exists — an address that bounces is worse
+           than no address. #}
+        {% if site.reply %}
+            <p class="reply">{{ t.reply }}
+                <a href="mailto:{{ site.reply }}?subject={{ post.title|url_encode }}">{{ site.reply }}</a></p>
+        {% endif %}
 
         <p class="back"><a href="{{ home }}">← {{ t.back }}</a></p>
     </main>
