@@ -202,7 +202,22 @@ $SITE_BLOCK
 	# in place. Checked rather than assumed — the first version of this looked
 	# right in the file and changed nothing on the wire.
 	@selfcontained path /audit/*
-	header @selfcontained >Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+	header @selfcontained {
+		>Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+
+		# Revalidate every time. These files carry no Cache-Control at all until
+		# this line, so a browser falls back to its heuristic — roughly a tenth
+		# of the age of the document — and serves a report from yesterday
+		# without asking. That is a nuisance on a blog post and a defect here:
+		# the report states the version that produced it and the digest of its
+		# own findings, and the token beside it is fetched fresh by anybody
+		# checking the date. A cached page against a current .tsr is a reader
+		# comparing two different documents and concluding our seal is broken —
+		# the exact false negative these documents spend a section warning about.
+		# `no-cache` still stores the file, it only forbids using it without
+		# asking, so the cost is a 304 and not a re-download.
+		>Cache-Control "no-cache"
+	}
 
 	# No log file: under systemd, Caddy writes to the journal, which rotates and
 	# prunes itself. A log file means a directory to create, permissions to grant
