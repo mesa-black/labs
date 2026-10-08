@@ -84,7 +84,16 @@ SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 # authority are self-signed and would need us to ship a root certificate for
 # anybody to check a date. Override it if you would rather trust somebody else:
 # that is the point of it being a variable.
-TSA ?= http://time.certum.pl
+#
+# Three of them, in three jurisdictions, because one authority is one point of
+# trust. An authority only ever sees the digest, so there is nothing to
+# coordinate and none of them knows it is not alone — the cost is one HTTP
+# request each. What it buys: each gives an independent upper bound, so the date
+# we can defend without anyone having to trust a single operator is the latest of
+# the three, and forging the earliest no longer gets anybody anything. Certum
+# stays first: it holds the oldest attestation of these findings, and the first
+# slot is the one every printed command points at.
+TSA ?= http://time.certum.pl,http://timestamp.globalsign.com/tsa/r6advanced1,http://timestamp.digicert.com
 
 audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@test -x "$(SABLIER)" || { echo "✗ sablier not found: $(SABLIER) (SABLIER=<path> make audit)"; exit 1; }
