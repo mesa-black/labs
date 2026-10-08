@@ -95,9 +95,27 @@ SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 # slot is the one every printed command points at.
 TSA ?= http://time.certum.pl,http://timestamp.globalsign.com/tsa/r6advanced1,http://timestamp.digicert.com
 
+# The published inventory names the version that produced it, in its masthead and
+# in the Threema summary. That line was a lie for a while: the audit is generated
+# from a working copy of sablier, not from a release, so the report said 0.9.0
+# while carrying three features that release does not have. The tool's own guard
+# only compares its constant against a tag when a tag is being cut, which is
+# right for a working branch and leaves this hole at the one place it matters —
+# publication. So the check lives here, where the artefact is produced.
+# UNRELEASED=1 for a local run that is not meant to be published.
 audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@test -x "$(SABLIER)" || { echo "✗ sablier not found: $(SABLIER) (SABLIER=<path> make audit)"; exit 1; }
 	@test -f "$(SABLIER_KEY)" || { echo "✗ signing key not found: $(SABLIER_KEY)"; exit 1; }
+	@src=$$(cd "$$(dirname "$(SABLIER)")/.." && pwd); \
+	 v=$$(php -r "require '$$src/src/Version.php'; echo Sablier\\Version::NUMBER;"); \
+	 tag=$$(git -C "$$src" describe --exact-match --tags HEAD 2>/dev/null || true); \
+	 dirty=$$(git -C "$$src" status --porcelain 2>/dev/null); \
+	 if [ -z "$(UNRELEASED)" ] && { [ "$$tag" != "v$$v" ] || [ -n "$$dirty" ]; }; then \
+		echo "✗ sablier is not at a clean release: constant $$v, HEAD $${tag:-untagged}$${dirty:+, working tree dirty}"; \
+		echo "  the report would print a version it was not built from. Tag the release, or UNRELEASED=1 for a local run."; \
+		exit 1; \
+	 fi; \
+	 printf '  sablier %s (%s%s)\n' "$$v" "$${tag:-untagged}" "$${dirty:+, working tree dirty — published under UNRELEASED}"
 	@# One rendering per language, because a reader who clicked a Spanish word
 	@# and received a French document learnt nothing. The signature covers the
 	@# findings and not the page, so the three carry the same digest — which the
