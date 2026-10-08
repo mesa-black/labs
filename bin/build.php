@@ -26,6 +26,7 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
+use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\MarkdownConverter;
 use Twig\Environment as Twig;
 use Twig\Loader\FilesystemLoader;
@@ -161,6 +162,10 @@ $env = new Environment(['html_input' => 'allow', 'allow_unsafe_links' => false])
 $env->addExtension(new CommonMarkCoreExtension());
 $env->addExtension(new FrontMatterExtension());
 $env->addExtension(new SmartPunctExtension());
+// Tables. The stylesheet has styled `.prose table` since it was written, and
+// nothing could produce one: a markdown table rendered as a paragraph full of
+// pipes. Part of league/commonmark already installed, so no new dependency.
+$env->addExtension(new TableExtension());
 $markdown = new MarkdownConverter($env);
 
 
