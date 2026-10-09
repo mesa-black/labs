@@ -4,6 +4,10 @@ standfirst: "A signature that did not cover the page it sealed. Three digests wh
 key: on-dit-ce-qu-on-fait
 date: 2026-10-06
 slug: we-say-what-we-do
+corrections:
+  - date: 2026-10-09
+    note: >-
+      The heading of section 1 was in the past tense — "a signature that did not cover the page it sealed" — which suggested it covers it now. The body had said the opposite since day one: the cause is structural, no mechanism repairs it. Only the heading kept the ambiguity alive; it is in the present tense now. Reported by a reader.
 ---
 
 "We say what we do and we do what we say" is a sentence found on a great many websites, and it costs nothing to write. It only becomes interesting where the two halves drift apart — and they always do, because a claim is written once while the code keeps moving.
@@ -102,14 +106,3 @@ It has **no comments** either. That would need an executable on the server, a da
 - **An apparatus is not a virtue.** None of the above guarantees the next sentence. It only guarantees that a claim already tested will not quietly decay.
 - The three errors in this piece were found in two days because somebody was **using** these tools that day. A tool nobody uses keeps its false claims indefinitely, and no test writes itself in our place.
 - Publishing your mistakes has a cost worth naming: to a fast reader it looks like amateurism. We do it anyway, because the alternative — correcting in silence — protects the author and leaves the reader with the false version.
-
----
-
-*Correction, 9 October 2026.* The heading of section 1 was in the past tense —
-"a signature that **did not** cover the page it sealed" — which suggested it
-covers it now. The body has said the opposite since day one: the cause is
-structural, no mechanism repairs it, and what is signed is the digest of the
-findings, which is the right choice. Only the heading kept the ambiguity alive;
-it is in the present tense now. Nothing else changed, and the published report
-still carries the sentence this section caused to be written: *"Without that
-recalculation, a page altered by hand still verifies."*

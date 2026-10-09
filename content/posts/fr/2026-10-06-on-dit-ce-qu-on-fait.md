@@ -4,6 +4,10 @@ standfirst: "Une signature qui ne couvrait pas la page qu'elle scellait. Trois e
 key: on-dit-ce-qu-on-fait
 date: 2026-10-06
 slug: on-dit-ce-qu-on-fait
+corrections:
+  - date: 2026-10-09
+    note: >-
+      Le titre de la section 1 était à l'imparfait — « une signature qui ne couvrait pas la page qu'elle scellait » — ce qui laissait entendre qu'elle la couvre désormais. Le corps disait l'inverse depuis le premier jour : la cause est structurelle, aucun mécanisme ne la répare. Seul le titre entretenait l'ambiguïté ; il est au présent. Signalé par un lecteur.
 ---
 
 « On dit ce qu'on fait et on fait ce qu'on dit » est une phrase qu'on lit sur beaucoup de sites, et qui ne coûte rien à écrire. Elle ne devient intéressante qu'à l'endroit où les deux moitiés s'écartent — et elles s'écartent toujours, parce qu'une affirmation est écrite une fois et que le code continue de bouger.
@@ -102,15 +106,3 @@ Il **n'a pas de commentaires** non plus. Il faudrait un exécutable sur le serve
 - **Un dispositif n'est pas une vertu.** Rien de ce qui précède ne garantit la prochaine phrase. Ça garantit seulement qu'une affirmation déjà testée ne se dégradera pas en silence.
 - Les trois erreurs de ce texte ont été trouvées en deux jours parce que quelqu'un **utilisait** ces outils ce jour-là. Un outil qu'on n'utilise pas garde ses affirmations fausses indéfiniment, et aucun test ne les écrit à notre place.
 - Publier ses erreurs a un coût qu'il faut nommer : ça ressemble à de l'amateurisme pour qui lit vite. On continue quand même, parce que l'alternative — corriger en silence — protège l'auteur et laisse le lecteur avec la version fausse.
-
----
-
-*Correction du 9 octobre 2026.* Le titre de la section 1 était à l'imparfait —
-« une signature qui ne **couvrait** pas la page qu'elle scellait » — ce qui
-laissait entendre qu'elle la couvre désormais. Le corps dit l'inverse depuis le
-premier jour : la cause est structurelle, aucun mécanisme ne la répare, et ce
-qui est signé est l'empreinte des constats, ce qui est le bon choix. Seul le
-titre entretenait l'ambiguïté ; il est au présent maintenant. Rien d'autre n'a
-changé, et le rapport en ligne porte toujours la phrase que cette section a fait
-écrire : *« Sans ce recalcul, une page modifiée à la main se vérifie quand
-même. »*

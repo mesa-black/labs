@@ -64,6 +64,18 @@
 
             <div class="prose">{{ post.html|raw }}</div>
 
+            {% if post.corrections %}
+                <aside class="corrections">
+                    <h2>{{ t.corrections }}</h2>
+                    <ul>
+                        {% for c in post.corrections %}
+                            <li><time datetime="{{ c.date|date('Y-m-d') }}">{{ c.date|long_date(locale) }}</time> — {{ c.note }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="corrections-seal">{{ t.corrections_seal }}</p>
+                </aside>
+            {% endif %}
+
             {% if post.rex %}
                 <aside class="crossover">
                     <p class="crossover-label">{{ post.pointer ? t.crossover_pointer : t.crossover_also }}</p>

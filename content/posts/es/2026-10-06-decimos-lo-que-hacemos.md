@@ -4,6 +4,10 @@ standfirst: "Una firma que no cubría la página que sellaba. Tres huellas donde
 key: on-dit-ce-qu-on-fait
 date: 2026-10-06
 slug: decimos-lo-que-hacemos
+corrections:
+  - date: 2026-10-09
+    note: >-
+      El título de la sección 1 estaba en pasado — «una firma que no cubría la página que sellaba» — lo que daba a entender que ahora sí la cubre. El cuerpo decía lo contrario desde el primer día: la causa es estructural, ningún mecanismo la repara. Solo el título mantenía la ambigüedad; ahora está en presente. Señalado por un lector.
 ---
 
 «Decimos lo que hacemos y hacemos lo que decimos» es una frase que se lee en muchísimos sitios, y escribirla no cuesta nada. Solo se vuelve interesante allí donde las dos mitades se separan — y siempre se separan, porque una afirmación se escribe una vez y el código sigue moviéndose.
@@ -102,14 +106,3 @@ Tampoco tiene **comentarios**. Harían falta un ejecutable en el servidor, una b
 - **Un dispositivo no es una virtud.** Nada de lo anterior garantiza la próxima frase. Solo garantiza que una afirmación ya probada no se degradará en silencio.
 - Los tres errores de este texto se encontraron en dos días porque alguien **estaba usando** esas herramientas ese día. Una herramienta que no se usa conserva sus afirmaciones falsas indefinidamente, y ningún test se escribe en nuestro lugar.
 - Publicar los propios errores tiene un coste que conviene nombrar: a quien lee deprisa le parece amateurismo. Lo hacemos igualmente, porque la alternativa — corregir en silencio — protege al autor y deja al lector con la versión falsa.
-
----
-
-*Corrección del 9 de octubre de 2026.* El título de la sección 1 estaba en
-pasado — «una firma que no **cubría** la página que sellaba» — lo que daba a
-entender que ahora sí la cubre. El cuerpo dice lo contrario desde el primer día:
-la causa es estructural, ningún mecanismo la repara, y lo que se firma es la
-huella de los hallazgos, que es la elección correcta. Solo el título mantenía la
-ambigüedad; ahora está en presente. Nada más ha cambiado, y el informe publicado
-sigue llevando la frase que esta sección hizo escribir: *«Sin ese recálculo, una
-página modificada a mano se verifica igualmente.»*

@@ -344,6 +344,49 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 .back a { color: var(--muted); text-decoration: none; }
 .back a:hover { color: var(--accent); }
 
+/* ----------------------------------------------------------- corrections */
+/* Visible without competing with the piece: a reader who missed the original
+   mistake should not be made to read about it first, and a reader looking for
+   it should find it where corrections always are — at the foot, dated. */
+.corrections {
+    margin: 3rem 0 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--line);
+    background: color-mix(in srgb, var(--ink) 3%, transparent);
+    font-size: .9rem;
+}
+
+.corrections h2 {
+    margin: 0 0 .75rem;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.corrections ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.corrections li + li {
+    margin-top: .6rem;
+}
+
+.corrections time {
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+}
+
+.corrections-seal {
+    margin: 1rem 0 0;
+    padding-top: .9rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .84rem;
+}
+
 /* ------------------------------------------------------------- crossover */
 
 /* A "pointer" piece does not copy the case study: it introduces it and links

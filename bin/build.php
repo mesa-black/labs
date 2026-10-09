@@ -65,6 +65,8 @@ $strings = [
         'tagline' => "Notes d'ingénierie : ce qu'on a construit, ce qu'on a cassé, ce qu'on en a tiré.",
         'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'reply' => 'Une remarque, une correction, un désaccord ?', 'minutes' => 'min', 'reading' => 'min de lecture',
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
+        'corrections' => 'Corrections',
+        'corrections_seal' => "Une correction de texte ne change pas l'empreinte de l'inventaire cryptographique de ce site : elle porte sur les constats que l'analyse trouve, pas sur la prose d'un article. Si une correction la déplaçait un jour, ce serait dit ici.",
         'back' => 'Tous les articles', 'language' => 'Langue',
         'crossover_pointer' => 'Publié sur Show me the REX',
         'crossover_also' => 'Aussi publié comme REX',
@@ -80,6 +82,8 @@ $strings = [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
         'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'reply' => 'A remark, a correction, a disagreement?', 'minutes' => 'min', 'reading' => 'min read',
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
+        'corrections' => 'Corrections',
+        'corrections_seal' => "A correction to the text does not move the digest of this site's cryptographic inventory: that digest covers the findings the analysis makes, not the prose of an article. If a correction ever moved it, it would be said here.",
         'back' => 'All posts', 'language' => 'Language',
         'crossover_pointer' => 'Published on Show me the REX',
         'crossover_also' => 'Also published as a case study',
@@ -95,6 +99,8 @@ $strings = [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
         'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'reply' => '¿Una observación, una corrección, un desacuerdo?', 'minutes' => 'min', 'reading' => 'min de lectura',
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
+        'corrections' => 'Correcciones',
+        'corrections_seal' => "Una corrección del texto no cambia la huella del inventario criptográfico de este sitio: esa huella cubre los hallazgos que encuentra el análisis, no la prosa de un artículo. Si alguna corrección la moviera algún día, se diría aquí.",
         'back' => 'Todos los artículos', 'language' => 'Idioma',
         'crossover_pointer' => 'Publicado en Show me the REX',
         'crossover_also' => 'También publicado como caso',
@@ -303,6 +309,37 @@ foreach (LOCALES as $locale) {
             'url' => ($locale === DEFAULT_LOCALE ? '' : "/$locale")."/$slug/",
             'title' => (string) $meta['title'],
             'standfirst' => (string) ($meta['standfirst'] ?? ''),
+            // Dated corrections, rendered at the foot of the piece. A mechanism
+            // rather than a habit: a convention held by prose is a convention
+            // that gets a different shape every time and is skipped once in
+            // three. Each entry is a date and what changed — and the footer says
+            // in every language why the site's signed inventory did not move,
+            // which is the question a reader of this blog actually asks.
+            'corrections' => array_values(array_map(
+                // The YAML parser hands back a timestamp for a bare date, the
+                // same way it does for the piece's own `date` — handled there,
+                // and it has to be handled here too.
+                static fn (array $c): array => [
+                    'date' => \is_int($c['date'] ?? null)
+                        ? (new DateTimeImmutable())->setTimestamp($c['date'])
+                        : new DateTimeImmutable((string) ($c['date'] ?? 'now')),
+                    'note' => (string) ($c['note'] ?? ''),
+                ],
+                // Loud rather than filtered. A correction silently dropped for
+                // a missing field is the exact failure this block exists to
+                // prevent: a reader left with the uncorrected version while the
+                // author believes it was published.
+                array_map(
+                    static function ($c) use ($fail, $locale, $name) {
+                        if (!\is_array($c) || ($c['note'] ?? '') === '' || ($c['date'] ?? '') === '') {
+                            $fail("$locale/$name: a correction needs both a \"date\" and a \"note\"");
+                        }
+
+                        return $c;
+                    },
+                    (array) ($meta['corrections'] ?? []),
+                ),
+            )),
             'date' => $date,
             'draft' => $draft,
             'rex' => $rexUrl,
