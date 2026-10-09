@@ -12,7 +12,7 @@ Así que la pregunta útil no es «¿somos transparentes?». Es: **¿mediante qu
 
 Aquí están las tres últimas, todas del 5 y 6 de octubre, todas impresas por nuestras propias herramientas.
 
-## 1. Una firma que no cubría la página que sellaba
+## 1. Una firma que no cubre la página que sella, y nunca la cubrirá
 
 Este sitio publica ahora su propio inventario criptográfico, producido por [Sablier](https://github.com/mesa-black/sablier) y firmado. El enlace está en la cabecera de cada página, el archivo `.sig` está al lado, y cuatro comandos bastan para comprobarlo sin nosotros.
 
@@ -102,3 +102,14 @@ Tampoco tiene **comentarios**. Harían falta un ejecutable en el servidor, una b
 - **Un dispositivo no es una virtud.** Nada de lo anterior garantiza la próxima frase. Solo garantiza que una afirmación ya probada no se degradará en silencio.
 - Los tres errores de este texto se encontraron en dos días porque alguien **estaba usando** esas herramientas ese día. Una herramienta que no se usa conserva sus afirmaciones falsas indefinidamente, y ningún test se escribe en nuestro lugar.
 - Publicar los propios errores tiene un coste que conviene nombrar: a quien lee deprisa le parece amateurismo. Lo hacemos igualmente, porque la alternativa — corregir en silencio — protege al autor y deja al lector con la versión falsa.
+
+---
+
+*Corrección del 9 de octubre de 2026.* El título de la sección 1 estaba en
+pasado — «una firma que no **cubría** la página que sellaba» — lo que daba a
+entender que ahora sí la cubre. El cuerpo dice lo contrario desde el primer día:
+la causa es estructural, ningún mecanismo la repara, y lo que se firma es la
+huella de los hallazgos, que es la elección correcta. Solo el título mantenía la
+ambigüedad; ahora está en presente. Nada más ha cambiado, y el informe publicado
+sigue llevando la frase que esta sección hizo escribir: *«Sin ese recálculo, una
+página modificada a mano se verifica igualmente.»*

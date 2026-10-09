@@ -12,7 +12,7 @@ So the useful question is not "are we transparent". It is: **by what apparatus d
 
 Here are the last three, all from 5 and 6 October, all printed by our own tools.
 
-## 1. A signature that did not cover the page it sealed
+## 1. A signature that does not cover the page it seals, and never will
 
 This site now publishes its own cryptographic inventory, produced by [Sablier](https://github.com/mesa-black/sablier) and signed. The link is in the header of every page, the `.sig` file sits beside it, and four commands are enough to check it without us.
 
@@ -102,3 +102,14 @@ It has **no comments** either. That would need an executable on the server, a da
 - **An apparatus is not a virtue.** None of the above guarantees the next sentence. It only guarantees that a claim already tested will not quietly decay.
 - The three errors in this piece were found in two days because somebody was **using** these tools that day. A tool nobody uses keeps its false claims indefinitely, and no test writes itself in our place.
 - Publishing your mistakes has a cost worth naming: to a fast reader it looks like amateurism. We do it anyway, because the alternative — correcting in silence — protects the author and leaves the reader with the false version.
+
+---
+
+*Correction, 9 October 2026.* The heading of section 1 was in the past tense —
+"a signature that **did not** cover the page it sealed" — which suggested it
+covers it now. The body has said the opposite since day one: the cause is
+structural, no mechanism repairs it, and what is signed is the digest of the
+findings, which is the right choice. Only the heading kept the ambiguity alive;
+it is in the present tense now. Nothing else changed, and the published report
+still carries the sentence this section caused to be written: *"Without that
+recalculation, a page altered by hand still verifies."*
