@@ -100,9 +100,10 @@ systemctl enable --now labs-release.timer >/dev/null
 
 # The one header that makes HTTPS hard to undo: without it, a visitor typing the
 # name with no scheme leaves in the clear once, and that once is the one that
-# counts. A year, subdomains included — www is the only one that exists and it is
-# served by this same machine. No `preload`: getting onto the browsers' list is
-# not undone in a day, and this site has a domain whose renewal is not settled.
+# counts. A year, subdomains included — www and vault are the only ones that
+# exist, and both are served over TLS by this same machine. No `preload`: getting
+# onto the browsers' list is not undone in a day, and this site has a domain
+# whose renewal is not settled.
 HSTS=""
 if [ -n "$SITE_DOMAIN" ]; then
 	HSTS='Strict-Transport-Security "max-age=31536000; includeSubDomains"
@@ -224,7 +225,14 @@ $SITE_BLOCK
 	# and a rotation to configure — for a static site, \`journalctl -u caddy\` is
 	# enough.
 }
+
+# Other services on this machine bring their own vhost (the vault, from its own
+# repository): this file is regenerated on every run and would erase them, so
+# they live beside it and are pulled in here. A glob that matches nothing is not
+# an error.
+import /etc/caddy/sites/*.caddy
 CONF
+install -d -m 0755 /etc/caddy/sites
 
 caddy validate --adapter caddyfile --config /etc/caddy/Caddyfile >/dev/null
 systemctl enable caddy >/dev/null
