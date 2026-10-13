@@ -18,6 +18,8 @@ HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SITE_ROOT=${SITE_ROOT:-/var/www/labs}
 SITE_DOMAIN=${SITE_DOMAIN:-}
 SITE_USER=${SITE_USER:-ubuntu}
+# Where the site is served from: the ClusterIP of the `labs` Service in k3s.
+SITE_UPSTREAM=${SITE_UPSTREAM:-10.43.200.10:80}
 
 say() { printf '\n▸ %s\n' "$1"; }
 
@@ -148,82 +150,29 @@ cat > /etc/caddy/Caddyfile <<CONF
 }
 $REDIRECT
 $SITE_BLOCK
-	root * $SITE_ROOT/current
-	encode zstd gzip
-	file_server
-
-	# One directory per piece: /piece/ serves its index.html.
-	try_files {path} {path}/ {path}/index.html
-
-	handle_errors {
-		rewrite * /404.html
-		file_server
+	# The site itself runs in k3s on this machine (github.com/mesa-black/k3s-stack,
+	# spoke/apps/labs): files, headers and the daily switch of dated versions all
+	# live in its image. This block only terminates TLS and passes requests on, to
+	# a Service whose ClusterIP is fixed in that repository — nothing listens on a
+	# host port, nothing goes around ufw.
+	reverse_proxy $SITE_UPSTREAM {
+		# A pod being replaced closes its kept-alive connections: retry for a
+		# few seconds rather than answer 502.
+		lb_try_duration 5s
 	}
 
+	# Caddy announces itself twice on a proxied response: Server, and the Via
+	# that reverse_proxy adds. Removed here rather than with reverse_proxy's own
+	# header_down, which runs before Via is added and so left it in place
+	# (tried). Deletions in `header` are deferred to the moment the response is
+	# written, after everything else.
 	header {
-		# Entirely static site: nothing to execute, nothing to inject.
-		Content-Security-Policy "default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
-		X-Content-Type-Options "nosniff"
-		Referrer-Policy "strict-origin-when-cross-origin"
-		# Nothing here reads a sensor, a camera or a payment method, so every
-		# such feature is denied rather than left at the browser's default. It
-		# costs one header and means a future page — or anything injected into
-		# one — cannot quietly ask for them. \\`browsing-topics=()\\` is in the
-		# list for a different reason: it keeps a visit to this site out of the
-		# advertising-interest profile Chrome builds from the pages people read.
-		Permissions-Policy "accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=()"
-		$HSTS-Server
-	}
-
-	@assets path *.css *.woff2
-	header @assets Cache-Control "public, max-age=3600"
-
-	# A Sablier signature is JSON, and it is readable on purpose: whoever checks
-	# it should be able to see what was signed without running anything. Caddy
-	# guessed "application/pgp-signature" from the extension, which is wrong and
-	# makes a browser download the file instead of showing it.
-	@signature path *.sig
-	header @signature Content-Type "application/json; charset=utf-8"
-
-	# An RFC 3161 token is DER, and this is its registered media type. Caddy had
-	# no guess for the extension and fell back to octet-stream, which works but
-	# tells a client nothing about what it just received.
-	@token path *.tsr
-	header @token Content-Type "application/timestamp-reply"
-
-	# The audit documents are self-contained by design — they travel by email, on
-	# a memory stick, into a room with no network — so their stylesheet is inside
-	# them. The site's own policy forbids inline styles, which is right for pages
-	# that load a stylesheet and turns a report into unstyled text. One policy for
-	# this path, then: inline styles allowed, everything else still at zero, and
-	# scripts in particular, because these documents contain none and must not
-	# start to.
-	# `>` rather than a plain set: the block above has already written a policy
-	# for every response, and a second `header` without it leaves the first one
-	# in place. Checked rather than assumed — the first version of this looked
-	# right in the file and changed nothing on the wire.
-	@selfcontained path /audit/*
-	header @selfcontained {
-		>Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
-
-		# Revalidate every time. These files carry no Cache-Control at all until
-		# this line, so a browser falls back to its heuristic — roughly a tenth
-		# of the age of the document — and serves a report from yesterday
-		# without asking. That is a nuisance on a blog post and a defect here:
-		# the report states the version that produced it and the digest of its
-		# own findings, and the token beside it is fetched fresh by anybody
-		# checking the date. A cached page against a current .tsr is a reader
-		# comparing two different documents and concluding our seal is broken —
-		# the exact false negative these documents spend a section warning about.
-		# `no-cache` still stores the file, it only forbids using it without
-		# asking, so the cost is a 304 and not a re-download.
-		>Cache-Control "no-cache"
+		-Server
+		-Via
 	}
 
 	# No log file: under systemd, Caddy writes to the journal, which rotates and
-	# prunes itself. A log file means a directory to create, permissions to grant
-	# and a rotation to configure — for a static site, \`journalctl -u caddy\` is
-	# enough.
+	# prunes itself.
 }
 
 # Other services on this machine bring their own vhost (the vault, from its own
@@ -276,8 +225,7 @@ else
 	SERVED="pas de domaine : HTTP seul, sur IP"
 fi
 
-printf '\n✓ Caddy sert %s (version %s) — %s\n' "$SITE_ROOT/current" \
-	"$(basename "$(readlink -f "$SITE_ROOT/current")")" \
+printf '\n✓ Caddy proxies %s to %s (the labs pod in k3s) — %s\n' "${SITE_DOMAIN:-:80}" "$SITE_UPSTREAM" \
 	"$SERVED"
 printf '  Firewall up, automatic security updates, fail2ban running\n'
 printf '  Bascule quotidienne : %s\n' "$(systemctl show -p NextElapseUSecRealtime --value labs-release.timer || echo 'labs-release.timer')"
