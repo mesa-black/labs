@@ -11,6 +11,11 @@
 	# Nothing to remember between restarts.
 	persist_config off
 	auto_https off
+	# On SIGTERM, wait at most this long for open connections. The default
+	# waits forever, and the proxy in front keeps connections alive: a pod
+	# being replaced would hang until Kubernetes kills it after 30 s. Its
+	# requests are already going to the new pod by then (preStop, 5 s).
+	grace_period 10s
 }
 
 :8080 {

@@ -61,8 +61,14 @@ if [ "${1:-}" = --once ]; then
 	switch
 	exit
 fi
+# Run as PID 1 in its container, a shell gets no default handler for SIGTERM:
+# Kubernetes then waits the whole grace period (30 s) before killing it, at
+# every deployment. Exit at once instead — and sleep in the background, since a
+# shell only runs a trap once the foreground command has returned.
+trap 'exit 0' TERM INT
 while :; do
 	# A failed check is logged and retried; the sidecar must not die over it.
 	switch || true
-	sleep 60
+	sleep 60 &
+	wait $!
 done
