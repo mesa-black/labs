@@ -228,11 +228,18 @@ jobs:
         name: Checkout
         uses: actions/checkout@v5
       -
-        # The day the image is built for, in Paris: passed to the build rather
-        # than read from the clock inside it (the Dockerfile says why).
-        name: Build day
+        # The publication day the image is built for, in Paris: before 07:00
+        # it is still yesterday, as for the switch in the pod. Passed to the
+        # build rather than read from the clock inside it (the Dockerfile says
+        # why).
+        name: Publication day
         id: day
-        run: echo "date=$(TZ=Europe/Paris date +%F)" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ "$(TZ=Europe/Paris date +%H)" -lt 7 ]; then
+            echo "date=$(TZ=Europe/Paris date -d yesterday +%F)" >> "$GITHUB_OUTPUT"
+          else
+            echo "date=$(TZ=Europe/Paris date +%F)" >> "$GITHUB_OUTPUT"
+          fi
       -
         name: Set up Buildx
         uses: docker/setup-buildx-action@v3
