@@ -348,7 +348,18 @@ foreach (LOCALES as $locale) {
             'html' => $html,
             // Reading time from the rendered text: the markdown still carries
             // syntax the reader never sees.
-            'words' => $words = str_word_count(strip_tags($html)),
+            //
+            // Counted as Unicode letters, not with str_word_count(): that one
+            // works on bytes and asks the C library which bytes are letters, so
+            // "déjà" was one word on a machine and two on another, and the same
+            // post read 16 minutes when built on the workstation and 15 in the
+            // container. A word is a run of letters (with their combining marks),
+            // joined by apostrophes or hyphens. Entities are decoded first, or
+            // "&amp;" would count as the word "amp".
+            'words' => $words = preg_match_all(
+                "/\\p{L}[\\p{L}\\p{Mn}'’-]*/u",
+                html_entity_decode(strip_tags($html), \ENT_QUOTES | \ENT_HTML5, 'UTF-8'),
+            ),
             'minutes' => max(1, (int) round($words / 200)),
         ];
     }
