@@ -1,0 +1,60 @@
+# Caddy inside the image: serves the live version of the site on :8080, plain
+# HTTP. TLS, the www and bare-IP redirects belong to whatever is in front (host
+# Caddy today, the cluster's ingress later); the headers belong to the site, so
+# they live here and travel with the image.
+#
+# Moved from the Caddyfile that deploy/provision.sh generates on the server — see
+# the comments there for why each header is what it is.
+{
+	# No configuration API: the configuration is this file, baked in.
+	admin off
+	# Nothing to remember between restarts.
+	persist_config off
+	auto_https off
+}
+
+:8080 {
+	# A symlink kept pointing at today's version by labs-switch.
+	root * /run/site/current
+	encode zstd gzip
+	file_server
+	try_files {path} {path}/ {path}/index.html
+
+	handle_errors {
+		# Error responses do not go through the site's `header` block above:
+		# without this line the 404 page announced "Server: Caddy" (it did on
+		# the host too).
+		header -Server
+		rewrite * /404.html
+		file_server
+	}
+
+	header {
+		Content-Security-Policy "default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=()"
+		# Ignored by browsers over plain HTTP, honoured once the proxy in front
+		# serves it over TLS: the site's policy, whoever terminates.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+
+	@assets path *.css *.woff2
+	header @assets Cache-Control "public, max-age=3600"
+
+	@signature path *.sig
+	header @signature Content-Type "application/json; charset=utf-8"
+
+	@token path *.tsr
+	header @token Content-Type "application/timestamp-reply"
+
+	@selfcontained path /audit/*
+	header @selfcontained {
+		>Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+		>Cache-Control "no-cache"
+	}
+
+	# No access log, as on the server today: nothing here needs visitors' IP
+	# addresses, and a log that is not written cannot leak.
+}

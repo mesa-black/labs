@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# Points /run/site/current at the newest dated version whose date has come —
+# deploy/release.sh, for a container. Every version, future ones included, is in
+# the image under /srv/releases/YYYY-MM-DD/; this only moves a link.
+#
+#   labs-switch            check every minute, forever (a sidecar)
+#   labs-switch --once     set the link and exit
+#   LABS_TODAY=2026-10-20 labs-switch --once    rehearse a future day
+#
+# The link lives in a volume shared with Caddy (an emptyDir in Kubernetes); it
+# points at a path that exists in both containers because they run one image.
+set -eu
+
+RELEASES=/srv/releases
+LINK_DIR=${LABS_LINK_DIR:-/run/site}
+
+switch() {
+	# TZ comes from the image: a POSIX rule for Paris, no tzdata needed.
+	today=${LABS_TODAY:-$(date +%F)}
+	target=''
+	for dir in "$RELEASES"/*/; do
+		name=$(basename "$dir")
+		case "$name" in
+		[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+		*) continue ;;
+		esac
+		[ "$name" \> "$today" ] && continue
+		target=$name
+	done
+	if [ -z "$target" ]; then
+		echo "no version whose date has come (today is $today)" >&2
+		return 1
+	fi
+	current=$(readlink "$LINK_DIR/current" 2>/dev/null || true)
+	[ "$current" = "$RELEASES/$target" ] && return 0
+	# A temporary link then a rename: atomic, no request lands on a missing root.
+	ln -sfn "$RELEASES/$target" "$LINK_DIR/.current.new"
+	mv -Tf "$LINK_DIR/.current.new" "$LINK_DIR/current"
+	echo "version $target is live${current:+ (previous: $(basename "$current"))}"
+}
+
+mkdir -p "$LINK_DIR"
+if [ "${1:-}" = --once ]; then
+	switch
+	exit
+fi
+while :; do
+	# A failed check is logged and retried; the sidecar must not die over it.
+	switch || true
+	sleep 60
+done
