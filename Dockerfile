@@ -56,6 +56,13 @@ RUN test -n "$SITE_DATE" || { echo "✗ --build-arg SITE_DATE=YYYY-MM-DD is requ
 # ------------------------------------------------------------------ serve
 FROM caddy:2.11.7-alpine
 
+# The official image gives the binary a file capability (cap_net_bind_service)
+# so that it can bind port 80 without root. This image listens on 8080, and the
+# pod drops every capability and forbids gaining any: the kernel then refuses to
+# exec a binary that asks for one ("exec /usr/bin/caddy: operation not
+# permitted"). Removed rather than granted back: least privilege.
+RUN setcap -r /usr/bin/caddy
+
 COPY --from=build /out/releases /srv/releases
 COPY container/Caddyfile /etc/caddy/Caddyfile
 COPY container/labs-switch /usr/local/bin/labs-switch
