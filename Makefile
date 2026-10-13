@@ -1,11 +1,45 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts preview serve clean drafts-list publish unpublish audit deps provision deploy
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish push audit audit-if-changed deps provision
+
+# --- PHP ---------------------------------------------------------------------
+# The workstation's PHP if it has one; otherwise the very PHP the image is built
+# with, in a container (the Dockerfile's `php` stage). The second is the
+# default here on purpose: a local build and the published one once disagreed
+# on reading times because two PHPs counted words differently.
+#
+# Paths are mounted at the same place inside the container as outside, so that
+# every path in this file means the same thing on both sides.
+PHP_IMAGE ?= localhost/labs-php
+SABLIER_DIR := $(abspath ../sablier)
+TTY := $(shell [ -t 0 ] && echo -t)
+# Sablier and its key are mounted only when they exist: `make build` must not
+# need the audit's tooling.
+MOUNTS := -v "$(CURDIR):$(CURDIR)" \
+	$(if $(wildcard $(SABLIER_DIR)),-v "$(SABLIER_DIR):$(SABLIER_DIR):ro") \
+	$(if $(wildcard $(HOME)/.sablier),-v "$(HOME)/.sablier:$(HOME)/.sablier:ro")
+RUN_IN_PHP = podman run --rm -i $(TTY) -e SITE_URL -e HOME=/tmp $(MOUNTS) -w "$(CURDIR)" $(1) $(PHP_IMAGE)
+ifeq ($(shell command -v php),)
+PHP_DEPS := .php-image
+PHP = $(call RUN_IN_PHP) php
+COMPOSER = $(call RUN_IN_PHP) composer
+SERVE = $(call RUN_IN_PHP,-p 127.0.0.1:$(1):$(1)) php -S 0.0.0.0:$(1)
+else
+PHP_DEPS :=
+PHP = php
+COMPOSER = composer
+SERVE = php -S localhost:$(1)
+endif
+
+# Built once, rebuilt when the Dockerfile changes. Ignored by Git.
+.php-image: Dockerfile
+	@podman build -q --target php -t $(PHP_IMAGE) . >/dev/null
+	@touch $@
 
 help: ## Show this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-install: ## Install the dependencies
-	@composer install
+install: $(PHP_DEPS) ## Install the dependencies
+	@$(COMPOSER) install
 
 # The site's public address. It feeds the canonical URLs, the hreflang tags, the
 # sitemap and the sharing metadata — so a local build and a deployed build cannot
@@ -20,55 +54,82 @@ SITE_URL ?= https://mesa.black
 SITE_DOMAIN ?= mesa.black
 SITE_ROOT ?= /var/www/labs
 
-build: ## Build the site into public/ (published posts only)
-	@php bin/build.php
+build: $(PHP_DEPS) ## Build the site into public/ (published posts only)
+	@$(PHP) bin/build.php
 
-drafts: ## Build including drafts — never deploy this output
-	@php bin/build.php --drafts
+drafts: $(PHP_DEPS) ## Build including drafts — never deploy this output
+	@$(PHP) bin/build.php --drafts
 
-# `deploy` rebuilds public/ once per publication date and finishes with today's:
+# A build rebuilds public/ for the date it is given, and nothing keeps it apart:
 # it therefore overwrites any preview of a future state, silently, and with the
 # deployed site's URLs. That happened twice, once while somebody was looking for
 # the piece and could not find it. A dedicated target, which says what it shows
 # and for which date, costs four lines.
 PREVIEW_PORT ?= 8000
 
-preview: ## Preview the site as of a date: make preview [DATE=2026-10-08]
+preview: $(PHP_DEPS) ## Preview the site as of a date: make preview [DATE=2026-10-08]
 	@d="$(DATE)"; \
-	 test -n "$$d" || d=$$(php bin/build.php --release-dates | tail -1); \
+	 test -n "$$d" || d=$$($(PHP) bin/build.php --release-dates | tail -1); \
 	 test -n "$$d" || d=$$(date +%F); \
-	 SITE_URL="http://localhost:$(PREVIEW_PORT)" php bin/build.php --as-of="$$d" >/dev/null; \
+	 SITE_URL="http://localhost:$(PREVIEW_PORT)" $(PHP) bin/build.php --as-of="$$d" >/dev/null; \
 	 printf '\n  the site as of %s · http://localhost:%s/\n' "$$d" "$(PREVIEW_PORT)"; \
 	 printf '  %s\n\n' "$$(find public -name index.html | wc -l | tr -d ' ') pages, Ctrl-C to stop"; \
-	 php -S localhost:$(PREVIEW_PORT) -t public
+	 $(call SERVE,$(PREVIEW_PORT)) -t public
 
 serve: drafts ## Build with drafts and serve on http://localhost:8000
-	@php -S localhost:8000 -t public
+	@$(call SERVE,8000) -t public
 
 clean: ## Remove the generated site
 	@rm -rf public
 
 # --- publication -------------------------------------------------------------
+# Publishing is a push. The site is an image built by CI from what is in Git,
+# and Argo CD deploys it (github.com/mesa-black/k3s-stack): nothing here talks
+# to the server any more. A piece goes live on its `date` at 07:00 Paris — on
+# the day of the push if that date has come, on its own later otherwise: every
+# dated version is in the image, and a small process in the pod switches.
+#
+# NO_PUSH=1 commits without pushing (to look before it leaves).
 
-drafts-list: ## List the drafts and their key
-	@php bin/publish.php
+drafts-list: $(PHP_DEPS) ## List the drafts and the scheduled pieces
+	@$(PHP) bin/publish.php
 
-publish: ## Publish a piece in every language, then deploy: make publish KEY=slug
-	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
-	@php bin/publish.php "$(KEY)"
-	@$(MAKE) --no-print-directory deploy
+publish: $(PHP_DEPS) ## Publish a piece in every language, audit, commit, push: make publish KEY=slug
+	@test -n "$(KEY)" || { $(PHP) bin/publish.php; exit 1; }
+	@$(PHP) bin/publish.php "$(KEY)"
+	@$(MAKE) --no-print-directory audit-if-changed
+	@d=$$(grep -lE '^key:[[:space:]]*"?$(KEY)"?[[:space:]]*$$' content/posts/*/*.md | xargs grep -hE '^date:' | head -1 | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}'); \
+	 today=$$(TZ=Europe/Paris date +%F); \
+	 if [ "$$d" \> "$$today" ]; then when="scheduled for $$d 07:00 Paris"; else when="live after the deployment (dated $$d)"; fi; \
+	 git add content assets/audit && git commit -q -m "publish: $(KEY), $$when" && \
+	 printf '  committed: publish %s — %s\n' "$(KEY)" "$$when"
+	@$(MAKE) --no-print-directory _push
 
-unpublish: ## Put a piece back to draft (does not deploy): make unpublish KEY=slug
-	@test -n "$(KEY)" || { php bin/publish.php; exit 1; }
-	@php bin/publish.php "$(KEY)" --draft
-	@echo "  → 'make deploy' to actually take it off the site"
+unpublish: $(PHP_DEPS) ## Put a piece back to draft, commit, push: make unpublish KEY=slug
+	@test -n "$(KEY)" || { $(PHP) bin/publish.php; exit 1; }
+	@$(PHP) bin/publish.php "$(KEY)" --draft
+	@git add content && git commit -q -m "unpublish: $(KEY)" && printf '  committed: unpublish %s\n' "$(KEY)"
+	@$(MAKE) --no-print-directory _push
+
+# Drafts, edits, corrections: whatever changed under content/, committed and
+# pushed. A draft is never built, so pushing one publishes nothing.
+push: ## Commit and push what changed under content/: make push [M="message"]
+	@git add content
+	@git diff --cached --quiet && { echo "  nothing changed under content/"; exit 0; } || \
+	 { git commit -q -m "$${M:-content: $$(git diff --cached --name-only | sed 's|content/posts/||' | paste -sd, -)}" && \
+	   printf '  committed: %s\n' "$$(git log -1 --format=%s)" && $(MAKE) --no-print-directory _push; }
+
+_push:
+	@if [ -n "$(NO_PUSH)" ]; then echo "  NO_PUSH: not pushed"; else \
+	   git push -q && printf '  pushed — CI: https://github.com/mesa-black/labs/actions\n'; fi
 
 # --- inventaire cryptographique ----------------------------------------------
 # The site publishes what Sablier says about it, signed by the key its
 # declaration designates. Two reasons to do it here rather than by hand: an
-# inventory published once goes wrong without warning, and `deploy` therefore
-# depends on it so that what is served always matches what is online.
-SABLIER ?= ../sablier/bin/sablier
+# inventory published once goes wrong without warning, and `publish` therefore
+# runs it (keeping it only when the findings change) so that what is served
+# matches what is online.
+SABLIER ?= $(SABLIER_DIR)/bin/sablier
 SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 
 # Who attests the date. The signature says which key signed and what it signed;
@@ -103,11 +164,11 @@ TSA ?= http://time.certum.pl,http://timestamp.globalsign.com/tsa/r6advanced1,htt
 # right for a working branch and leaves this hole at the one place it matters —
 # publication. So the check lives here, where the artefact is produced.
 # UNRELEASED=1 for a local run that is not meant to be published.
-audit: ## Produce the site's signed cryptographic inventory, in three languages
+audit: $(PHP_DEPS) ## Produce the site's signed cryptographic inventory, in three languages
 	@test -x "$(SABLIER)" || { echo "✗ sablier not found: $(SABLIER) (SABLIER=<path> make audit)"; exit 1; }
 	@test -f "$(SABLIER_KEY)" || { echo "✗ signing key not found: $(SABLIER_KEY)"; exit 1; }
 	@src=$$(cd "$$(dirname "$(SABLIER)")/.." && pwd); \
-	 v=$$(php -r "require '$$src/src/Version.php'; echo Sablier\\Version::NUMBER;"); \
+	 v=$$($(PHP) -r "require '$$src/src/Version.php'; echo Sablier\\Version::NUMBER;"); \
 	 tag=$$(git -C "$$src" describe --exact-match --tags HEAD 2>/dev/null || true); \
 	 dirty=$$(git -C "$$src" status --porcelain 2>/dev/null); \
 	 if [ -z "$(UNRELEASED)" ] && { [ "$$tag" != "v$$v" ] || [ -n "$$dirty" ]; }; then \
@@ -129,7 +190,7 @@ audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@for lang in fr en es; do \
 		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
 		mkdir -p "$$dir"; \
-		$(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
+		$(PHP) $(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
 			--lang=$$lang --sign="$(SABLIER_KEY)" --timestamp=$(TSA) --quiet; \
 		test -s "$$dir/report.html.tsr" \
 			|| { echo "✗ no token for $$lang: the audit would claim a date nobody attests"; exit 1; }; \
@@ -137,13 +198,27 @@ audit: ## Produce the site's signed cryptographic inventory, in three languages
 	@printf '  digests, one per language:\n'
 	@for lang in fr en es; do \
 		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
-		printf '    %s  %s\n' "$$lang" "$$(php -r 'echo json_decode(file_get_contents($$argv[1]), true)["digest"];' "$$dir/report.html.sig")"; \
+		printf '    %s  %s\n' "$$lang" "$$($(PHP) -r 'echo json_decode(file_get_contents($$argv[1]), true)["digest"];' "$$dir/report.html.sig")"; \
 	done
-	@$(SABLIER) verify assets/audit/report.html.sig --declare=sablier.json
+	@$(PHP) $(SABLIER) verify assets/audit/report.html.sig --declare=sablier.json
+
+# Run the audit, and keep it only if it says something new. Sablier keeps the
+# signature and the timestamp tokens when the findings have not changed — the
+# oldest attestation is the one worth having — so an unchanged run only
+# re-renders the pages with a new date. That is noise in Git, not information:
+# discarded. NO_AUDIT=1 skips it (offline, say); CI still compares the source
+# with its reference and blocks the image if new cryptography appears.
+audit-if-changed:
+	@if [ -n "$(NO_AUDIT)" ]; then echo "  NO_AUDIT: inventory not refreshed"; exit 0; fi; \
+	 $(MAKE) --no-print-directory $(addprefix -f ,$(MAKEFILE_LIST)) audit && \
+	 if git diff --quiet -- $$(git ls-files 'assets/audit/*.sig' 'assets/audit/**/*.sig') && \
+	    [ -z "$$(git ls-files --others --exclude-standard assets/audit)" ]; then \
+		git restore assets/audit && echo "  findings unchanged: the re-rendered inventory is discarded"; \
+	 else echo "  findings changed: the new signed inventory will be committed"; fi
 
 # --- serveur -----------------------------------------------------------------
-# `provision` describes the machine, `deploy` puts the site on it. One tool, one
-# role.
+# `provision` describes the machine: host Caddy in front of the site, which runs
+# in k3s. There is no `deploy` any more: deploying is pushing (see publication).
 
 provision: ## Put the server in the expected state (re-runnable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
@@ -153,22 +228,5 @@ provision: ## Put the server in the expected state (re-runnable)
 # names their versions — which is a claim about them being sound, and nothing was
 # checking it. `--locked` reads composer.lock, so the check describes what is
 # actually deployed and runs without an install.
-deps: ## Check the dependencies against the advisory database
-	@composer audit --locked --no-interaction
-
-deploy: deps audit ## Publish: one version of the site per publication date, then switch
-	@ssh mesa.black "mkdir -p $(SITE_ROOT)/releases"
-	@# Filtered to date-shaped tokens: a single stray line on stdout — a PHP
-	@# warning, once — turned every word of it into a release directory on the
-	@# server, each holding a full copy of the site. The loop now ignores
-	@# anything that is not YYYY-MM-DD.
-	@for d in $$(php bin/build.php --release-dates | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$$') $$(date +%F); do \
-		SITE_URL="$(SITE_URL)" php bin/build.php --as-of=$$d >/dev/null; \
-		rsync -az --delete --checksum --exclude '.DS_Store' \
-			public/ mesa.black:$(SITE_ROOT)/releases/$$d/; \
-		printf '  version %s — %s pages\n' "$$d" \
-			"$$(find public -name '*.html' | wc -l | tr -d ' ')"; \
-	done
-	@printf '%s\n' $$(php bin/build.php --release-dates | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$$') $$(date +%F) \
-		| ssh mesa.black "cat > $(SITE_ROOT)/releases/.expected"
-	@ssh mesa.black /usr/local/bin/labs-release
+deps: $(PHP_DEPS) ## Check the dependencies against the advisory database
+	@$(COMPOSER) audit --locked --no-interaction

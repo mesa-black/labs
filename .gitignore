@@ -3,3 +3,4 @@
 .DS_Store
 /deploy/*.retry
 /.kilo/
+/.php-image

@@ -8,6 +8,9 @@
 #   labs-switch --once     set the link and exit
 #   LABS_TODAY=2026-10-20 labs-switch --once    rehearse a future day
 #
+# A piece dated D goes live on D at LABS_PUBLISH_HOUR (default 7) Paris time —
+# the morning, as the server's timer did, so that it is there when people read.
+#
 # The link lives in a volume shared with Caddy (an emptyDir in Kubernetes); it
 # points at a path that exists in both containers because they run one image.
 set -eu
@@ -15,9 +18,22 @@ set -eu
 RELEASES=/srv/releases
 LINK_DIR=${LABS_LINK_DIR:-/run/site}
 
+# The publication day: before the publication hour it is still yesterday.
+# Decided from the local hour rather than by subtracting seven hours from the
+# clock: on the two nights a year the clocks change, that subtraction lands an
+# hour early or late. Yesterday is "now minus a day", which is always the
+# previous date whatever the clocks did. TZ comes from the image: a POSIX rule
+# for Paris, no tzdata needed.
+publication_day() {
+	if [ "$(date +%H)" -lt "${LABS_PUBLISH_HOUR:-7}" ]; then
+		date -d "@$(( $(date +%s) - 86400 ))" +%F
+	else
+		date +%F
+	fi
+}
+
 switch() {
-	# TZ comes from the image: a POSIX rule for Paris, no tzdata needed.
-	today=${LABS_TODAY:-$(date +%F)}
+	today=${LABS_TODAY:-$(publication_day)}
 	target=''
 	for dir in "$RELEASES"/*/; do
 		name=$(basename "$dir")

@@ -31,6 +31,11 @@ make serve       # build with drafts + http://localhost:8000
 | `make preview` | The site as of a given date, served locally: `make preview DATE=2026-10-08` |
 | `make clean` | Removes `public/` |
 
+No PHP on the workstation is needed: without one, the Makefile runs the PHP the image is
+built with (the Dockerfile's `php` stage), in a Podman container built on first use. A local
+build and the published one then cannot disagree — they once did, on reading times,
+because two PHPs counted words differently.
+
 `make build` fails when no post is published: deliberately, so that an empty site cannot be
 deployed unnoticed.
 
@@ -100,10 +105,20 @@ exist in stays visible but inert — more honest than hiding it.
 ### Publishing
 
 ```bash
-make drafts-list                              # which drafts, which keys
-make publish KEY=le-code-qu-on-n-ecrit-pas    # removes draft: true everywhere, then deploys
-make unpublish KEY=...                        # back to draft (does not deploy)
+make drafts-list                              # which drafts, which scheduled pieces, which keys
+make publish KEY=le-code-qu-on-n-ecrit-pas    # draft: true removed everywhere, audit, commit, push
+make unpublish KEY=...                        # back to draft, commit, push
+make push [M="message"]                       # whatever changed under content/: commit, push
 ```
+
+**Publishing is a push.** The site is a container image that CI builds from what is in Git,
+and [k3s-stack](https://github.com/mesa-black/k3s-stack) deploys it to mesa.black through
+Argo CD: nothing on the workstation talks to the server any more. About five minutes after
+the push, the new version is online — without an interruption.
+
+`make push` is for everything else: drafts saved, a typo fixed, a dated correction. A draft
+is never built, so pushing one publishes nothing. `NO_PUSH=1` commits without pushing, to
+look before it leaves.
 
 `publish` acts on **every language of one post** at once, through their shared `key`. That
 is the point: a post left in draft in a single language shows greyed out in the selector,
@@ -114,8 +129,9 @@ byte for byte.
 
 ### Scheduling a publication
 
-The front matter's `date` **is** the publication date. A post dated in the future is left
-out of the build and comes out on its own, on the day:
+The front matter's `date` **is** the publication date. A post dated in the future comes out
+on its own, **on that day at 07:00 Paris time** — in the morning, when people read. Publish
+it whenever it is ready, as long as it is pushed before its date:
 
 ```bash
 make drafts-list      # the drafts, and separately, the scheduled posts
@@ -207,9 +223,13 @@ make audit       # scans this repository, signs the report, verifies it
 ```
 
 Three artefacts land in `assets/audit/` and the build copies them to `/audit/`, linked from
-the footer of every page. `deploy` depends on `audit`, because a site that displays its own
+the footer of every page. `make publish` runs `audit`, because a site that displays its own
 inventory has to serve a current one — an inventory published once goes wrong without
-warning.
+warning. It keeps the result **only when the findings changed**: when they did not, Sablier
+keeps the original signature and timestamp tokens — the oldest attestation is the one worth
+having — and a re-run only re-renders the pages with a new date, which is noise in Git, not
+information. `NO_AUDIT=1` skips it; CI still compares the source with its reference and
+refuses to build the image if new cryptography appears.
 
 Scanned with no declaration it returns nothing at all: a static generator encrypts nothing,
 signs nothing, hashes nothing. All of this site's cryptography is in its transport and in
@@ -238,64 +258,28 @@ public is what makes possible.
 
 ## The server
 
-One Ubuntu machine, one Caddy, one folder of files. Nothing else.
-
-```bash
-make provision    # puts the server in the expected state, re-runnable
-make deploy       # builds every dated version and publishes
-```
-
-`deploy/provision.sh` describes the state of the machine: packages, automatic security
-updates, a firewall down to 22/80/443, fail2ban, and the Caddy repository **declared**
-rather than added by hand — a distribution upgrade removes third-party sources without
-saying so, and re-running the script puts them back. It is re-runnable as often as you like
-and ends with a verification: it says what it obtained, it does not assume it.
-
-The scope stops where publishing begins. `make deploy` does the rest, over `rsync`.
-
-`SITE_DOMAIN` defaults to `mesa.black` in the Makefile rather than living only in the
-environment: without a default, a `make provision` run without thinking regenerates the
-site block on `:80` and undoes HTTPS without saying anything. The certificate is obtained
-automatically, `www` and the bare IP redirect to the name, and HSTS is set for a year
-without `preload` — that list does not let go in a day.
-
-### How a scheduled publication goes live
-
-The server builds nothing. It has no PHP, no composer, no repository: giving it a build
-chain means accepting that a publication fails on a Saturday morning because of a broken
-dependency.
-
-Instead, `make deploy` builds **one complete version of the site per publication date** —
-today's, and one per scheduled post — and uploads them all:
+The site runs on mesa.black as a container in **k3s**, deployed by **Argo CD** from
+[k3s-stack](https://github.com/mesa-black/k3s-stack) (`spoke/apps/labs`), which documents the
+whole chain. In short:
 
 ```
-/var/www/labs/releases/2026-09-30/   today's version
-/var/www/labs/releases/2026-10-04/   the one coming out on Saturday
-/var/www/labs/current -> releases/2026-09-30
+push here ──► CI: build · dependencies · cryptography ──► image ghcr.io/mesa-black/labs:<sha>
+          └─► CI commits the new tag to k3s-stack ──► Argo CD ──► rolling update on mesa.black
 ```
 
-Caddy serves the `current` link. Every morning at 7, `labs-release.timer` runs a
-fifteen-line script that points that link at the most recent version whose date has come,
-then prunes the old ones, keeping three. The replacement goes through a rename: no request
-can land on a root that does not exist.
+- `Dockerfile`: PHP builds **one complete version of the site per publication date still
+  ahead**, plus today's; Caddy serves them on :8080 as a non-root user, with the site's
+  headers (`container/Caddyfile`).
+- `container/labs-switch`, a sidecar in the pod: every minute it points the served
+  directory at the newest version whose date has come — at 07:00 Paris, from the local
+  hour, so that the two nights a year the clocks change do not move it. What comes out on
+  Saturday is already built and in the image today; the workstation can be off.
+- Rolling back is a `git revert` of the `labs: deploy` commit in k3s-stack.
 
-Three consequences worth the detour:
+Host Caddy is still in front for now (`make provision`, `deploy/provision.sh`): it
+terminates TLS, redirects `www` and the bare IP, and proxies to the pod's Service. It goes
+once the other service on the machine has moved to k3s too.
 
-- what comes out on Saturday is **already built and browsable** today, so it can be checked
-  before leaving;
-- rolling back means pointing a link again;
-- the timer is `Persistent=true`: if the machine was off at 7, the switch happens at the
-  next boot rather than being skipped.
-
-A future publication can be rehearsed without waiting, and that is the only proof that
-counts:
-
-```bash
-ssh mesa.black 'LABS_TODAY=2026-10-04 /usr/local/bin/labs-release'   # jump forward
-ssh mesa.black '/usr/local/bin/labs-release'                         # back to the real day
-```
-
-**We tried Ansible first, and threw it away.** For a machine serving static files it
-brought idempotence and a Python dependency, against thirty lines of shell doing the same
-thing. It becomes relevant again the day there is real server configuration to own —
-compose files, secrets, several machines. Not before.
+The old path — dated releases uploaded by rsync under `/var/www/labs`, switched by
+`labs-release.timer` — is still installed on the server and will be removed once a scheduled
+post has gone out on its own from the pod. Nothing uses it any more.

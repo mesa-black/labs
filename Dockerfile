@@ -5,7 +5,7 @@
 # container/labs-switch (a sidecar in Kubernetes), exactly as the server's timer
 # does today with a symlink.
 #
-#   podman build --build-arg SITE_DATE=$(TZ=Europe/Paris date +%F) -t labs .
+#   podman build --build-arg SITE_DATE=$(TZ=Europe/Paris date -v-7H +%F) -t labs .
 #
 # Two stages. The build stage runs on the BUILD machine's architecture
 # ($BUILDPLATFORM): its output is HTML and PNG, the same whatever CPU produced
@@ -13,8 +13,11 @@
 # files — so a multi-arch image (amd64 for the server, arm64 for a laptop) never
 # runs PHP under emulation.
 
-# ------------------------------------------------------------------ build
-FROM --platform=$BUILDPLATFORM php:8.4-cli AS build
+# ------------------------------------------------------------------ php
+# The PHP the site is built with — also what the Makefile runs on a
+# workstation without PHP (`podman build --target php`), so that a local
+# build and the image's cannot disagree again (the word count once did).
+FROM --platform=$BUILDPLATFORM php:8.4-cli AS php
 
 # gd with FreeType draws the sharing cards; without it every piece ships with no
 # image. unzip lets Composer install from dist archives instead of cloning.
@@ -29,6 +32,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # release.sh does on the server.
 RUN echo 'date.timezone = Europe/Paris' > /usr/local/etc/php/conf.d/timezone.ini
 
+# ------------------------------------------------------------------ build
+FROM php AS build
 WORKDIR /src
 # Dependencies first, in their own layer: a new post does not reinstall them.
 COPY composer.json composer.lock ./
@@ -36,17 +41,22 @@ RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --no-
 COPY . .
 RUN composer dump-autoload --no-dev --classmap-authoritative
 
-# The day the image is built for, passed in rather than read from the clock:
+# The publication day the image is built for (Paris, before 07:00 it is still
+# yesterday — see container/labs-switch), passed in rather than read from the clock:
 # a build cache keys layers on their instructions and inputs, never on the date,
 # so a `RUN date` layer cached yesterday would silently build yesterday's site.
 # A different SITE_DATE is a different input, so it invalidates the cache.
 ARG SITE_DATE
 ARG SITE_URL=https://mesa.black
-# One complete version per publication date still ahead, plus the build day —
-# what `make deploy` uploads today. Release dates are filtered to date-shaped
-# lines: a stray PHP warning once became nine release directories.
+# One complete version per publication date still ahead, plus the publication
+# day and the calendar day. Both of the last two, because before 07:00 they
+# differ: the switch serves the publication day (yesterday), and a piece dated
+# today is not "ahead" for --release-dates, so its version must be built too or
+# it would never come out. Release dates are filtered to date-shaped lines: a
+# stray PHP warning once became nine release directories.
 RUN test -n "$SITE_DATE" || { echo "✗ --build-arg SITE_DATE=YYYY-MM-DD is required"; exit 1; } \
- && for d in $(php bin/build.php --release-dates | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') "$SITE_DATE"; do \
+ && for d in $( { php bin/build.php --release-dates; php -r 'echo date("Y-m-d"), "\n";'; echo "$SITE_DATE"; } \
+               | grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' | sort -u ); do \
         SITE_URL="$SITE_URL" php bin/build.php --as-of="$d" >/dev/null \
      && mkdir -p /out/releases \
      && rm -rf "/out/releases/$d" && mv public "/out/releases/$d" \
