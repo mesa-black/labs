@@ -205,3 +205,121 @@ jobs:
           path: |
             ${{ runner.temp }}/wire.html
             ${{ runner.temp }}/observed.json
+
+  # ---------------------------------------------------------------- delivery
+  # Only for a push to main, and only once the site builds, its dependencies
+  # are clean and its source inventory matches. The TLS probe is not in `needs`
+  # on purpose: it measures the live server, which a commit to this repository
+  # does not change — blocking a fix because a certificate is being renewed
+  # would block the very fix that might be needed.
+  image:
+    name: Image
+    needs: [build, dependencies, cryptography]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # The repository's default token is read-only; this job alone may write
+    # packages. No personal token involved: the image is pushed by the
+    # workflow's own GITHUB_TOKEN, which expires with the run.
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v5
+      -
+        # The day the image is built for, in Paris: passed to the build rather
+        # than read from the clock inside it (the Dockerfile says why).
+        name: Build day
+        id: day
+        run: echo "date=$(TZ=Europe/Paris date +%F)" >> "$GITHUB_OUTPUT"
+      -
+        name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        # Two architectures without QEMU: the build stage runs on the runner's
+        # own platform, the final stage only copies files.
+        #
+        # Tagged with the full commit SHA, never `latest`: the deployment
+        # repository names exactly which build runs, and going back is a revert.
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            SITE_DATE=${{ steps.day.outputs.date }}
+          tags: ghcr.io/mesa-black/labs:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.description=BlackMesa Labs, every dated version of the site, served by Caddy
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # GitOps: CI never talks to the cluster. It changes one line in the
+  # deployment repository, and Argo CD, which watches that repository, does the
+  # rest. A deployment is therefore a commit there: history, review, and
+  # `git revert` as the rollback.
+  deploy:
+    name: Deploy (commit to k3s-stack)
+    needs: image
+    runs-on: ubuntu-latest
+    # Two pushes in a row must not race each other's commit. Queued, never
+    # cancelled: a cancelled deploy would leave the older image running.
+    concurrency:
+      group: deploy-labs
+      cancel-in-progress: false
+    steps:
+      -
+        # A deploy key with write access to k3s-stack, and to nothing else.
+        # Its private half is a secret of this repository.
+        name: Checkout the deployment repository
+        uses: actions/checkout@v5
+        with:
+          repository: mesa-black/k3s-stack
+          ssh-key: ${{ secrets.K3S_STACK_DEPLOY_KEY }}
+          path: k3s-stack
+      -
+        # yq rather than `kustomize edit set image`: kustomize rewrites the whole
+        # file and drops its comments.
+        name: Point the blog at this build
+        working-directory: k3s-stack
+        run: |
+          yq -i '(.images[] | select(.name == "ghcr.io/mesa-black/labs")).newTag = "${{ github.sha }}"' \
+            spoke/apps/labs/kustomization.yaml
+          git diff --stat
+      -
+        # The message carries the source commit, so that the deployment history
+        # leads back to the code. A re-run with nothing to change commits nothing.
+        name: Commit and push
+        working-directory: k3s-stack
+        env:
+          SUBJECT: ${{ github.event.head_commit.message }}
+        run: |
+          git diff --quiet && { echo "already deployed"; exit 0; }
+          # First line of the source commit's message. Computed here: inside a
+          # here-document, $'\n' quoting is not interpreted.
+          subject=${SUBJECT%%$'\n'*}
+          git config user.name 'labs CI'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -q -a -F - <<MSG
+          labs: deploy ${GITHUB_SHA::7}
+
+          ${subject}
+
+          https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+          MSG
+          for attempt in 1 2 3 4 5; do
+            git pull -q --rebase && git push -q && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1
