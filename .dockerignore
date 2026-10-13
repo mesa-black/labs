@@ -1,0 +1,12 @@
+# What the image build must not see. The build context is sent whole to the
+# builder, and anything in it can end up in a layer.
+.git
+.github
+.sablier
+.DS_Store
+**/.DS_Store
+vendor
+public
+deploy
+*.key
+.env*
