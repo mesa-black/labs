@@ -52,7 +52,6 @@ SITE_URL ?= https://mesa.black
 # anything. A domain is decided once, and that decision belongs to the
 # repository.
 SITE_DOMAIN ?= mesa.black
-SITE_ROOT ?= /var/www/labs
 
 build: $(PHP_DEPS) ## Build the site into public/ (published posts only)
 	@$(PHP) bin/build.php
@@ -222,7 +221,7 @@ audit-if-changed:
 
 provision: ## Put the server in the expected state (re-runnable)
 	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
-	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' SITE_ROOT='$(SITE_ROOT)' bash /tmp/labs-deploy/provision.sh"
+	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' bash /tmp/labs-deploy/provision.sh"
 
 # The dependencies are three Composer packages, and the site's own inventory
 # names their versions — which is a claim about them being sound, and nothing was

@@ -281,5 +281,5 @@ terminates TLS, redirects `www` and the bare IP, and proxies to the pod's Servic
 once the other service on the machine has moved to k3s too.
 
 The old path — dated releases uploaded by rsync under `/var/www/labs`, switched by
-`labs-release.timer` — is still installed on the server and will be removed once a scheduled
-post has gone out on its own from the pod. Nothing uses it any more.
+`labs-release.timer` — was removed on 2026-10-14; `deploy/provision.sh` now removes it if it
+finds it, so that a re-run keeps the machine as described.

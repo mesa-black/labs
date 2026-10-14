@@ -15,9 +15,7 @@ set -euo pipefail
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-SITE_ROOT=${SITE_ROOT:-/var/www/labs}
 SITE_DOMAIN=${SITE_DOMAIN:-}
-SITE_USER=${SITE_USER:-ubuntu}
 # Where the site is served from: the ClusterIP of the `labs` Service in k3s.
 SITE_UPSTREAM=${SITE_UPSTREAM:-10.43.200.10:80}
 
@@ -63,42 +61,21 @@ CONF
 apt-get update -qq
 apt-get install -y -qq caddy
 
-say "Racine du site : $SITE_ROOT"
-install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT"
-install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$SITE_ROOT/releases"
-
-say "Dated releases"
-# The workstation uploads one complete version of the site per publication
-# date. Caddy serves the `current` link, which a timer moves forward every
-# morning. The intended consequence: no build chain here, so no publication can
-# fail because of a broken dependency on the server.
-if [ ! -L "$SITE_ROOT/current" ]; then
-	seed="$SITE_ROOT/releases/$(date +%F)"
-	install -d -o "$SITE_USER" -g "$SITE_USER" -m 0755 "$seed"
-	if [ -f "$SITE_ROOT/index.html" ]; then
-		# Taking over what is there: whatever was being served becomes
-		# today's version, with no interruption.
-		find "$SITE_ROOT" -mindepth 1 -maxdepth 1 \
-			! -name releases ! -name current -exec mv {} "$seed/" \;
-	else
-		cat > "$seed/index.html" <<'HTML'
-<!DOCTYPE html>
-<html lang="fr"><meta charset="utf-8"><title>BlackMesa Labs</title>
-<body style="font:16px system-ui;margin:4rem auto;max-width:32rem;padding:0 1rem">
-<p>Nothing is published here yet.</p>
-</body></html>
-HTML
-	fi
-	chown -R "$SITE_USER:$SITE_USER" "$seed"
-	ln -sfn "$seed" "$SITE_ROOT/current"
-	chown -h "$SITE_USER:$SITE_USER" "$SITE_ROOT/current"
+say "Retired: the dated releases this host used to serve"
+# Until 2026-10-14 the site was files under /var/www/labs, one directory per
+# publication date, switched every morning by labs-release.timer. It now runs in
+# k3s, with every dated version inside its image and the switch in its pod
+# (github.com/mesa-black/k3s-stack). Removed here rather than by hand, so that a
+# re-run keeps them removed and the script stays the description of the
+# machine. The path is written out, never built from a variable: an empty
+# variable in an `rm -rf` is how a server loses its root.
+if [ -f /etc/systemd/system/labs-release.timer ]; then
+	systemctl disable --now labs-release.timer >/dev/null 2>&1 || true
 fi
-
-install -m 0755 "$HERE/release.sh" /usr/local/bin/labs-release
-install -m 0644 "$HERE/labs-release.service" /etc/systemd/system/labs-release.service
-install -m 0644 "$HERE/labs-release.timer" /etc/systemd/system/labs-release.timer
+rm -f /etc/systemd/system/labs-release.timer /etc/systemd/system/labs-release.service \
+	/usr/local/bin/labs-release /etc/caddy/Caddyfile.before-k3s
 systemctl daemon-reload
-systemctl enable --now labs-release.timer >/dev/null
+rm -rf /var/www/labs
 
 # The one header that makes HTTPS hard to undo: without it, a visitor typing the
 # name with no scheme leaves in the clear once, and that once is the one that
@@ -228,4 +205,3 @@ fi
 printf '\n✓ Caddy proxies %s to %s (the labs pod in k3s) — %s\n' "${SITE_DOMAIN:-:80}" "$SITE_UPSTREAM" \
 	"$SERVED"
 printf '  Firewall up, automatic security updates, fail2ban running\n'
-printf '  Bascule quotidienne : %s\n' "$(systemctl show -p NextElapseUSecRealtime --value labs-release.timer || echo 'labs-release.timer')"
