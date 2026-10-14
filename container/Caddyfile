@@ -1,10 +1,10 @@
 # Caddy inside the image: serves the live version of the site on :8080, plain
-# HTTP. TLS, the www and bare-IP redirects belong to whatever is in front (host
-# Caddy today, the cluster's ingress later); the headers belong to the site, so
-# they live here and travel with the image.
+# HTTP. TLS, the www and bare-IP redirects belong to whatever is in front (the
+# cluster's ingress, Traefik, since 2026-10-14); the headers belong to the site,
+# so they live here and travel with the image.
 #
-# Moved from the Caddyfile that deploy/provision.sh generates on the server — see
-# the comments there for why each header is what it is.
+# Moved from the Caddyfile that deploy/provision.sh generated on the server
+# (removed 2026-10-14: see it in git history for why each header is what it is).
 {
 	# No configuration API: the configuration is this file, baked in.
 	admin off

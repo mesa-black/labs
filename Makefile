@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts preview serve clean drafts-list publish unpublish push audit audit-if-changed deps provision
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish push audit audit-if-changed deps
 
 # --- PHP ---------------------------------------------------------------------
 # The workstation's PHP if it has one; otherwise the very PHP the image is built
@@ -45,13 +45,6 @@ install: $(PHP_DEPS) ## Install the dependencies
 # sitemap and the sharing metadata — so a local build and a deployed build cannot
 # share one default.
 SITE_URL ?= https://mesa.black
-
-# The name Caddy serves, and the one it asks a certificate for. With a default,
-# and not only in the environment: without one, a `make provision` run without
-# thinking regenerates the block on `:80` and undoes HTTPS without saying
-# anything. A domain is decided once, and that decision belongs to the
-# repository.
-SITE_DOMAIN ?= mesa.black
 
 build: $(PHP_DEPS) ## Build the site into public/ (published posts only)
 	@$(PHP) bin/build.php
@@ -216,12 +209,11 @@ audit-if-changed:
 	 else echo "  findings changed: the new signed inventory will be committed"; fi
 
 # --- serveur -----------------------------------------------------------------
-# `provision` describes the machine: host Caddy in front of the site, which runs
-# in k3s. There is no `deploy` any more: deploying is pushing (see publication).
-
-provision: ## Put the server in the expected state (re-runnable)
-	@rsync -az --delete deploy/ mesa.black:/tmp/labs-deploy/
-	@ssh mesa.black "sudo SITE_DOMAIN='$(SITE_DOMAIN)' bash /tmp/labs-deploy/provision.sh"
+# Nothing here any more: deploying is pushing (see publication), and the server
+# — the machine, k3s, the ingress (Traefik) and the certificates (cert-manager)
+# — is described in github.com/mesa-black/k3s-stack. Until 2026-10-14 this
+# section held `make provision` (deploy/provision.sh: host Caddy and the
+# machine's base), retired when Traefik took over.
 
 # The dependencies are three Composer packages, and the site's own inventory
 # names their versions — which is a claim about them being sound, and nothing was

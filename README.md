@@ -276,10 +276,11 @@ push here ──► CI: build · dependencies · cryptography ──► image gh
   Saturday is already built and in the image today; the workstation can be off.
 - Rolling back is a `git revert` of the `labs: deploy` commit in k3s-stack.
 
-Host Caddy is still in front for now (`make provision`, `deploy/provision.sh`): it
-terminates TLS, redirects `www` and the bare IP, and proxies to the pod's Service. It goes
-once the other service on the machine has moved to k3s too.
+In front of the pod, since 2026-10-14: Traefik in the cluster terminates TLS (certificates
+from cert-manager, ECDSA P-256), redirects `www` and the bare IP, and routes to the pod's
+Service — all declared in k3s-stack (`spoke/apps/labs/ingress.yaml`). Host Caddy, and the
+`make provision` / `deploy/provision.sh` that configured it, are gone (git history keeps
+them).
 
 The old path — dated releases uploaded by rsync under `/var/www/labs`, switched by
-`labs-release.timer` — was removed on 2026-10-14; `deploy/provision.sh` now removes it if it
-finds it, so that a re-run keeps the machine as described.
+`labs-release.timer` — was removed on 2026-10-14 as well.
