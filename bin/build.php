@@ -395,6 +395,9 @@ $twig = new Twig(new FilesystemLoader(ROOT.'/templates'), [
     'autoescape' => 'html',
     'strict_variables' => true,
 ]);
+// The stylesheet is cached for an hour under its URL: a URL that follows its
+// content is what makes a change show up on the next page load, not an hour later.
+$twig->addGlobal('style_url', '/style.css?v='.substr(hash_file('sha256', ROOT.'/assets/style.css'), 0, 10));
 $twig->addFilter(new TwigFilter('long_date', static function (DateTimeImmutable $d, string $locale) use ($months): string {
     $day = $d->format('j');
     $month = $months[$locale][(int) $d->format('n')];
