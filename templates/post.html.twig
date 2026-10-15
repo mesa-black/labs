@@ -9,6 +9,7 @@
 {% block canonical %}<link rel="canonical" href="{{ post.canonical ?: site.url ~ post.url }}">{% endblock %}
 
 {% block og_type %}article{% endblock %}
+{% block author %}<meta name="author" content="{{ site.author.name }}">{% endblock %}
 {% block og_title %}{{ post.title }}{% endblock %}
 {% block og_description %}{{ post.standfirst ?: t.tagline }}{% endblock %}
 
@@ -22,7 +23,12 @@
         'inLanguage': locale,
         'url': site.url ~ post.url,
         'mainEntityOfPage': post.canonical ?: site.url ~ post.url,
-        'author': { '@type': 'Organization', 'name': 'BlackMesa' },
+        'author': {
+            '@type': 'Person',
+            'name': site.author.name,
+            'url': site.author.links|first.url,
+            'sameAs': site.author.links|map(l => l.url)
+        },
         'publisher': { '@type': 'Organization', 'name': 'BlackMesa' },
         'wordCount': post.words,
         'isAccessibleForFree': true
@@ -53,6 +59,8 @@
         <article>
             <header class="post-header">
                 <p class="post-meta">
+                    <span>{{ t.byline }} {{ site.author.name }}</span>
+                    <span aria-hidden="true">·</span>
                     <time datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|long_date(locale) }}</time>
                     <span aria-hidden="true">·</span>
                     <span>{{ post.minutes }} {{ t.reading }}</span>
@@ -63,6 +71,15 @@
             </header>
 
             <div class="prose">{{ post.html|raw }}</div>
+
+            <footer class="signature">
+                <p class="signature-name">{{ site.author.name }}</p>
+                <p class="signature-links">
+                    {% for link in site.author.links %}
+                        <a href="{{ link.url }}" target="_blank" rel="noopener me">{{ link.label }}</a>
+                    {% endfor %}
+                </p>
+            </footer>
 
             {% if post.corrections %}
                 <aside class="corrections">

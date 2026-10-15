@@ -6,6 +6,10 @@
     <link href="{{ site.url }}{{ home }}"/>
     <updated>{{ posts|first.date|date('c') }}</updated>
     <id>{{ site.url }}{{ home }}</id>
+    <author>
+        <name>{{ site.author.name }}</name>
+        <uri>{{ site.author.links|first.url }}</uri>
+    </author>
     {% for post in posts %}
     <entry>
         <title>{{ post.title }}</title>
