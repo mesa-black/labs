@@ -387,6 +387,34 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     font-size: .84rem;
 }
 
+/* ------------------------------------------------------------- signature */
+
+.signature {
+    margin-top: 2.8rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+}
+
+.signature-name {
+    margin: 0 0 .3rem;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+}
+
+.signature-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.1rem;
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+.signature-links a { color: var(--muted); text-decoration: none; }
+.signature-links a:hover { color: var(--accent); }
+
 /* ------------------------------------------------------------- crossover */
 
 /* A "pointer" piece does not copy the case study: it introduces it and links

@@ -57,13 +57,23 @@ $site = [
     // which is worse than publishing none — so the line below is the switch,
     // and the block disappears from every page while it is empty.
     'reply' => '',
+    // Every piece is signed: a name a reader can hold to what is written, and
+    // the places where the work behind it can be checked.
+    'author' => [
+        'name' => 'Jérôme Nadaud',
+        'links' => [
+            ['label' => 'GitHub', 'url' => 'https://github.com/jnadaud'],
+            ['label' => 'BlackMesa', 'url' => 'https://github.com/mesa-black'],
+            ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/in/jeromenadaud'],
+        ],
+    ],
 ];
 
 /** Everything the templates say in their own voice, per language. */
 $strings = [
     'fr' => [
         'tagline' => "Notes d'ingénierie : ce qu'on a construit, ce qu'on a cassé, ce qu'on en a tiré.",
-        'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'reply' => 'Une remarque, une correction, un désaccord ?', 'minutes' => 'min', 'reading' => 'min de lecture',
+        'feed' => 'Flux', 'nav_audit' => 'Audit', 'card_kicker' => 'Notes d’ingénierie', 'byline' => 'Par', 'reply' => 'Une remarque, une correction, un désaccord ?', 'minutes' => 'min', 'reading' => 'min de lecture',
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
         'corrections' => 'Corrections',
         'corrections_seal' => "Une correction de texte ne change pas l'empreinte de l'inventaire cryptographique de ce site : elle porte sur les constats que l'analyse trouve, pas sur la prose d'un article. Si une correction la déplaçait un jour, ce serait dit ici.",
@@ -80,7 +90,7 @@ $strings = [
     ],
     'en' => [
         'tagline' => 'Engineering notes: what we built, what we broke, what we took away.',
-        'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'reply' => 'A remark, a correction, a disagreement?', 'minutes' => 'min', 'reading' => 'min read',
+        'feed' => 'Feed', 'nav_audit' => 'Audit', 'card_kicker' => 'Engineering notes', 'byline' => 'By', 'reply' => 'A remark, a correction, a disagreement?', 'minutes' => 'min', 'reading' => 'min read',
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
         'corrections' => 'Corrections',
         'corrections_seal' => "A correction to the text does not move the digest of this site's cryptographic inventory: that digest covers the findings the analysis makes, not the prose of an article. If a correction ever moved it, it would be said here.",
@@ -97,7 +107,7 @@ $strings = [
     ],
     'es' => [
         'tagline' => 'Notas de ingeniería: lo que construimos, lo que rompimos, lo que aprendimos.',
-        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'reply' => '¿Una observación, una corrección, un desacuerdo?', 'minutes' => 'min', 'reading' => 'min de lectura',
+        'feed' => 'Feed', 'nav_audit' => 'Auditoría', 'card_kicker' => 'Notas de ingeniería', 'byline' => 'Por', 'reply' => '¿Una observación, una corrección, un desacuerdo?', 'minutes' => 'min', 'reading' => 'min de lectura',
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
         'corrections' => 'Correcciones',
         'corrections_seal' => "Una corrección del texto no cambia la huella del inventario criptográfico de este sitio: esa huella cubre los hallazgos que encuentra el análisis, no la prosa de un artículo. Si alguna corrección la moviera algún día, se diría aquí.",
