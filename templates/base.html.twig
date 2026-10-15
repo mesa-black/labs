@@ -29,9 +29,9 @@
     {% block author %}{% endblock %}
     {% block schema %}{% endblock %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.name }}" href="{{ site.url }}{{ feed_url }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap">
+    {# The two faces every page opens with, asked for before the stylesheet names them. #}
+    <link rel="preload" href="/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ style_url }}">
 </head>
 <body>

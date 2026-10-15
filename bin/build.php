@@ -545,6 +545,16 @@ $write('404.html', $twig->render('404.html.twig', [
 copy(ROOT.'/assets/style.css', OUT.'/style.css');
 echo '  ', str_pad('style.css', 48), number_format(filesize(OUT.'/style.css') / 1024, 1), " KB\n";
 
+// The web fonts, served from the site itself. Only the WOFF2: the TTF next to
+// them are for the sharing cards (bin/cards.php), drawn here and never sent.
+@mkdir(OUT.'/fonts', 0o755, true);
+$fontBytes = 0;
+foreach (glob(ROOT.'/assets/fonts/*.woff2') ?: [] as $font) {
+    copy($font, OUT.'/fonts/'.basename($font));
+    $fontBytes += filesize($font);
+}
+echo '  ', str_pad('fonts/ (woff2)', 48), number_format($fontBytes / 1024, 1), " KB\n";
+
 // The site's cryptographic inventory, produced by `make audit` and copied as
 // is. These are self-contained signed documents: rebuilding them here would take
 // them outside the scope of the signature, which covers findings and not a
