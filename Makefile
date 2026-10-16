@@ -93,7 +93,7 @@ publish: $(PHP_DEPS) ## Publish a piece in every language, audit, commit, push: 
 	@d=$$(grep -lE '^key:[[:space:]]*"?$(KEY)"?[[:space:]]*$$' content/posts/*/*.md | xargs grep -hE '^date:' | head -1 | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}'); \
 	 today=$$(TZ=Europe/Paris date +%F); \
 	 if [ "$$d" \> "$$today" ]; then when="scheduled for $$d 07:00 Paris"; else when="live after the deployment (dated $$d)"; fi; \
-	 git add content assets/audit && git commit -q -m "publish: $(KEY), $$when" && \
+	 git add content assets/audit sablier.probe.txt && git commit -q -m "publish: $(KEY), $$when" && \
 	 printf '  committed: publish %s — %s\n' "$(KEY)" "$$when"
 	@$(MAKE) --no-print-directory _push
 
@@ -200,13 +200,22 @@ audit: $(PHP_DEPS) ## Produce the site's signed cryptographic inventory, in thre
 # re-renders the pages with a new date. That is noise in Git, not information:
 # discarded. NO_AUDIT=1 skips it (offline, say); CI still compares the source
 # with its reference and blocks the image if new cryptography appears.
+#
+# What the server negotiates is not in the findings' digest: TLS 1.2 closed,
+# a renewed certificate, and the digest does not move. Comparing signatures
+# alone kept a page saying "TLSv1.2, TLSv1.3" for a week after it stopped
+# being true. So the probe's own output is kept beside the declaration
+# (sablier.probe.txt), and a change there keeps the re-rendered inventory too.
 audit-if-changed:
 	@if [ -n "$(NO_AUDIT)" ]; then echo "  NO_AUDIT: inventory not refreshed"; exit 0; fi; \
 	 $(MAKE) --no-print-directory $(addprefix -f ,$(MAKEFILE_LIST)) audit && \
-	 if git diff --quiet -- $$(git ls-files 'assets/audit/*.sig' 'assets/audit/**/*.sig') && \
-	    [ -z "$$(git ls-files --others --exclude-standard assets/audit)" ]; then \
-		git restore assets/audit && echo "  findings unchanged: the re-rendered inventory is discarded"; \
-	 else echo "  findings changed: the new signed inventory will be committed"; fi
+	 for host in $$($(PHP) -r 'foreach (json_decode(file_get_contents("sablier.json"), true)["probe"] ?? [] as $$h) echo $$h, "\n";'); do \
+		$(PHP) $(SABLIER) probe "$$host" --lang=fr; \
+	 done > sablier.probe.txt && \
+	 if git diff --quiet -- $$(git ls-files 'assets/audit/*.sig' 'assets/audit/**/*.sig') sablier.probe.txt && \
+	    [ -z "$$(git ls-files --others --exclude-standard assets/audit sablier.probe.txt)" ]; then \
+		git restore assets/audit && echo "  findings and negotiation unchanged: the re-rendered inventory is discarded"; \
+	 else echo "  findings or negotiation changed: the new signed inventory will be committed"; fi
 
 # --- serveur -----------------------------------------------------------------
 # Nothing here any more: deploying is pushing (see publication), and the server

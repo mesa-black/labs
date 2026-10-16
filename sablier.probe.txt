@@ -1,0 +1,17 @@
+
+  mesa.black
+
+    service                      HTTPS
+    protocole négocié            TLSv1.3
+    suite                        TLS_AES_128_GCM_SHA256 (128 bits)
+    groupe négocié               X25519MLKEM768
+    signature du certificat      ecdsa-with-SHA384
+    clé du certificat            courbe elliptique 256 bits
+    chaîne                       4 certificats
+    certificat valide jusqu'au   12/01/2027
+    versions acceptées           TLSv1.3
+
+    · ML-KEM — Échange de clés hybride : une capture du trafic d'aujourd'hui reste illisible pour un adversaire quantique.
+
+    · ECDSA — Certificat serveur. Sa durée de vie est courte : le remplacer par une signature post-quantique se fera au renouvellement, sans migration de données.
+
