@@ -48,6 +48,17 @@
 	@assets path *.css *.woff2
 	header @assets Cache-Control "public, max-age=3600"
 
+	# Pages: the browser asks again every time, with the ETag, and gets a 304
+	# when nothing changed. Without a Cache-Control it guessed a lifetime from
+	# Last-Modified and could show yesterday's page after a deploy. Matched on
+	# the response, so every page is covered whatever its URL looks like.
+	header {
+		match {
+			header Content-Type text/html*
+		}
+		Cache-Control "no-cache"
+	}
+
 	@signature path *.sig
 	header @signature Content-Type "application/json; charset=utf-8"
 
