@@ -41,7 +41,11 @@
 		Permissions-Policy "accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=()"
 		# Ignored by browsers over plain HTTP, honoured once the proxy in front
 		# serves it over TLS: the site's policy, whoever terminates.
-		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		# preload (2026-10-16): mesa.black is submitted to hstspreload.org, so
+		# browsers ship it HTTPS-only and even the first visit cannot be sent
+		# to plain HTTP. Leaving the list takes months: every subdomain must
+		# stay HTTPS (cert-manager issues one for each Ingress).
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 		-Server
 	}
 
