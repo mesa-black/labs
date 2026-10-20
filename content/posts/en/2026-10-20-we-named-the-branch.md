@@ -2,7 +2,7 @@
 title: "We named the branch. Git pushed to main."
 standfirst: "In a GitOps repository, main is production. One night in October, manifests nobody had approved landed there, with an image tag that did not exist, and nobody had typed \"main\". Two Git settings, each reasonable, and a command that is right everywhere else."
 key: push-sur-main
-date: 2026-10-21
+date: 2026-10-20
 slug: we-named-the-branch
 draft: true
 ---
