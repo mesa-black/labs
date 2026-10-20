@@ -4,7 +4,6 @@ standfirst: "En un repositorio GitOps, main es producción. Una noche de octubre
 key: push-sur-main
 date: 2026-10-20
 slug: nombramos-la-rama
-draft: true
 ---
 
 En un repositorio GitOps no hay botón de «desplegar». Argo CD lee la rama `main` de k3s-stack, nuestro repositorio de infraestructura (privado), y hace converger el clúster hacia lo que contiene. Empujar a `main` es poner en producción. Ese es todo el interés del modelo, y por eso todo pasa por una rama, se revisa y luego se fusiona.

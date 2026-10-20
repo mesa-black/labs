@@ -4,7 +4,6 @@ standfirst: "Dans un dépôt GitOps, main est la production. Un soir d'octobre, 
 key: push-sur-main
 date: 2026-10-20
 slug: nous-avons-nomme-la-branche
-draft: true
 ---
 
 Dans un dépôt GitOps, il n'y a pas de bouton « déployer ». Argo CD lit la branche `main` de k3s-stack, notre dépôt d'infrastructure (privé), et fait converger le cluster vers ce qu'elle contient. Pousser sur `main`, c'est mettre en production. C'est tout l'intérêt du modèle, et c'est pour ça que tout passe par une branche, relue, puis fusionnée.
