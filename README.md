@@ -112,7 +112,7 @@ make push [M="message"]                       # whatever changed under content/:
 ```
 
 **Publishing is a push.** The site is a container image that CI builds from what is in Git,
-and [k3s-stack](https://github.com/mesa-black/k3s-stack) deploys it to mesa.black through
+and k3s-stack (our private infrastructure repository) deploys it to mesa.black through
 Argo CD: nothing on the workstation talks to the server any more. About five minutes after
 the push, the new version is online — without an interruption.
 
@@ -259,7 +259,7 @@ public is what makes possible.
 ## The server
 
 The site runs on mesa.black as a container in **k3s**, deployed by **Argo CD** from
-[k3s-stack](https://github.com/mesa-black/k3s-stack) (`spoke/apps/labs`), which documents the
+k3s-stack, a private repository (`spoke/apps/labs`), which documents the
 whole chain. In short:
 
 ```

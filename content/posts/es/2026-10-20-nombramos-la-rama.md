@@ -2,7 +2,7 @@
 title: "Nombramos la rama. Git empujó a main."
 standfirst: "En un repositorio GitOps, main es producción. Una noche de octubre llegaron allí manifiestos que nadie había aprobado, con una etiqueta de imagen que no existía, sin que nadie hubiera escrito «main». Dos ajustes de Git, razonables cada uno, y un comando correcto en cualquier otro sitio."
 key: push-sur-main
-date: 2026-10-21
+date: 2026-10-20
 slug: nombramos-la-rama
 draft: true
 ---
