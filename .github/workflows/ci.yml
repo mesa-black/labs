@@ -223,6 +223,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    # The digest of what was pushed: deploy pins it next to the tag.
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       -
         name: Checkout
@@ -257,6 +260,7 @@ jobs:
         # Tagged with the full commit SHA, never `latest`: the deployment
         # repository names exactly which build runs, and going back is a revert.
         name: Build and push
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -297,11 +301,15 @@ jobs:
           path: k3s-stack
       -
         # yq rather than `kustomize edit set image`: kustomize rewrites the whole
-        # file and drops its comments.
+        # file and drops its comments. The tag names the commit, the digest the
+        # bytes: an image pushed again under the same tag never reaches a node.
         name: Point the blog at this build
         working-directory: k3s-stack
+        env:
+          DIGEST: ${{ needs.image.outputs.digest }}
         run: |
-          yq -i '(.images[] | select(.name == "ghcr.io/mesa-black/labs")).newTag = "${{ github.sha }}"' \
+          case "$DIGEST" in sha256:*) ;; *) echo "no digest for labs" >&2; exit 1 ;; esac
+          yq -i "(.images[] | select(.name == \"ghcr.io/mesa-black/labs\")) |= (.newTag = \"${{ github.sha }}\" | .digest = \"$DIGEST\")" \
             spoke/apps/labs/kustomization.yaml
           git diff --stat
       -
