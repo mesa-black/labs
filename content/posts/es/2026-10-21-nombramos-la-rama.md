@@ -7,7 +7,7 @@ slug: nombramos-la-rama
 draft: true
 ---
 
-En un repositorio GitOps no hay botón de «desplegar». Argo CD lee la rama `main` de [k3s-stack](https://github.com/mesa-black/k3s-stack) y hace converger el clúster hacia lo que contiene. Empujar a `main` es poner en producción. Ese es todo el interés del modelo, y por eso todo pasa por una rama, se revisa y luego se fusiona.
+En un repositorio GitOps no hay botón de «desplegar». Argo CD lee la rama `main` de k3s-stack, nuestro repositorio de infraestructura (privado), y hace converger el clúster hacia lo que contiene. Empujar a `main` es poner en producción. Ese es todo el interés del modelo, y por eso todo pasa por una rama, se revisa y luego se fusiona.
 
 El 19 de octubre a la 01:00, un commit llegó directamente a `main`: los manifiestos del pequeño servicio que muestra al lector el intercambio de claves que su navegador acaba de negociar. Nadie los había aprobado. Y su imagen llevaba una etiqueta provisional, escrita a la espera de que la CI construyera la real:
 

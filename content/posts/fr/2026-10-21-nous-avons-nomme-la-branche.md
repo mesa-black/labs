@@ -7,7 +7,7 @@ slug: nous-avons-nomme-la-branche
 draft: true
 ---
 
-Dans un dépôt GitOps, il n'y a pas de bouton « déployer ». Argo CD lit la branche `main` de [k3s-stack](https://github.com/mesa-black/k3s-stack) et fait converger le cluster vers ce qu'elle contient. Pousser sur `main`, c'est mettre en production. C'est tout l'intérêt du modèle, et c'est pour ça que tout passe par une branche, relue, puis fusionnée.
+Dans un dépôt GitOps, il n'y a pas de bouton « déployer ». Argo CD lit la branche `main` de k3s-stack, notre dépôt d'infrastructure (privé), et fait converger le cluster vers ce qu'elle contient. Pousser sur `main`, c'est mettre en production. C'est tout l'intérêt du modèle, et c'est pour ça que tout passe par une branche, relue, puis fusionnée.
 
 Le 19 octobre à 01:00, un commit est arrivé directement sur `main` : les manifests du petit service qui montre au lecteur l'échange de clés que son navigateur vient de négocier. Ils n'avaient pas été validés. Et leur image portait un tag provisoire, écrit en attendant que la CI construise la vraie :
 
