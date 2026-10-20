@@ -4,7 +4,6 @@ standfirst: "In a GitOps repository, main is production. One night in October, m
 key: push-sur-main
 date: 2026-10-20
 slug: we-named-the-branch
-draft: true
 ---
 
 In a GitOps repository there is no "deploy" button. Argo CD reads the `main` branch of k3s-stack, our (private) infrastructure repository, and makes the cluster converge on what it contains. Pushing to `main` is shipping to production. That is the whole point of the model, and it is why everything goes through a branch, gets reviewed, then merged.
