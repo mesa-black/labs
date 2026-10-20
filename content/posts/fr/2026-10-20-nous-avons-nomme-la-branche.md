@@ -1,5 +1,5 @@
 ---
-title: "Nous avons nommé la branche. Git a poussé sur main."
+title: "Nous avons nommé la branche. Le commit a atterri sur main."
 standfirst: "Dans un dépôt GitOps, main est la production. Un soir d'octobre, des manifests pas encore validés y sont arrivés, avec un tag d'image qui n'existait pas, sans que personne ait tapé « main ». Deux réglages de Git, chacun raisonnable, et une commande correcte partout ailleurs."
 key: push-sur-main
 date: 2026-10-20
