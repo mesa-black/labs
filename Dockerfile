@@ -17,7 +17,7 @@
 # The PHP the site is built with — also what the Makefile runs on a
 # workstation without PHP (`podman build --target php`), so that a local
 # build and the image's cannot disagree again (the word count once did).
-FROM --platform=$BUILDPLATFORM php:8.4-cli AS php
+FROM --platform=$BUILDPLATFORM php:8.5-cli AS php
 
 # gd with FreeType draws the sharing cards; without it every piece ships with no
 # image. unzip lets Composer install from dist archives instead of cloning.
