@@ -133,5 +133,4 @@ function draw(array $card): void
     tracked($im, $ink, $mono, 14.5, W - PAD - $markWidth, H - 84, $mark, 2.6);
 
     imagepng($im, $card['out'], 9);
-    imagedestroy($im);
 }

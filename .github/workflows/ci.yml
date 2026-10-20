@@ -34,7 +34,7 @@ jobs:
         name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: gd, mbstring, dom
           coverage: none
       -
@@ -78,7 +78,7 @@ jobs:
         name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           coverage: none
       -
         # --locked reads composer.lock, so what is checked is what gets deployed
@@ -102,7 +102,7 @@ jobs:
         name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: sodium, openssl, json
           coverage: none
       -
@@ -157,7 +157,7 @@ jobs:
         name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           extensions: sodium, openssl, json
           coverage: none
       -
