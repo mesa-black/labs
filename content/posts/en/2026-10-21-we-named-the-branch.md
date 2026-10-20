@@ -7,7 +7,7 @@ slug: we-named-the-branch
 draft: true
 ---
 
-In a GitOps repository there is no "deploy" button. Argo CD reads the `main` branch of [k3s-stack](https://github.com/mesa-black/k3s-stack) and makes the cluster converge on what it contains. Pushing to `main` is shipping to production. That is the whole point of the model, and it is why everything goes through a branch, gets reviewed, then merged.
+In a GitOps repository there is no "deploy" button. Argo CD reads the `main` branch of k3s-stack, our (private) infrastructure repository, and makes the cluster converge on what it contains. Pushing to `main` is shipping to production. That is the whole point of the model, and it is why everything goes through a branch, gets reviewed, then merged.
 
 On 19 October at 01:00, a commit landed directly on `main`: the manifests of the small service that shows readers the key exchange their browser just negotiated. Nobody had approved them. And their image carried a placeholder tag, written while waiting for CI to build the real one:
 
