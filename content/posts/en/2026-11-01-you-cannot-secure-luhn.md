@@ -2,7 +2,7 @@
 title: "You cannot secure Luhn. That is why your card has a CVV."
 standfirst: "The Luhn formula has been explained a thousand times. What gets explained less is that it protects against nothing, that making it \"more secure\" is a category error, and that the payment industry understood this back in the 1990s. We also checked what our own tool sees when code uses it as a lock: nothing. That is fixed, in part, and here is what remains."
 key: on-ne-peut-pas-securiser-luhn
-date: 2026-11-02
+date: 2026-11-01
 slug: you-cannot-secure-luhn
 ---
 
