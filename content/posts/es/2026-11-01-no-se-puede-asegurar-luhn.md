@@ -2,7 +2,7 @@
 title: "No se puede asegurar Luhn. Por eso tu tarjeta tiene un CVV."
 standfirst: "La fórmula de Luhn se ha explicado mil veces. Lo que se explica menos es que no protege de nada, que hacerla «más segura» es un error de categoría, y que el sector de los pagos lo entendió ya en los años noventa. También comprobamos qué ve nuestra propia herramienta cuando un código la usa como cerradura: nada. Está corregido, en parte, y esto es lo que queda."
 key: on-ne-peut-pas-securiser-luhn
-date: 2026-11-02
+date: 2026-11-01
 slug: no-se-puede-asegurar-luhn
 ---
 
