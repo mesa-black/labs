@@ -2,7 +2,7 @@
 title: "On ne peut pas sécuriser Luhn. C'est pour ça que votre carte a un CVV."
 standfirst: "La formule de Luhn a été expliquée mille fois. Ce qu'on explique moins, c'est qu'elle ne protège de rien, que la rendre « plus sûre » est une erreur de catégorie, et que l'industrie du paiement l'a compris dès les années 1990. Nous avons aussi vérifié ce que notre propre outil voit quand un code s'en sert comme d'une serrure : rien. C'est corrigé, en partie, et voici ce qui reste."
 key: on-ne-peut-pas-securiser-luhn
-date: 2026-11-05
+date: 2026-11-02
 slug: on-ne-peut-pas-securiser-luhn
 ---
 
@@ -89,7 +89,7 @@ Ce n'est pas un accident de parcours, c'est la conséquence d'un choix que nous 
 
 ## Ce que l'outil dit maintenant
 
-Le constat qui manquait n'était pas « CRC32 est cassé ». [CRC32](https://fr.wikipedia.org/wiki/Contr%C3%B4le_de_redondance_cyclique) n'est pas cassé, il fait très bien ce pour quoi il existe, vérifier qu'un fichier n'a pas été abîmé en route. Ce constat-là serait faux, et ce genre d'erreur apprend au lecteur à ne plus croire les rouges. Le constat juste porte sur l'**usage**, et c'est celui que Sablier imprime désormais :
+Le constat qui manquait n'était pas « CRC32 est cassé ». [CRC32](https://fr.wikipedia.org/wiki/Contr%C3%B4le_de_redondance_cyclique) n'est pas cassé, il fait très bien ce pour quoi il existe, vérifier qu'un fichier n'a pas été abîmé en route. Ce constat-là serait faux, et ce genre d'erreur apprend au lecteur à ne plus croire les rouges. Le constat juste porte sur l'**usage**, et c'est celui que Sablier imprime depuis la 0.12.0 :
 
 > **CASSÉ AUJOURD'HUI** — `src/ResetLink.php:8`
 > Une somme de contrôle protège contre un accident, pas contre quelqu'un : elle n'a pas de clé, n'importe qui la recalcule. L'échéance était hier.

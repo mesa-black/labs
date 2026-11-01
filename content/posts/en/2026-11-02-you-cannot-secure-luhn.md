@@ -2,7 +2,7 @@
 title: "You cannot secure Luhn. That is why your card has a CVV."
 standfirst: "The Luhn formula has been explained a thousand times. What gets explained less is that it protects against nothing, that making it \"more secure\" is a category error, and that the payment industry understood this back in the 1990s. We also checked what our own tool sees when code uses it as a lock: nothing. That is fixed, in part, and here is what remains."
 key: on-ne-peut-pas-securiser-luhn
-date: 2026-11-05
+date: 2026-11-02
 slug: you-cannot-secure-luhn
 ---
 
@@ -89,7 +89,7 @@ This is not a one-off slip, it is the consequence of a choice we still stand by.
 
 ## What the tool says now
 
-The missing finding was not "CRC32 is broken". [CRC32](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) is not broken; it does very well what it exists for, checking that a file was not damaged on the way. That finding would be false, and that kind of error teaches the reader to stop believing the red ones. The right finding is about the **use**, and it is the one Sablier now prints:
+The missing finding was not "CRC32 is broken". [CRC32](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) is not broken; it does very well what it exists for, checking that a file was not damaged on the way. That finding would be false, and that kind of error teaches the reader to stop believing the red ones. The right finding is about the **use**, and it is the one Sablier prints since 0.12.0:
 
 > **BROKEN TODAY** — `src/ResetLink.php:8`
 > A checksum protects against an accident, not against somebody: it has no key, and anyone can recompute it. The deadline was yesterday.
