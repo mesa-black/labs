@@ -89,7 +89,7 @@ This is not a one-off slip, it is the consequence of a choice we still stand by.
 
 ## What the tool says now
 
-The missing finding was not "CRC32 is broken". [CRC32](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) is not broken; it does very well what it exists for, checking that a file was not damaged on the way. That finding would be false, and that kind of error teaches the reader to stop believing the red ones. The right finding is about the **use**, and it is the one Sablier prints since 0.12.0:
+The missing finding was not "CRC32 is broken". [CRC32](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) is not broken; it does very well what it exists for, checking that a file was not damaged on the way. That finding would be false, and that kind of error teaches the reader to stop believing the red ones. The right finding is about the **use**, and it is the one Sablier has printed since 0.12.0:
 
 > **BROKEN TODAY** — `src/ResetLink.php:8`
 > A checksum protects against an accident, not against somebody: it has no key, and anyone can recompute it. The deadline was yesterday.
