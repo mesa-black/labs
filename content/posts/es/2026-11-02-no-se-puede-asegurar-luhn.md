@@ -2,7 +2,7 @@
 title: "No se puede asegurar Luhn. Por eso tu tarjeta tiene un CVV."
 standfirst: "La fórmula de Luhn se ha explicado mil veces. Lo que se explica menos es que no protege de nada, que hacerla «más segura» es un error de categoría, y que el sector de los pagos lo entendió ya en los años noventa. También comprobamos qué ve nuestra propia herramienta cuando un código la usa como cerradura: nada. Está corregido, en parte, y esto es lo que queda."
 key: on-ne-peut-pas-securiser-luhn
-date: 2026-11-05
+date: 2026-11-02
 slug: no-se-puede-asegurar-luhn
 ---
 
@@ -89,7 +89,7 @@ No es un tropiezo puntual, es la consecuencia de una decisión que seguimos defe
 
 ## Lo que dice ahora la herramienta
 
-El hallazgo que faltaba no era «CRC32 está roto». [CRC32](https://es.wikipedia.org/wiki/Verificaci%C3%B3n_de_redundancia_c%C3%ADclica) no está roto: hace muy bien aquello para lo que existe, comprobar que un archivo no se ha dañado por el camino. Ese hallazgo sería falso, y ese tipo de error enseña al lector a dejar de creer en los rojos. El hallazgo correcto trata del **uso**, y es el que Sablier imprime ahora:
+El hallazgo que faltaba no era «CRC32 está roto». [CRC32](https://es.wikipedia.org/wiki/Verificaci%C3%B3n_de_redundancia_c%C3%ADclica) no está roto: hace muy bien aquello para lo que existe, comprobar que un archivo no se ha dañado por el camino. Ese hallazgo sería falso, y ese tipo de error enseña al lector a dejar de creer en los rojos. El hallazgo correcto trata del **uso**, y es el que Sablier imprime desde la 0.12.0:
 
 > **ROTO HOY** — `src/ResetLink.php:8`
 > Una suma de control protege contra un accidente, no contra alguien: no tiene clave y cualquiera puede recalcularla. El plazo era ayer.
