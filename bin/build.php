@@ -25,6 +25,7 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\MarkdownConverter;
@@ -77,7 +78,7 @@ $strings = [
         'draft' => 'brouillon', 'elsewhere' => 'sur Show me the REX',
         'corrections' => 'Corrections',
         'corrections_seal' => "Une correction de texte ne change pas l'empreinte de l'inventaire cryptographique de ce site : elle porte sur les constats que l'analyse trouve, pas sur la prose d'un article. Si une correction la déplaçait un jour, ce serait dit ici.",
-        'back' => 'Tous les articles', 'language' => 'Langue',
+        'back' => 'Tous les articles', 'toc' => 'Sommaire', 'language' => 'Langue',
         'crossover_pointer' => 'Publié sur Show me the REX',
         'crossover_also' => 'Aussi publié comme REX',
         'crossover_read' => 'Lire le retour d’expérience complet',
@@ -94,7 +95,7 @@ $strings = [
         'draft' => 'draft', 'elsewhere' => 'on Show me the REX',
         'corrections' => 'Corrections',
         'corrections_seal' => "A correction to the text does not move the digest of this site's cryptographic inventory: that digest covers the findings the analysis makes, not the prose of an article. If a correction ever moved it, it would be said here.",
-        'back' => 'All posts', 'language' => 'Language',
+        'back' => 'All posts', 'toc' => 'Contents', 'language' => 'Language',
         'crossover_pointer' => 'Published on Show me the REX',
         'crossover_also' => 'Also published as a case study',
         'crossover_read' => 'Read the full case study',
@@ -111,7 +112,7 @@ $strings = [
         'draft' => 'borrador', 'elsewhere' => 'en Show me the REX',
         'corrections' => 'Correcciones',
         'corrections_seal' => "Una corrección del texto no cambia la huella del inventario criptográfico de este sitio: esa huella cubre los hallazgos que encuentra el análisis, no la prosa de un artículo. Si alguna corrección la moviera algún día, se diría aquí.",
-        'back' => 'Todos los artículos', 'language' => 'Idioma',
+        'back' => 'Todos los artículos', 'toc' => 'Índice', 'language' => 'Idioma',
         'crossover_pointer' => 'Publicado en Show me the REX',
         'crossover_also' => 'También publicado como caso',
         'crossover_read' => 'Leer el caso completo',
@@ -174,7 +175,13 @@ $fail = static function (string $message): void {
 };
 
 // ---------------------------------------------------------------- markdown
-$env = new Environment(['html_input' => 'allow', 'allow_unsafe_links' => false]);
+$env = new Environment([
+    'html_input' => 'allow',
+    'allow_unsafe_links' => false,
+    // An id on each heading and nothing else: no pilcrow next to the titles.
+    // The ids are what the contents in the margin point to.
+    'heading_permalink' => ['insert' => 'none', 'apply_id_to_heading' => true, 'id_prefix' => '', 'fragment_prefix' => ''],
+]);
 $env->addExtension(new CommonMarkCoreExtension());
 $env->addExtension(new FrontMatterExtension());
 $env->addExtension(new SmartPunctExtension());
@@ -182,6 +189,7 @@ $env->addExtension(new SmartPunctExtension());
 // nothing could produce one: a markdown table rendered as a paragraph full of
 // pipes. Part of league/commonmark already installed, so no new dependency.
 $env->addExtension(new TableExtension());
+$env->addExtension(new HeadingPermalinkExtension());
 $markdown = new MarkdownConverter($env);
 
 
@@ -311,6 +319,17 @@ foreach (LOCALES as $locale) {
         $html = linkBrandOnce($html, $locale);
         $html = externalLinksInNewTab($html, $site['url']);
 
+        // Contents, from the sections as rendered. Under three sections a piece
+        // is read in one go and a list of two links is noise: none at all.
+        preg_match_all('#<h2 id="([^"]+)">(.*?)</h2>#s', $html, $sections, \PREG_SET_ORDER);
+        $toc = \count($sections) < 3 ? [] : array_map(
+            static fn (array $h): array => [
+                'id' => $h[1],
+                'title' => html_entity_decode(strip_tags($h[2]), \ENT_QUOTES | \ENT_HTML5, 'UTF-8'),
+            ],
+            $sections,
+        );
+
         $slug = (string) ($meta['slug'] ?? preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', basename($file, '.md')));
 
         $byLocale[$locale][] = [
@@ -356,6 +375,7 @@ foreach (LOCALES as $locale) {
             'pointer' => $pointer,
             'canonical' => $pointer ? $rexUrl : '',
             'html' => $html,
+            'toc' => $toc,
             // Reading time from the rendered text: the markdown still carries
             // syntax the reader never sees.
             //

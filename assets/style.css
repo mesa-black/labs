@@ -252,6 +252,27 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     max-width: 52ch;
 }
 
+/* On a wide screen, the date and reading time move out to the left margin, where
+   an article keeps its contents: the list reads as a log, dates on one side,
+   titles all starting on the same line on the other. The text column does not
+   move. Below that, the meta line stays above the title as it always has. */
+@media (min-width: 86rem) {
+    .post-link { position: relative; }
+    .post-link .post-meta {
+        position: absolute;
+        right: 100%;
+        top: calc(1.7rem + .55rem);
+        width: 13rem;
+        margin: 0 3.5rem 0 0;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: .35rem;
+        text-align: right;
+    }
+    .post-link .post-meta > [aria-hidden] { display: none; }
+    .post-link .post-meta time { color: var(--ink); }
+}
+
 /* ---------------------------------------------------------------- article */
 
 .post-header { margin-bottom: 2.6rem; }
@@ -506,6 +527,70 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
 
 .scroll { overflow-x: auto; margin: 0 0 1.4rem; }
 .scroll table { margin: 0; }
+
+/* ---------------------------------------------------------------- contents */
+
+/* No script on this site, so no highlighting of the current section: a list
+   that stays in view, in the margin a wide screen leaves empty anyway. It
+   hangs off the text column without moving it, and spans the whole piece so
+   the list can stick while the text scrolls past. */
+.post-body { position: relative; }
+.toc { display: none; }
+.prose h2 { scroll-margin-top: 1.5rem; }
+
+@media (min-width: 86rem) {
+    .toc {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        width: 13rem;
+        margin-right: 3.5rem;
+    }
+    .toc-in {
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+    .toc-label {
+        font-family: var(--mono);
+        font-size: .68rem;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 .9rem;
+    }
+    .toc ol {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 .9rem;
+        border-left: 1px solid var(--rule);
+        counter-reset: section;
+    }
+    .toc li {
+        counter-increment: section;
+        font-size: .84rem;
+        line-height: 1.4;
+        margin: 0 0 .7rem;
+        text-wrap: pretty;
+    }
+    .toc li::before {
+        content: counter(section, decimal-leading-zero);
+        display: block;
+        font-family: var(--mono);
+        font-size: .62rem;
+        letter-spacing: .08em;
+        color: var(--accent);
+    }
+    .toc a { color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--ink); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+}
 
 /* ---------------------------------------------------------------- mobile */
 

@@ -68,7 +68,21 @@
                 {% if post.standfirst %}<p class="standfirst">{{ post.standfirst }}</p>{% endif %}
             </header>
 
-            <div class="prose">{{ post.html|raw }}</div>
+            {# The contents live in the left margin, which only exists on a wide
+               screen: below that, the piece reads as it always has. #}
+            <div class="post-body">
+                {% if post.toc %}
+                    <nav class="toc" aria-label="{{ t.toc }}">
+                        <div class="toc-in">
+                            <p class="toc-label">{{ t.toc }}</p>
+                            <ol>
+                                {% for s in post.toc %}<li><a href="#{{ s.id }}">{{ s.title }}</a></li>{% endfor %}
+                            </ol>
+                        </div>
+                    </nav>
+                {% endif %}
+                <div class="prose">{{ post.html|raw }}</div>
+            </div>
 
             <footer class="signature">
                 <p class="signature-name">{{ site.author.name }}</p>
