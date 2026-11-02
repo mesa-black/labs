@@ -63,6 +63,8 @@
             <p>{{ t.footer_agency }}</p>
             {# Both leave the blog: the platform, and a self-contained document. #}
             <p>{{ t.footer_smtr }} <a href="{{ smtr_url }}" target="_blank" rel="noopener">Show me the REX</a>.</p>
+            {# French only: the other languages say so in the link itself. #}
+            <p>{{ t.footer_observatoire }} <a href="https://observatoire.mesa.black/" target="_blank" rel="noopener"{{ locale != 'fr' ? ' hreflang="fr"' : '' }}>{{ t.footer_observatoire_link }}</a>.</p>
             {% if audit_published %}<p>{{ t.footer_audit }} :
                 <a href="{{ audit_url }}" target="_blank" rel="noopener">{{ t.footer_audit_hint }}</a>.</p>{% endif %}
         </div>
