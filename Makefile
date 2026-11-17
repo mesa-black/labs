@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help install build drafts preview serve clean drafts-list publish unpublish push audit audit-if-changed deps
+.PHONY: help install build drafts preview serve clean drafts-list publish unpublish push audit audit-if-changed anchor deps
 
 # --- PHP ---------------------------------------------------------------------
 # The workstation's PHP if it has one; otherwise the very PHP the image is built
@@ -148,6 +148,14 @@ SABLIER_KEY ?= $(HOME)/.sablier/blackmesa-labs.key
 # slot is the one every printed command points at.
 TSA ?= http://time.certum.pl,http://timestamp.globalsign.com/tsa/r6advanced1,http://timestamp.digicert.com
 
+# And the same date without an authority. The tokens above are signed with RSA,
+# which is what this site's own inventory classes as quantum vulnerable, and a
+# date has to be believed from whoever signs it. The anchoring puts the same
+# digest in the Bitcoin chain through the OpenTimestamps calendars: a chain of
+# SHA-256 operations to a block header, that anybody checks by arithmetic. It
+# is pending for a few hours after `make audit`; `make anchor` completes it.
+ANCHOR ?= opentimestamps
+
 # The published inventory names the version that produced it, in its masthead and
 # in the Threema summary. That line was a lie for a while: the audit is generated
 # from a working copy of sablier, not from a release, so the report said 0.9.0
@@ -183,7 +191,7 @@ audit: $(PHP_DEPS) ## Produce the site's signed cryptographic inventory, in thre
 		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
 		mkdir -p "$$dir"; \
 		$(PHP) $(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
-			--lang=$$lang --sign="$(SABLIER_KEY)" --timestamp=$(TSA) --quiet; \
+			--lang=$$lang --sign="$(SABLIER_KEY)" --timestamp=$(TSA) --anchor=$(ANCHOR) --quiet; \
 		test -s "$$dir/report.html.tsr" \
 			|| { echo "✗ no token for $$lang: the audit would claim a date nobody attests"; exit 1; }; \
 	done
@@ -216,6 +224,16 @@ audit-if-changed:
 	    [ -z "$$(git ls-files --others --exclude-standard assets/audit sablier.probe.txt)" ]; then \
 		git restore assets/audit && echo "  findings and negotiation unchanged: the re-rendered inventory is discarded"; \
 	 else echo "  findings or negotiation changed: the new signed inventory will be committed"; fi
+
+# A fresh anchoring is a promise from the calendars, not a proof: they put
+# their digests in a block every few hours. Run this some hours after `make
+# audit`; a proof that reached a block is rewritten in place, and it is that
+# file, committed, that lets a reader check the date without asking anybody.
+anchor: $(PHP_DEPS) ## Complete the Bitcoin anchoring of the inventory, hours after make audit
+	@for dir in assets/audit assets/audit/en assets/audit/es; do \
+		test -f "$$dir/report.html.ots" || continue; \
+		$(PHP) $(SABLIER) anchor "$$dir/report.html.ots" --lang=fr; \
+	done
 
 # --- serveur -----------------------------------------------------------------
 # Nothing here any more: deploying is pushing (see publication), and the server
