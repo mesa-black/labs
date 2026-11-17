@@ -1,0 +1,22 @@
+# What can change without a commit: a new advisory against a dependency, and
+# what the live server negotiates. Only these two run every day; the build, the
+# source inventory and the delivery can only change when the files do, so they
+# stay in CI, on pushes.
+name: Daily checks
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dependencies:
+    name: Dependencies
+    uses: ./.github/workflows/dependencies.yml
+
+  tls:
+    name: Cryptography on the wire
+    uses: ./.github/workflows/wire.yml

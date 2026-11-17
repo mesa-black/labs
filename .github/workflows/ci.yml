@@ -4,16 +4,12 @@
 # usual test pyramid has nothing to stand on. What can go wrong is narrower, and
 # these four jobs are the whole of it — the build, the dependencies, the
 # cryptography the source contains, and the cryptography the live server
-# negotiates.
+# negotiates. The last two also run every day, on their own: daily.yml.
 name: CI
 
 on:
   push:
   pull_request:
-  # The TLS job also runs on its own, daily: a certificate is renewed, a cipher
-  # suite is dropped, and neither event is a commit.
-  schedule:
-    - cron: '17 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -22,12 +18,11 @@ permissions:
 jobs:
   build:
     name: Build the site
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       -
         # gd with FreeType is not optional here: the sharing cards are drawn at
         # build time, and without it every piece ships without its image.
@@ -63,41 +58,19 @@ jobs:
           php bin/build.php --release-dates | tee /tmp/dates
           ! grep -qvE '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' /tmp/dates
 
-  # Runs on the daily schedule as well as on pushes, which is the whole point: a
-  # dependency with no known advisory today is not a dependency with no known
-  # advisory in March, and this site goes weeks without a commit. The build and
-  # the source inventory stay on pushes — they can only change when the files do.
+  # The two checks that also run daily (daily.yml) live in their own reusable
+  # workflows, so that each is written once.
   dependencies:
     name: Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v5
-      -
-        name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          coverage: none
-      -
-        # --locked reads composer.lock, so what is checked is what gets deployed
-        # rather than what a fresh resolution would pick today. Three packages,
-        # and the site's own published inventory names their versions — which is
-        # a claim about them being sound, and this is what checks it.
-        name: Advisories
-        run: |
-          composer validate --strict --no-check-publish
-          composer audit --locked --no-interaction
+    uses: ./.github/workflows/dependencies.yml
 
   cryptography:
     name: Cryptography in the source
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       -
         name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -134,7 +107,7 @@ jobs:
         # if: always() — the run you most want to read is the one that failed.
         name: Keep both reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cryptography
           path: |
@@ -143,68 +116,7 @@ jobs:
 
   tls:
     name: Cryptography on the wire
-    # Pinned, where every other job floats. The probe measures a *pair* — what
-    # this client and that server agree on — so a runner image that changes its
-    # OpenSSL changes the findings without anything on mesa.black moving, and the
-    # reference would drift under us. ubuntu-latest becomes Ubuntu 26 on 19
-    # October 2026, which is exactly that event.
-    runs-on: ubuntu-24.04
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v5
-      -
-        name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          extensions: sodium, openssl, json
-          coverage: none
-      -
-        name: Get Sablier
-        run: git clone --depth 1 --branch v0.8.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
-      -
-        # Its own reference, separate from the source one: these findings come
-        # from a handshake rather than from a file, so mixing them into the source
-        # baseline would make a certificate renewal look like a commit that added
-        # cryptography.
-        #
-        # --lang=en because the reference is committed and read in review: every
-        # machine field is language-independent, and `because` is prose that
-        # follows the report's language, so capturing in one language and running
-        # in another would leave a diff that is pure translation.
-        #
-        # And the reference is captured *here*, from this image, not from a
-        # laptop. The first run of this job proved why: locally the handshake
-        # negotiates X25519MLKEM768 and the probe records ml-kem; from the runner
-        # it negotiated plain ECDH, because that client's OpenSSL does not offer
-        # the hybrid group. Nothing was wrong with the server — the probe reports
-        # what two machines agreed on, and a reference taken on one of them says
-        # nothing about the other.
-        #
-        # So this job has a blind spot it cannot close: it cannot see whether
-        # mesa.black still offers ML-KEM, because its client never asks. What it
-        # does see is the rest of the handshake — the certificate's algorithm and
-        # strength, the protocol versions — which is what quietly regresses. The
-        # ML-KEM half is checked at every deploy, by `make audit`, from a client
-        # that offers it. Said here rather than left for somebody to discover in
-        # a green run that proves less than it looks.
-        name: Probe the live site
-        run: |
-          php "$RUNNER_TEMP/sablier/bin/sablier" scan . \
-            --baseline=.sablier/wire.json \
-            --json="$RUNNER_TEMP/observed.json" \
-            --lang=en \
-            --out="$RUNNER_TEMP/wire.html"
-      -
-        name: Keep the report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: wire
-          path: |
-            ${{ runner.temp }}/wire.html
-            ${{ runner.temp }}/observed.json
+    uses: ./.github/workflows/wire.yml
 
   # ---------------------------------------------------------------- delivery
   # Only for a push to main, and only once the site builds, its dependencies
@@ -229,7 +141,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       -
         # The publication day the image is built for, in Paris: before 07:00
         # it is still yesterday, as for the switch in the pod. Passed to the
@@ -245,10 +157,10 @@ jobs:
           fi
       -
         name: Set up Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
       -
         name: Log in to ghcr.io
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -261,7 +173,7 @@ jobs:
         # repository names exactly which build runs, and going back is a revert.
         name: Build and push
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -281,7 +193,7 @@ jobs:
   # rest. A deployment is therefore a commit there: history, review, and
   # `git revert` as the rollback.
   deploy:
-    name: Deploy (commit to k3s-stack)
+    name: Deploy via Argo CD
     needs: image
     runs-on: ubuntu-latest
     # Two pushes in a row must not race each other's commit. Queued, never
@@ -294,7 +206,7 @@ jobs:
         # A deploy key with write access to k3s-stack, and to nothing else.
         # Its private half is a secret of this repository.
         name: Checkout the deployment repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: mesa-black/k3s-stack
           ssh-key: ${{ secrets.K3S_STACK_DEPLOY_KEY }}
