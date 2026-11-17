@@ -12,24 +12,27 @@
             "paths": [
                 "content/*",
                 "templates/*",
+                "assets/*",
                 "public/*",
-                "bin/*",
-                "src/*"
+                "bin/*"
             ],
             "lifetime_years": 0,
             "note": "Articles, gabarits et générateur. Tout est écrit pour être servi en clair à qui le demande : la confidentialité due est nulle, par construction et pas par négligence.",
             "declared_by": "Jérôme Nadaud, BlackMesa",
-            "declared_on": "2026-10-06"
+            "declared_on": "2026-11-17"
         },
-        "chaîne de déploiement": {
+        "chaîne de construction et de déploiement": {
             "paths": [
-                "deploy/*",
-                "Makefile"
+                "Dockerfile",
+                "container/*",
+                ".github/*",
+                "Makefile",
+                ".dockerignore"
             ],
             "lifetime_years": 0,
-            "note": "Scripts de provisionnement et de publication. Ils décrivent la configuration du serveur, y compris son TLS, et ne contiennent aucun secret : la clé SSH qui les exécute vit sur le poste de travail et n'entre jamais dans le dépôt. Si ces fichiers sortaient, ils n'apprendraient rien à personne — c'est aussi pour ça qu'ils sont lisibles.",
+            "note": "Construction de l'image et sa mise en ligne. La CI construit l'image et la pousse sur ghcr.io avec le jeton du run (GITHUB_TOKEN), qui expire avec lui ; elle écrit ensuite l'empreinte de l'image dans le dépôt de déploiement avec une clé qui ne peut écrire que là (K3S_STACK_DEPLOY_KEY), un secret GitHub qui n'entre jamais dans ce dépôt. Argo CD déploie depuis ce dépôt-là. Dans le conteneur, Caddy sert en HTTP : le TLS est terminé par Traefik, avec un certificat de cert-manager, et sa configuration vit dans le dépôt de déploiement. Aucun de ces fichiers ne contient de secret : s'ils sortaient, ils n'apprendraient rien à personne.",
             "declared_by": "Jérôme Nadaud, BlackMesa",
-            "declared_on": "2026-10-06"
+            "declared_on": "2026-11-17"
         }
     },
     "_probe": "This site's real cryptography is not in its files: it is negotiated by the server. Without this line the report would see nothing and say so — with it, it goes and looks.",
