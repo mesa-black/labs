@@ -2,12 +2,9 @@
 title: "Una fecha que nadie tiene que creer"
 standfirst: "En octubre sacamos la fecha de nuestros informes de nuestro propio reloj y la confiamos a tres autoridades de sellado de tiempo. El propio informe admite el límite: sus sellos no valen nada más allá del RSA que los firma. Aquí está la continuación: una prueba de fecha hecha solo de SHA-256, que termina en un bloque de Bitcoin y que cualquiera puede verificar sin confiar en nadie. Y lo que no prueba, porque es la mitad del tema."
 key: une-date-que-personne-n-a-besoin-de-croire
-date: 2026-11-24
+date: 2026-11-17
 slug: una-fecha-que-nadie-tiene-que-creer
-draft: true
 ---
-
-[[POR COMPLETAR antes de publicar: la fecha del artículo, el número y la hora del bloque que ancla el inventario de este sitio, y las salidas de los comandos ejecutados de nuevo en un contenedor vacío. Nada de lo que sigue se publica hasta que esos tres puntos estén hechos.]]
 
 Nuestro artículo [«Una firma prueba quién y qué. Nunca cuándo.»](/es/cuando/) terminaba con una frase que el informe imprime junto a cada fecha atestiguada:
 
@@ -44,7 +41,7 @@ Verificar es rehacer esos hashes y comparar el resultado con la cabecera del blo
 
 **Ya no hay firma que creer.** Un sello [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) dice «la autoridad afirma». Una prueba OpenTimestamps dice «rehaz el cálculo». La diferencia no está en cuánto confías en el operador: ya no queda ningún operador cuya palabra cuente. Un calendario que cayera mañana, o que quisiera mentir, no podría quitarle nada a una prueba ya completa.
 
-**Falsificar cuesta un bloque.** Para antedatar un documento, su resumen tendría que aparecer en un bloque antiguo. Ese bloque lo copian decenas de miles de nodos, y la cadena de trabajo que lo sigue representa años de electricidad. Para mostrar una cabecera falsa a un verificador que comprueba la [prueba de trabajo](https://es.wikipedia.org/wiki/Sistema_de_prueba_de_trabajo), habría que minar un bloque con la dificultad real. A los precios actuales eso supone **[[POR COMPLETAR: orden de magnitud, en euros, del coste de un bloque con la dificultad del día]]**, para engañar a una sola persona.
+**Falsificar cuesta un bloque.** Para antedatar un documento, su resumen tendría que aparecer en un bloque antiguo. Ese bloque lo copian decenas de miles de nodos, y la cadena de trabajo que lo sigue representa años de electricidad. Para mostrar una cabecera falsa a un verificador que comprueba la [prueba de trabajo](https://es.wikipedia.org/wiki/Sistema_de_prueba_de_trabajo), habría que minar un bloque con la dificultad real. A los precios actuales eso supone del orden de **2,5 a 3 GWh de electricidad, es decir, de 120 000 a 320 000 €** según el rendimiento de las máquinas y el precio del kWh, sin contar el hardware, para engañar a una sola persona. (Calculado con la dificultad del bloque 976 238: 5,8 × 10²³ hashes por bloque, máquinas de 15 a 20 J/TH, un kWh a 5-10 céntimos.) Un verificador como el nuestro tolera una dificultad hasta cuatro veces menor que su último punto de referencia, para no rechazar los bloques honestos de un periodo más fácil: el precio mínimo para engañarlo es más bien de **30 000 a 80 000 €**.
 
 **Y sobre todo, solo hay hash.** Es el punto que nos interesa, porque es el tema de todo este sitio. Un sello firmado con RSA-4096 cae el día en que un ordenador cuántico ejecute el [algoritmo de Shor](https://es.wikipedia.org/wiki/Algoritmo_de_Shor) a ese tamaño: entonces se podrán fabricar sellos con cualquier fecha. Una prueba OpenTimestamps solo contiene [SHA-256](https://es.wikipedia.org/wiki/SHA-2) (y a veces RIPEMD-160). Contra una función hash, un ordenador cuántico dispone del [algoritmo de Grover](https://es.wikipedia.org/wiki/Algoritmo_de_Grover), que **divide por dos** el margen de seguridad en lugar de anularlo. Encontrar otro documento que siga el mismo camino de hashes seguiría costando del orden de 2¹²⁸ operaciones, incluso con Grover. La prueba que producimos hoy tiene todas las razones para seguir siendo legible en 2040.
 
@@ -72,7 +69,7 @@ Es la mitad del tema, y lo imprimimos en el informe en lugar de en una nota.
 
 - **Quién.** Una prueba OpenTimestamps no dice nada del autor. Ese es el trabajo de la firma, y lo sigue siendo.
 - **Una hora precisa.** La marca de tiempo de un bloque de Bitcoin la fija el minero, dentro de un margen: debe ser posterior a la mediana de los once bloques anteriores y no adelantarse más de dos horas ([las reglas exactas](https://en.bitcoin.it/wiki/Block_timestamp), en inglés). La fecha es por tanto exacta **con unas horas de margen**, no al segundo. Para decir «inventariado antes del 31 de diciembre de 2026» basta de sobra; para desempatar dos depósitos con diez minutos de diferencia, no.
-- **De inmediato.** La prueba solo está completa cuando entra en un bloque, normalmente **[[POR COMPLETAR: plazo medido entre el envío y la prueba completa]]**. Mientras tanto, se tiene una promesa de los calendarios, no una prueba.
+- **De inmediato.** La prueba solo está completa cuando entra en un bloque, en menos de dos horas. Medido en el inventario de este sitio: enviado a las 5:46 UTC, inscrito en el bloque de las 6:11, prueba completa disponible antes de las 7:41, porque los calendarios esperan seis confirmaciones antes de entregarla. Mientras tanto, se tiene una promesa de los calendarios, no una prueba.
 - **Que el documento no existía antes.** Como un sello RFC 3161, es una cota superior. Probar lo contrario («este informe no se fabricó de antemano») exigiría incluir un valor público e imprevisible del día, como un sorteo de la baliza [drand](https://drand.love). Es otra herramienta, y no la hemos construido.
 - **Un valor jurídico.** Un sello de tiempo *cualificado* según eIDAS goza de una presunción de exactitud de la fecha ([Reglamento (UE) n.º 910/2014](https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32014R0910), artículo 41). Una prueba OpenTimestamps no tiene ninguna: un juez puede admitirla, nada le obliga a ello.
 
@@ -94,20 +91,33 @@ El sello sirve para un litigio en los próximos tres años. La prueba sirve para
 
 Como en octubre, nada de esto necesita nuestra herramienta. Basta con el [cliente oficial](https://github.com/opentimestamps/opentimestamps-client).
 
-[[POR COMPLETAR: ejecutar este bloque de nuevo en un contenedor vacío, pegar las salidas reales y comprobar en particular qué hace `ots verify` sin un nodo de Bitcoin local.]]
+Ejecutado en un contenedor vacío el 17 de noviembre de 2026:
 
 ```
-pip install opentimestamps-client
+$ pip install opentimestamps-client
+$ ots stamp artefact.json
+Submitting to remote calendar https://a.pool.opentimestamps.org
+Submitting to remote calendar https://b.pool.opentimestamps.org
+Submitting to remote calendar https://a.pool.eternitywall.com
+Submitting to remote calendar https://ots.btc.catallaxy.com
 
-# 1. anclar: el resumen va a los calendarios, vuelve un archivo .ots
-ots stamp artefacto.json
-
-# 2. unas horas después: recuperar la prueba completa
-ots upgrade artefacto.json.ots
-
-# 3. verificar: rehacer los hashes hasta el bloque
-ots verify artefacto.json.ots
+$ ots upgrade artefact.json.ots
+Calendar https://alice.btc.calendar.opentimestamps.org: Pending confirmation in Bitcoin blockchain
+Failed! Timestamp not complete
 ```
+
+Justo después del envío, aún no hay nada en un bloque. Unas horas después, `ots upgrade` completa el archivo. Queda la verificación, y ahí el cliente oficial es de lo más honesto: **sin un nodo de Bitcoin, no verifica nada por sí mismo.** Sobre la prueba del inventario de este sitio:
+
+```
+$ ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Could not connect to Bitcoin node: Cookie file unusable ([Errno 2] No such file or directory: '/root/.bitcoin/.cookie') …
+
+$ ots --no-bitcoin verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Not checking Bitcoin attestation; Bitcoin disabled
+To verify manually, check that Bitcoin block 976238 has merkleroot 962c81d774938b388799d7307f6f46a54e0c51b2f47a89f46b45aa5ea1c6a0b9
+```
+
+Esa verificación manual la hicimos en mempool.space y en blockstream.info: ambos dan `962c81d774938b38…` para el bloque 976 238. Es exactamente el punto donde vuelve la confianza, y lo que Sablier hace por ti, añadiendo la comprobación de la prueba de trabajo que el cliente no hace sin nodo.
 
 Guarda el `.ots` junto al artefacto, como el `.tsr`. Tu lector no necesita ni a ti ni un formato propio.
 
@@ -131,14 +141,16 @@ Las reglas son las mismas que en octubre:
 
 `sablier verify` recupera la prueba completa cuando aún está pendiente, y luego la verifica.
 
-El inventario de este sitio está anclado desde el **[[POR COMPLETAR: fecha]]**, en el bloque **[[POR COMPLETAR: número]]**. La prueba está en línea junto al informe, con sus tres sellos:
+El inventario de este sitio está anclado desde el **17 de noviembre de 2026 a las 6:11 UTC**, en el bloque **976 238**. La prueba está en línea junto al informe, con sus tres sellos:
 
 ```
-curl -sO https://mesa.black/audit/report.html.ots
-ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+$ curl -sO https://mesa.black/audit/report.html.ots
+$ sablier anchor report.html.ots --lang=es
+  report.html.ots ancla la huella 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5
+  anclado en la cadena Bitcoin en el bloque 976238, 17/11/2026 06:11 UTC — cabecera obtenida de blockstream.info + mempool.space, raíz de Merkle y prueba de trabajo verificadas aquí.
 ```
 
-[[POR COMPLETAR: salida real de este comando.]]
+Y `sablier anchor <archivo>` ancla cualquier archivo: un SBOM, una declaración firmada, un acta. Cada versión de Sablier publica ahora el anclaje de su propio archivo.
 
 ## Buenas prácticas
 

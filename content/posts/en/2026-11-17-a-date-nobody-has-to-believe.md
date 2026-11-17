@@ -2,12 +2,9 @@
 title: "A date nobody has to believe"
 standfirst: "In October we took the date of our reports off our own clock and handed it to three timestamping authorities. The report itself admits the limit: their tokens are worth nothing beyond the RSA that signs them. Here is the sequel: a proof of date made of SHA-256 alone, ending in a Bitcoin block, that anybody can check without trusting anybody. And what it does not prove, because that is half of the subject."
 key: une-date-que-personne-n-a-besoin-de-croire
-date: 2026-11-24
+date: 2026-11-17
 slug: a-date-nobody-has-to-believe
-draft: true
 ---
-
-[[TO COMPLETE before publication: the post's date, the number and time of the block that anchors this site's inventory, and the outputs of the commands replayed in an empty container. Nothing below is to be published until those three are done.]]
 
 Our post ["A signature proves who and what. Never when."](/en/when/) ended on a sentence the report prints next to every attested date:
 
@@ -44,7 +41,7 @@ Checking it means redoing those hashes and comparing the result with the block h
 
 **There is no signature left to believe.** An [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) token says "the authority asserts". An OpenTimestamps proof says "redo the computation". The difference is not about how much you trust the operator: there is no operator left whose word matters. A calendar that went down tomorrow, or wanted to lie, could take nothing away from a proof that is already complete.
 
-**Forging costs a block.** To backdate a document, its digest would have to appear in an old block. That block is copied by tens of thousands of nodes, and the chain of work that follows it amounts to years of electricity. To show a fake header to a verifier that checks the [proof of work](https://en.wikipedia.org/wiki/Proof_of_work), you would have to mine a block at the real difficulty. At today's prices that is **[[TO COMPLETE: order of magnitude, in euros, of the cost of one block at today's difficulty]]**, to lie to a single person.
+**Forging costs a block.** To backdate a document, its digest would have to appear in an old block. That block is copied by tens of thousands of nodes, and the chain of work that follows it amounts to years of electricity. To show a fake header to a verifier that checks the [proof of work](https://en.wikipedia.org/wiki/Proof_of_work), you would have to mine a block at the real difficulty. At today's prices that is in the order of **2.5 to 3 GWh of electricity, that is €120,000 to €320,000** depending on the machines' efficiency and the price of a kWh, hardware not included, to lie to a single person. (Computed from block 976,238's difficulty: 5.8 × 10²³ hashes per block, machines at 15 to 20 J/TH, a kWh at 5 to 10 cents.) A verifier like ours accepts a difficulty up to four times lower than its latest checkpoint, so as not to refuse the honest blocks of an easier period: the floor price to fool it is therefore rather **€30,000 to €80,000**.
 
 **And above all, it is only hashing.** This is the point we care about, since it is what this whole site is about. A token signed with RSA-4096 falls the day a quantum computer runs [Shor's algorithm](https://en.wikipedia.org/wiki/Shor%27s_algorithm) at that size: tokens can then be made at any date. An OpenTimestamps proof is made of [SHA-256](https://en.wikipedia.org/wiki/SHA-2) alone (and sometimes RIPEMD-160). Against a hash function, a quantum computer has [Grover's algorithm](https://en.wikipedia.org/wiki/Grover%27s_algorithm), which **halves** the security margin instead of erasing it. Finding another document that follows the same hash path would still take in the order of 2¹²⁸ operations, even with Grover. The proof we produce today has every reason to still be readable in 2040.
 
@@ -72,7 +69,7 @@ This is half of the subject, and we print it in the report rather than in a foot
 
 - **Who.** An OpenTimestamps proof says nothing about the author. That is the signature's job, and it stays so.
 - **A precise time.** A Bitcoin block's timestamp is set by the miner, within a margin: it must be later than the median of the previous eleven blocks and no more than two hours ahead ([the exact rules](https://en.bitcoin.it/wiki/Block_timestamp)). The date is therefore right **to within a few hours**, not to the second. To say "inventoried before 31 December 2026", that is plenty; to separate two filings ten minutes apart, it is not.
-- **Right away.** The proof is only complete once it is in a block, usually **[[TO COMPLETE: measured delay between submission and complete proof]]**. In the meantime you have a promise from the calendars, not a proof.
+- **Right away.** The proof is only complete once it is in a block, within two hours. Measured on this site's inventory: submitted at 05:46 UTC, in the block of 06:11, complete proof available before 07:41, because the calendars wait for six confirmations before handing it out. In the meantime you have a promise from the calendars, not a proof.
 - **That the document did not exist before.** Like an RFC 3161 token, it is an upper bound. Proving the opposite ("this report was not made in advance") would require including an unpredictable public value of the day, such as a draw from the [drand](https://drand.love) beacon. That is another tool, and we have not built it.
 - **Legal standing.** A *qualified* electronic timestamp under eIDAS enjoys a presumption that its date is accurate ([Regulation (EU) No 910/2014](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0910), Article 41). An OpenTimestamps proof has none: a court may admit it, nothing obliges it to.
 
@@ -94,20 +91,33 @@ The token is for a dispute in the next three years. The proof is for the questio
 
 As in October, none of this needs our tool. The [official client](https://github.com/opentimestamps/opentimestamps-client) is enough.
 
-[[TO COMPLETE: replay this block in an empty container, paste the real outputs, and check in particular what `ots verify` does without a local Bitcoin node.]]
+Replayed in an empty container on 17 November 2026:
 
 ```
-pip install opentimestamps-client
+$ pip install opentimestamps-client
+$ ots stamp artefact.json
+Submitting to remote calendar https://a.pool.opentimestamps.org
+Submitting to remote calendar https://b.pool.opentimestamps.org
+Submitting to remote calendar https://a.pool.eternitywall.com
+Submitting to remote calendar https://ots.btc.catallaxy.com
 
-# 1. anchor: the digest goes to the calendars, a .ots file comes back
-ots stamp artefact.json
-
-# 2. a few hours later: fetch the complete proof
-ots upgrade artefact.json.ots
-
-# 3. verify: redo the hashes up to the block
-ots verify artefact.json.ots
+$ ots upgrade artefact.json.ots
+Calendar https://alice.btc.calendar.opentimestamps.org: Pending confirmation in Bitcoin blockchain
+Failed! Timestamp not complete
 ```
+
+Right after submission, nothing is in a block yet. A few hours later, `ots upgrade` completes the file. Then comes verification, and this is where the official client is most honest: **without a Bitcoin node, it checks nothing by itself.** On this site's inventory proof:
+
+```
+$ ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Could not connect to Bitcoin node: Cookie file unusable ([Errno 2] No such file or directory: '/root/.bitcoin/.cookie') …
+
+$ ots --no-bitcoin verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Not checking Bitcoin attestation; Bitcoin disabled
+To verify manually, check that Bitcoin block 976238 has merkleroot 962c81d774938b388799d7307f6f46a54e0c51b2f47a89f46b45aa5ea1c6a0b9
+```
+
+We did that manual check against mempool.space and blockstream.info: both give `962c81d774938b38…` for block 976,238. That is exactly where trust comes back, and what Sablier does for you, adding the proof-of-work check the client does not make without a node.
 
 Keep the `.ots` next to the artefact, like the `.tsr`. Your reader needs neither you nor a home-made format.
 
@@ -131,14 +141,16 @@ The rules are the same as in October:
 
 `sablier verify` fetches the complete proof when it is still pending, then checks it.
 
-This site's inventory has been anchored since **[[TO COMPLETE: date]]**, in block **[[TO COMPLETE: number]]**. The proof is online next to the report, with its three tokens:
+This site's inventory has been anchored since **17 November 2026 at 06:11 UTC**, in block **976,238**. The proof is online next to the report, with its three tokens:
 
 ```
-curl -sO https://mesa.black/audit/report.html.ots
-ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+$ curl -sO https://mesa.black/audit/report.html.ots
+$ sablier anchor report.html.ots --lang=en
+  report.html.ots anchors the digest 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5
+  anchored in the Bitcoin chain at block 976238, 17/11/2026 06:11 UTC — header from blockstream.info + mempool.space, merkle root and proof of work checked here.
 ```
 
-[[TO COMPLETE: real output of this command.]]
+And `sablier anchor <file>` anchors any file: a SBOM, a signed declaration, minutes. Every release of Sablier now publishes the anchoring of its own archive.
 
 ## Good practice
 

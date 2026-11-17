@@ -2,12 +2,9 @@
 title: "Une date que personne n'a besoin de croire"
 standfirst: "En octobre, nous avons sorti la date de nos rapports de notre propre horloge pour la confier à trois autorités d'horodatage. Le rapport avoue lui-même la limite : leurs jetons ne valent rien au-delà du RSA qui les signe. Voici la suite : une preuve de date faite uniquement de SHA-256, qui aboutit dans un bloc Bitcoin, que n'importe qui vérifie sans faire confiance à personne. Et ce qu'elle ne prouve pas, parce que c'est la moitié du sujet."
 key: une-date-que-personne-n-a-besoin-de-croire
-date: 2026-11-24
+date: 2026-11-17
 slug: une-date-que-personne-n-a-besoin-de-croire
-draft: true
 ---
-
-[[À COMPLÉTER avant publication : la date du billet, le numéro et l'heure du bloc qui ancre l'inventaire de ce site, et les sorties des commandes rejouées dans un conteneur vide. Rien ci-dessous n'est à publier tant que ces trois points ne sont pas faits.]]
 
 Notre article [« Une signature prouve qui et quoi. Jamais quand. »](/quand/) se terminait sur une phrase que le rapport imprime à côté de chaque date attestée :
 
@@ -44,7 +41,7 @@ Vérifier, c'est refaire ces hachages et comparer le résultat à l'en-tête du 
 
 **Il n'y a plus de signature à croire.** Un jeton [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) dit « l'autorité affirme ». Une preuve OpenTimestamps dit « refais le calcul ». La différence ne tient pas à la confiance qu'on accorde à l'opérateur : il n'y a plus d'opérateur dont l'affirmation compte. Un calendrier qui tomberait demain, ou qui voudrait mentir, ne pourrait rien retirer à une preuve déjà complète.
 
-**Falsifier coûte un bloc.** Pour antidater un document, il faudrait faire apparaître son empreinte dans un bloc ancien. Ce bloc est recopié par des dizaines de milliers de nœuds, et la chaîne de travail qui le suit représente des années d'électricité. Pour présenter un faux en-tête à un vérificateur qui contrôle la [preuve de travail](https://fr.wikipedia.org/wiki/Preuve_de_travail), il faudrait miner un bloc à la difficulté réelle. Au cours actuel, c'est **[[À COMPLÉTER : ordre de grandeur, en euros, du coût d'un bloc à la difficulté du jour]]**, pour mentir à une seule personne.
+**Falsifier coûte un bloc.** Pour antidater un document, il faudrait faire apparaître son empreinte dans un bloc ancien. Ce bloc est recopié par des dizaines de milliers de nœuds, et la chaîne de travail qui le suit représente des années d'électricité. Pour présenter un faux en-tête à un vérificateur qui contrôle la [preuve de travail](https://fr.wikipedia.org/wiki/Preuve_de_travail), il faudrait miner un bloc à la difficulté réelle. Au cours actuel, c'est de l'ordre de **2,5 à 3 GWh d'électricité, soit 120 000 à 320 000 €** selon le rendement des machines et le prix du kWh, sans compter le matériel, pour mentir à une seule personne. (Calcul fait sur la difficulté du bloc 976 238 : 5,8 × 10²³ hachages par bloc, des machines à 15 à 20 J/TH, un kWh à 5 à 10 centimes.) Un vérificateur comme le nôtre tolère une difficulté jusqu'à quatre fois plus basse que son dernier repère, pour ne pas refuser les blocs honnêtes d'une période plus facile : le prix plancher pour le tromper est donc plutôt de **30 000 à 80 000 €**.
 
 **Et surtout, il n'y a que du hachage.** C'est le point qui nous intéresse, puisque c'est le sujet de tout ce site. Un jeton signé en RSA-4096 tombe le jour où un ordinateur quantique fait tourner [l'algorithme de Shor](https://fr.wikipedia.org/wiki/Algorithme_de_Shor) à cette taille : on pourra alors fabriquer des jetons à n'importe quelle date. Une preuve OpenTimestamps n'est faite que de [SHA-256](https://fr.wikipedia.org/wiki/SHA-2) (et parfois de RIPEMD-160). Contre une fonction de hachage, un ordinateur quantique dispose de [l'algorithme de Grover](https://fr.wikipedia.org/wiki/Algorithme_de_Grover), qui **divise par deux** la marge de sécurité au lieu de l'annuler. Pour trouver un autre document qui suive le même chemin de hachages, il faudrait de l'ordre de 2¹²⁸ opérations, même avec Grover. La preuve que nous produisons aujourd'hui a toutes les raisons d'être encore lisible en 2040.
 
@@ -72,7 +69,7 @@ C'est la moitié du sujet, et nous l'écrivons dans le rapport plutôt qu'en not
 
 - **Qui.** Une preuve OpenTimestamps ne dit rien de l'auteur. C'est le travail de la signature, et ça le reste.
 - **Une heure précise.** L'horodatage d'un bloc Bitcoin est fixé par le mineur, dans une marge : il doit dépasser la médiane des onze blocs précédents et ne pas avoir plus de deux heures d'avance ([les règles exactes](https://en.bitcoin.it/wiki/Block_timestamp), en anglais). La date est donc juste **à quelques heures près**, pas à la seconde. Pour dire « inventorié avant le 31 décembre 2026 », c'est largement suffisant ; pour départager deux dépôts à dix minutes d'écart, non.
-- **Tout de suite.** La preuve n'est complète qu'après l'inscription dans un bloc, en général **[[À COMPLÉTER : délai mesuré entre la soumission et la preuve complète]]**. Dans l'intervalle, on a une promesse des calendriers, pas une preuve.
+- **Tout de suite.** La preuve n'est complète qu'après l'inscription dans un bloc, en moins de deux heures. Mesuré sur l'inventaire de ce site : soumis à 5 h 46 UTC, inscrit dans le bloc de 6 h 11, preuve complète récupérable avant 7 h 41, parce que les calendriers attendent six confirmations avant de la rendre. Dans l'intervalle, on a une promesse des calendriers, pas une preuve.
 - **Que le document n'existait pas avant.** Comme un jeton RFC 3161, c'est une borne supérieure. Prouver le contraire (« ce rapport n'a pas été fabriqué à l'avance ») demanderait d'y inclure une valeur publique imprévisible du jour, comme un tirage de la balise [drand](https://drand.love). C'est un autre outil, et nous ne l'avons pas construit.
 - **Une valeur juridique.** Un horodatage *qualifié* au sens d'eIDAS bénéficie d'une présomption d'exactitude de la date ([règlement (UE) n° 910/2014](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32014R0910), article 41). Une preuve OpenTimestamps n'en a aucune : un juge peut l'admettre, rien ne l'y oblige.
 
@@ -94,20 +91,33 @@ Le jeton sert pour un litige dans les trois prochaines années. La preuve sert p
 
 Comme en octobre, rien de cela n'a besoin de notre outil. Le [client officiel](https://github.com/opentimestamps/opentimestamps-client) suffit.
 
-[[À COMPLÉTER : rejouer ce bloc dans un conteneur vide, coller les sorties réelles, et vérifier en particulier ce que fait `ots verify` sans nœud Bitcoin local.]]
+Rejoué dans un conteneur vide, le 17 novembre 2026 :
 
 ```
-pip install opentimestamps-client
+$ pip install opentimestamps-client
+$ ots stamp artefact.json
+Submitting to remote calendar https://a.pool.opentimestamps.org
+Submitting to remote calendar https://b.pool.opentimestamps.org
+Submitting to remote calendar https://a.pool.eternitywall.com
+Submitting to remote calendar https://ots.btc.catallaxy.com
 
-# 1. ancrer : l'empreinte part vers les calendriers, un fichier .ots revient
-ots stamp artefact.json
-
-# 2. quelques heures plus tard : récupérer la preuve complète
-ots upgrade artefact.json.ots
-
-# 3. vérifier : refaire les hachages jusqu'au bloc
-ots verify artefact.json.ots
+$ ots upgrade artefact.json.ots
+Calendar https://alice.btc.calendar.opentimestamps.org: Pending confirmation in Bitcoin blockchain
+Failed! Timestamp not complete
 ```
+
+Juste après la soumission, rien n'est encore dans un bloc. Quelques heures plus tard, `ots upgrade` complète le fichier. Reste la vérification, et c'est là que le client officiel est le plus honnête : **sans nœud Bitcoin, il ne vérifie rien lui-même.** Sur la preuve de l'inventaire de ce site :
+
+```
+$ ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Could not connect to Bitcoin node: Cookie file unusable ([Errno 2] No such file or directory: '/root/.bitcoin/.cookie') …
+
+$ ots --no-bitcoin verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+Not checking Bitcoin attestation; Bitcoin disabled
+To verify manually, check that Bitcoin block 976238 has merkleroot 962c81d774938b388799d7307f6f46a54e0c51b2f47a89f46b45aa5ea1c6a0b9
+```
+
+Cette vérification manuelle, nous l'avons faite auprès de mempool.space et de blockstream.info : tous deux donnent bien `962c81d774938b38…` pour le bloc 976 238. C'est exactement l'endroit où la confiance revient, et ce que Sablier fait pour vous, en ajoutant le contrôle de la preuve de travail que le client ne fait pas sans nœud.
 
 Rangez le `.ots` à côté de l'artefact, comme le `.tsr`. Votre lecteur n'a besoin ni de vous ni d'un format maison.
 
@@ -131,14 +141,16 @@ Les règles sont les mêmes qu'en octobre :
 
 `sablier verify` va chercher la preuve complète quand elle est en attente, puis la vérifie.
 
-L'inventaire de ce site est ancré depuis **[[À COMPLÉTER : date]]**, au bloc **[[À COMPLÉTER : numéro]]**. La preuve est en ligne à côté du rapport, avec ses trois jetons :
+L'inventaire de ce site est ancré depuis le **17 novembre 2026 à 6 h 11 UTC**, au bloc **976 238**. La preuve est en ligne à côté du rapport, avec ses trois jetons :
 
 ```
-curl -sO https://mesa.black/audit/report.html.ots
-ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots
+$ curl -sO https://mesa.black/audit/report.html.ots
+$ sablier anchor report.html.ots
+  report.html.ots ancre l'empreinte 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5
+  ancré dans la chaîne Bitcoin au bloc 976238, 17/11/2026 06:11 UTC — en-tête obtenu de blockstream.info + mempool.space, racine de Merkle et preuve de travail vérifiées ici.
 ```
 
-[[À COMPLÉTER : sortie réelle de cette commande.]]
+Et `sablier anchor <fichier>` ancre n'importe quel fichier : un SBOM, une déclaration signée, un procès-verbal. Chaque version de Sablier publie désormais l'ancrage de sa propre archive.
 
 ## Bonnes pratiques
 
