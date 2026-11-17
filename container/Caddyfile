@@ -69,6 +69,11 @@
 	@token path *.tsr
 	header @token Content-Type "application/timestamp-reply"
 
+	# The Bitcoin anchoring: binary, read by `sablier anchor` or the official
+	# `ots` client, never meant to be displayed.
+	@anchor path *.ots
+	header @anchor Content-Type "application/octet-stream"
+
 	@selfcontained path /audit/*
 	header @selfcontained {
 		>Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
