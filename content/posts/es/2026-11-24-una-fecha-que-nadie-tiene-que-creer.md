@@ -13,7 +13,7 @@ Nuestro artículo [«Una firma prueba quién y qué. Nunca cuándo.»](/es/cuand
 
 > Lo que el sello no prueba: nada más allá de RSA-4096, el esquema que lo firma.
 
-Es honesto, y es incómodo. Una herramienta que dedica cuarenta páginas a explicar que RSA caduca no puede conformarse con fechar sus propias conclusiones con RSA. Habíamos repartido la confianza entre tres autoridades, en tres jurisdicciones. Pero repartir la confianza no es prescindir de ella.
+Es honesto, y es incómodo. Una herramienta que dedica cuarenta páginas a explicar que [RSA](https://es.wikipedia.org/wiki/RSA) caduca no puede conformarse con fechar sus propias conclusiones con RSA. Como recordatorio: RSA es el algoritmo de clave pública más extendido, y un ordenador cuántico lo bastante grande lo rompería. El día en que eso ocurra tiene nombre, el [Q-Day](https://observatoire.mesa.black/comprendre#g-q-day), que nuestro [Observatorio post-cuántico](https://observatoire.mesa.black/comprendre) (en francés) explica paso a paso. Habíamos repartido la confianza entre tres autoridades, en tres jurisdicciones. Pero repartir la confianza no es prescindir de ella.
 
 Luego la pregunta llegó de forma más directa: *¿por qué mi firma valdría más que una referencia pública? ¿No se puede fechar respecto a algo que todo el mundo puede verificar?*
 
@@ -21,7 +21,7 @@ Se puede. Pero la pregunta contiene dos, y hay que separarlas antes de responder
 
 ## Quién y cuándo: dos preguntas, dos herramientas
 
-Una firma responde a **quién**. Nuestra declaración dice «estos datos no necesitan seguir siendo confidenciales», y todo el veredicto del informe depende de ello. Lo que importa es que una persona identificable se comprometa. Una referencia pública no puede hacerlo: cualquiera puede anclar cualquier archivo, lo que prueba que existía, no que alguien responda de él.
+Una firma responde a **quién**. La nuestra, por cierto, va acompañada de una firma post-cuántica, [ML-DSA](https://observatoire.mesa.black/comprendre#g-ml-dsa) (en francés). Nuestra declaración dice «estos datos no necesitan seguir siendo confidenciales», y todo el veredicto del informe depende de ello. Lo que importa es que una persona identificable se comprometa. Una referencia pública no puede hacerlo: cualquiera puede anclar cualquier archivo, lo que prueba que existía, no que alguien responda de él.
 
 Una fecha responde a **cuándo**. Y ahí la pregunta es acertada: nada obliga a que la sostenga alguien a quien haya que creer. Una autoridad de sellado *firma* una fecha; también se puede *inscribir* un resumen en un registro público, donde ya nadie puede moverlo.
 
@@ -29,12 +29,12 @@ Así que mantenemos la firma para el **quién** y cambiamos de herramienta para 
 
 ## OpenTimestamps, en una frase
 
-[OpenTimestamps](https://opentimestamps.org) une un resumen a un bloque de la cadena de Bitcoin mediante una serie de operaciones de hash que cualquiera puede rehacer.
+[OpenTimestamps](https://opentimestamps.org), un protocolo abierto [publicado por Peter Todd en 2016](https://petertodd.org/2016/opentimestamps-announcement), une un resumen a un bloque de la cadena de [Bitcoin](https://es.wikipedia.org/wiki/Bitcoin) mediante una serie de operaciones de hash que cualquiera puede rehacer.
 
 El mecanismo, sin la jerga:
 
-1. Se envía el **resumen** de los hallazgos, treinta y dos bytes, a servidores públicos llamados **calendarios**. Como con una autoridad de sellado, el documento nunca sale.
-2. Cada calendario coloca los resúmenes que recibe en un **árbol de Merkle**: se calcula el hash de los resúmenes de dos en dos, luego el de los resultados de dos en dos, hasta que queda un único valor, la raíz.
+1. Se envía el **resumen** de los hallazgos, treinta y dos bytes, a servidores públicos llamados **calendarios**. Como con una autoridad de sellado, el documento nunca sale. El cliente incluso le mezcla dieciséis bytes aleatorios antes del envío, para que un calendario no pueda relacionar un informe publicado con quien lo envió.
+2. Cada calendario coloca los resúmenes que recibe en un **[árbol de Merkle](https://es.wikipedia.org/wiki/%C3%81rbol_de_Merkle)**: se calcula el hash de los resúmenes de dos en dos, luego el de los resultados de dos en dos, hasta que queda un único valor, la raíz.
 3. Cada pocas horas, el calendario inscribe esa raíz en **una** transacción de Bitcoin. Una transacción para miles de resúmenes: por eso el servicio es gratuito.
 4. Cuando esa transacción entra en un bloque, la prueba queda completa. Es la lista de hashes que lleva de **tu** resumen a la raíz de Merkle de **ese** bloque.
 
@@ -42,11 +42,11 @@ Verificar es rehacer esos hashes y comparar el resultado con la cabecera del blo
 
 ## Por qué es más sólido que tres autoridades
 
-**Ya no hay firma que creer.** Un sello RFC 3161 dice «la autoridad afirma». Una prueba OpenTimestamps dice «rehaz el cálculo». La diferencia no está en cuánto confías en el operador: ya no queda ningún operador cuya palabra cuente. Un calendario que cayera mañana, o que quisiera mentir, no podría quitarle nada a una prueba ya completa.
+**Ya no hay firma que creer.** Un sello [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) dice «la autoridad afirma». Una prueba OpenTimestamps dice «rehaz el cálculo». La diferencia no está en cuánto confías en el operador: ya no queda ningún operador cuya palabra cuente. Un calendario que cayera mañana, o que quisiera mentir, no podría quitarle nada a una prueba ya completa.
 
-**Falsificar cuesta un bloque.** Para antedatar un documento, su resumen tendría que aparecer en un bloque antiguo. Ese bloque lo copian decenas de miles de nodos, y la cadena de trabajo que lo sigue representa años de electricidad. Para mostrar una cabecera falsa a un verificador que comprueba la prueba de trabajo, habría que minar un bloque con la dificultad real. A los precios actuales eso supone **[[POR COMPLETAR: orden de magnitud, en euros, del coste de un bloque con la dificultad del día]]**, para engañar a una sola persona.
+**Falsificar cuesta un bloque.** Para antedatar un documento, su resumen tendría que aparecer en un bloque antiguo. Ese bloque lo copian decenas de miles de nodos, y la cadena de trabajo que lo sigue representa años de electricidad. Para mostrar una cabecera falsa a un verificador que comprueba la [prueba de trabajo](https://es.wikipedia.org/wiki/Sistema_de_prueba_de_trabajo), habría que minar un bloque con la dificultad real. A los precios actuales eso supone **[[POR COMPLETAR: orden de magnitud, en euros, del coste de un bloque con la dificultad del día]]**, para engañar a una sola persona.
 
-**Y sobre todo, solo hay hash.** Es el punto que nos interesa, porque es el tema de todo este sitio. Un sello firmado con RSA-4096 cae el día en que un ordenador cuántico ejecute el algoritmo de Shor a ese tamaño: entonces se podrán fabricar sellos con cualquier fecha. Una prueba OpenTimestamps solo contiene SHA-256 (y a veces RIPEMD-160). Contra una función hash, un ordenador cuántico dispone del algoritmo de Grover, que **divide por dos** el margen de seguridad en lugar de anularlo. Encontrar otro documento que siga el mismo camino de hashes seguiría costando del orden de 2¹²⁸ operaciones, incluso con Grover. La prueba que producimos hoy tiene todas las razones para seguir siendo legible en 2040.
+**Y sobre todo, solo hay hash.** Es el punto que nos interesa, porque es el tema de todo este sitio. Un sello firmado con RSA-4096 cae el día en que un ordenador cuántico ejecute el [algoritmo de Shor](https://es.wikipedia.org/wiki/Algoritmo_de_Shor) a ese tamaño: entonces se podrán fabricar sellos con cualquier fecha. Una prueba OpenTimestamps solo contiene [SHA-256](https://es.wikipedia.org/wiki/SHA-2) (y a veces RIPEMD-160). Contra una función hash, un ordenador cuántico dispone del [algoritmo de Grover](https://es.wikipedia.org/wiki/Algoritmo_de_Grover), que **divide por dos** el margen de seguridad en lugar de anularlo. Encontrar otro documento que siga el mismo camino de hashes seguiría costando del orden de 2¹²⁸ operaciones, incluso con Grover. La prueba que producimos hoy tiene todas las razones para seguir siendo legible en 2040.
 
 Una precisión, para no afirmar más de lo que es cierto: la seguridad *de Bitcoin* como moneda también descansa en ECDSA, que es vulnerable a la computación cuántica. Pero una prueba de fecha no depende de ello. Necesita que la cabecera del bloque exista y que haya costado trabajo, no que alguien pueda seguir gastando sus bitcoins.
 
@@ -59,7 +59,7 @@ Para verificar, hace falta la raíz de Merkle del bloque número N. Si tienes tu
 Esto es lo que hicimos en [Sablier](https://github.com/mesa-black/sablier), en este orden:
 
 1. **Tu propio nodo**, si está configurado. No hace falta confiar.
-2. Si no, **dos exploradores independientes** (blockstream.info y mempool.space), **que deben devolver la misma cabecera**. Si discrepan, la verificación falla de forma visible.
+2. Si no, **dos exploradores independientes** ([blockstream.info](https://blockstream.info) y [mempool.space](https://mempool.space)), **que deben devolver la misma cabecera**. Si discrepan, la verificación falla de forma visible.
 3. Y en todos los casos, **se comprueba la propia cabecera**: su doble SHA-256 debe estar por debajo del objetivo de dificultad que declara, y esa dificultad debe superar un mínimo. Un explorador que quisiera mentir no puede inventarse una cabecera: tendría que **minarla**.
 
 Esa es la diferencia con una autoridad: no creemos al explorador, comprobamos lo que da. Puede negarse a responder; no puede mentir a bajo coste.
@@ -71,10 +71,10 @@ Sin conexión, en modo `--airgap`, la cabecera se puede aportar a mano. Pasa ent
 Es la mitad del tema, y lo imprimimos en el informe en lugar de en una nota.
 
 - **Quién.** Una prueba OpenTimestamps no dice nada del autor. Ese es el trabajo de la firma, y lo sigue siendo.
-- **Una hora precisa.** La marca de tiempo de un bloque de Bitcoin la fija el minero, dentro de un margen: debe ser posterior a la mediana de los once bloques anteriores y no adelantarse más de dos horas. La fecha es por tanto exacta **con unas horas de margen**, no al segundo. Para decir «inventariado antes del 31 de diciembre de 2026» basta de sobra; para desempatar dos depósitos con diez minutos de diferencia, no.
+- **Una hora precisa.** La marca de tiempo de un bloque de Bitcoin la fija el minero, dentro de un margen: debe ser posterior a la mediana de los once bloques anteriores y no adelantarse más de dos horas ([las reglas exactas](https://en.bitcoin.it/wiki/Block_timestamp), en inglés). La fecha es por tanto exacta **con unas horas de margen**, no al segundo. Para decir «inventariado antes del 31 de diciembre de 2026» basta de sobra; para desempatar dos depósitos con diez minutos de diferencia, no.
 - **De inmediato.** La prueba solo está completa cuando entra en un bloque, normalmente **[[POR COMPLETAR: plazo medido entre el envío y la prueba completa]]**. Mientras tanto, se tiene una promesa de los calendarios, no una prueba.
 - **Que el documento no existía antes.** Como un sello RFC 3161, es una cota superior. Probar lo contrario («este informe no se fabricó de antemano») exigiría incluir un valor público e imprevisible del día, como un sorteo de la baliza [drand](https://drand.love). Es otra herramienta, y no la hemos construido.
-- **Un valor jurídico.** Un sello de tiempo *cualificado* según eIDAS goza de una presunción de exactitud de la fecha (Reglamento (UE) n.º 910/2014, artículo 41). Una prueba OpenTimestamps no tiene ninguna: un juez puede admitirla, nada le obliga a ello.
+- **Un valor jurídico.** Un sello de tiempo *cualificado* según eIDAS goza de una presunción de exactitud de la fecha ([Reglamento (UE) n.º 910/2014](https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32014R0910), artículo 41). Una prueba OpenTimestamps no tiene ninguna: un juez puede admitirla, nada le obliga a ello.
 
 ## Las dos juntas, y por qué
 
@@ -92,7 +92,7 @@ El sello sirve para un litigio en los próximos tres años. La prueba sirve para
 
 ## Hacerlo en casa, hoy, sin nosotros
 
-Como en octubre, nada de esto necesita nuestra herramienta. Basta con el cliente oficial.
+Como en octubre, nada de esto necesita nuestra herramienta. Basta con el [cliente oficial](https://github.com/opentimestamps/opentimestamps-client).
 
 [[POR COMPLETAR: ejecutar este bloque de nuevo en un contenedor vacío, pegar las salidas reales y comprobar en particular qué hace `ots verify` sin un nodo de Bitcoin local.]]
 
@@ -155,3 +155,13 @@ ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 r
 - Una prueba pendiente no es una prueba. Un informe que dijera «anclado» antes del bloque diría más de lo que sabe.
 - El anclaje no tiene ningún valor jurídico. Si necesitas una presunción ante un juez, necesitas además un sello de tiempo cualificado según eIDAS.
 - Anclar no dice nada del autor. Un resumen anclado sin firma prueba que un archivo existía, no que alguien responda de él.
+
+## Referencias
+
+- **OpenTimestamps**: [el sitio del proyecto](https://opentimestamps.org), [el cliente oficial](https://github.com/opentimestamps/opentimestamps-client), [el anuncio de Peter Todd en 2016](https://petertodd.org/2016/opentimestamps-announcement) (en inglés).
+- **Sellado por una autoridad**: [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161); [Reglamento eIDAS (UE) n.º 910/2014](https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32014R0910), artículo 41.
+- **Bitcoin**: [las reglas de la marca de tiempo de los bloques](https://en.bitcoin.it/wiki/Block_timestamp) (en inglés), [la prueba de trabajo](https://es.wikipedia.org/wiki/Sistema_de_prueba_de_trabajo).
+- **Criptografía**: [RSA](https://es.wikipedia.org/wiki/RSA), [el algoritmo de Shor](https://es.wikipedia.org/wiki/Algoritmo_de_Shor), [el algoritmo de Grover](https://es.wikipedia.org/wiki/Algoritmo_de_Grover), [SHA-2](https://es.wikipedia.org/wiki/SHA-2), [los árboles de Merkle](https://es.wikipedia.org/wiki/%C3%81rbol_de_Merkle).
+- **Aleatoriedad pública**: [drand](https://drand.love) (en inglés).
+- **Nuestro Observatorio post-cuántico** (en francés): [el Q-Day](https://observatoire.mesa.black/comprendre#g-q-day), [la criptografía post-cuántica](https://observatoire.mesa.black/comprendre#g-post-quantique), [«recolectar ahora, descifrar después»](https://observatoire.mesa.black/comprendre#g-harvest), [ML-DSA](https://observatoire.mesa.black/comprendre#g-ml-dsa).
+- **Aquí**: [«Una firma prueba quién y qué. Nunca cuándo.»](/es/cuando/), [Sablier](https://github.com/mesa-black/sablier), y [el inventario de este sitio](/audit/es/report.html).

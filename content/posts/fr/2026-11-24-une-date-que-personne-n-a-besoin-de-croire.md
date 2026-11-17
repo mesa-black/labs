@@ -13,7 +13,7 @@ Notre article [« Une signature prouve qui et quoi. Jamais quand. »](/quand/) s
 
 > Ce que le jeton ne prouve pas : rien au-delà de RSA-4096, le schéma qui le signe.
 
-C'est honnête, et c'est gênant. Un outil qui passe quarante pages à expliquer que RSA périme ne peut pas se contenter de dater ses propres conclusions avec du RSA. Nous avions divisé la confiance entre trois autorités, dans trois juridictions. Mais diviser la confiance, ce n'est pas s'en passer.
+C'est honnête, et c'est gênant. Un outil qui passe quarante pages à expliquer que [RSA](https://fr.wikipedia.org/wiki/Chiffrement_RSA) périme ne peut pas se contenter de dater ses propres conclusions avec du RSA. Pour mémoire : RSA est l'algorithme à clé publique le plus répandu, et un ordinateur quantique assez grand le casserait. Le jour où ça arrivera a un nom, le [Q-Day](https://observatoire.mesa.black/comprendre#g-q-day), que notre [Observatoire post-quantique](https://observatoire.mesa.black/comprendre) explique pas à pas. Nous avions divisé la confiance entre trois autorités, dans trois juridictions. Mais diviser la confiance, ce n'est pas s'en passer.
 
 Puis la question est venue sous une forme plus directe : *pourquoi ma signature vaudrait-elle plus qu'une référence publique ? On ne peut pas dater par rapport à quelque chose que tout le monde peut vérifier ?*
 
@@ -21,7 +21,7 @@ On peut. Mais la question en contient deux, et il faut les séparer avant de ré
 
 ## Qui, et quand : deux questions, deux outils
 
-Une signature répond à **qui**. Notre déclaration dit « ces données n'ont pas besoin de rester confidentielles », et tout le verdict du rapport en dépend. Ce qui compte, c'est qu'une personne identifiable s'y engage. Une référence publique n'y peut rien : n'importe qui peut ancrer n'importe quel fichier, ce qui prouve qu'il existait, pas que quelqu'un l'assume.
+Une signature répond à **qui**. La nôtre est d'ailleurs doublée d'une signature post-quantique, [ML-DSA](https://observatoire.mesa.black/comprendre#g-ml-dsa). Notre déclaration dit « ces données n'ont pas besoin de rester confidentielles », et tout le verdict du rapport en dépend. Ce qui compte, c'est qu'une personne identifiable s'y engage. Une référence publique n'y peut rien : n'importe qui peut ancrer n'importe quel fichier, ce qui prouve qu'il existait, pas que quelqu'un l'assume.
 
 Une date répond à **quand**. Et là, la question est juste : rien n'oblige à la faire porter par quelqu'un qu'il faut croire. Une autorité d'horodatage *signe* une date ; on peut aussi *inscrire* une empreinte dans un registre public, où personne ne peut plus la déplacer.
 
@@ -29,12 +29,12 @@ Nous gardons donc la signature pour le **qui**, et nous changeons d'outil pour l
 
 ## OpenTimestamps, en une phrase
 
-[OpenTimestamps](https://opentimestamps.org) relie une empreinte à un bloc de la chaîne Bitcoin par une suite d'opérations de hachage, que n'importe qui peut refaire.
+[OpenTimestamps](https://opentimestamps.org), un protocole ouvert [publié par Peter Todd en 2016](https://petertodd.org/2016/opentimestamps-announcement), relie une empreinte à un bloc de la chaîne [Bitcoin](https://fr.wikipedia.org/wiki/Bitcoin) par une suite d'opérations de hachage, que n'importe qui peut refaire.
 
 Le mécanisme, sans le jargon :
 
-1. On envoie **l'empreinte** des constats, trente-deux octets, à des serveurs publics qu'on appelle des **calendriers**. Comme pour une autorité d'horodatage, le document ne sort jamais.
-2. Chaque calendrier range les empreintes qu'il reçoit dans un **arbre de Merkle** : on hache les empreintes deux par deux, puis les résultats deux par deux, jusqu'à une seule valeur, la racine.
+1. On envoie **l'empreinte** des constats, trente-deux octets, à des serveurs publics qu'on appelle des **calendriers**. Comme pour une autorité d'horodatage, le document ne sort jamais. Le client y mêle même seize octets aléatoires avant l'envoi, pour qu'un calendrier ne puisse pas relier un rapport publié à celui qui l'a soumis.
+2. Chaque calendrier range les empreintes qu'il reçoit dans un **[arbre de Merkle](https://fr.wikipedia.org/wiki/Arbre_de_Merkle)** : on hache les empreintes deux par deux, puis les résultats deux par deux, jusqu'à une seule valeur, la racine.
 3. Toutes les quelques heures, le calendrier inscrit cette racine dans **une** transaction Bitcoin. Une transaction pour des milliers d'empreintes : c'est pour ça que le service est gratuit.
 4. Une fois cette transaction dans un bloc, la preuve devient complète. C'est la liste des hachages qui mènent de **votre** empreinte à la racine de Merkle de **ce** bloc.
 
@@ -42,11 +42,11 @@ Vérifier, c'est refaire ces hachages et comparer le résultat à l'en-tête du 
 
 ## Pourquoi c'est plus solide que trois autorités
 
-**Il n'y a plus de signature à croire.** Un jeton RFC 3161 dit « l'autorité affirme ». Une preuve OpenTimestamps dit « refais le calcul ». La différence ne tient pas à la confiance qu'on accorde à l'opérateur : il n'y a plus d'opérateur dont l'affirmation compte. Un calendrier qui tomberait demain, ou qui voudrait mentir, ne pourrait rien retirer à une preuve déjà complète.
+**Il n'y a plus de signature à croire.** Un jeton [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) dit « l'autorité affirme ». Une preuve OpenTimestamps dit « refais le calcul ». La différence ne tient pas à la confiance qu'on accorde à l'opérateur : il n'y a plus d'opérateur dont l'affirmation compte. Un calendrier qui tomberait demain, ou qui voudrait mentir, ne pourrait rien retirer à une preuve déjà complète.
 
-**Falsifier coûte un bloc.** Pour antidater un document, il faudrait faire apparaître son empreinte dans un bloc ancien. Ce bloc est recopié par des dizaines de milliers de nœuds, et la chaîne de travail qui le suit représente des années d'électricité. Pour présenter un faux en-tête à un vérificateur qui contrôle la preuve de travail, il faudrait miner un bloc à la difficulté réelle. Au cours actuel, c'est **[[À COMPLÉTER : ordre de grandeur, en euros, du coût d'un bloc à la difficulté du jour]]**, pour mentir à une seule personne.
+**Falsifier coûte un bloc.** Pour antidater un document, il faudrait faire apparaître son empreinte dans un bloc ancien. Ce bloc est recopié par des dizaines de milliers de nœuds, et la chaîne de travail qui le suit représente des années d'électricité. Pour présenter un faux en-tête à un vérificateur qui contrôle la [preuve de travail](https://fr.wikipedia.org/wiki/Preuve_de_travail), il faudrait miner un bloc à la difficulté réelle. Au cours actuel, c'est **[[À COMPLÉTER : ordre de grandeur, en euros, du coût d'un bloc à la difficulté du jour]]**, pour mentir à une seule personne.
 
-**Et surtout, il n'y a que du hachage.** C'est le point qui nous intéresse, puisque c'est le sujet de tout ce site. Un jeton signé en RSA-4096 tombe le jour où un ordinateur quantique fait tourner l'algorithme de Shor à cette taille : on pourra alors fabriquer des jetons à n'importe quelle date. Une preuve OpenTimestamps n'est faite que de SHA-256 (et parfois de RIPEMD-160). Contre une fonction de hachage, un ordinateur quantique dispose de l'algorithme de Grover, qui **divise par deux** la marge de sécurité au lieu de l'annuler. Pour trouver un autre document qui suive le même chemin de hachages, il faudrait de l'ordre de 2¹²⁸ opérations, même avec Grover. La preuve que nous produisons aujourd'hui a toutes les raisons d'être encore lisible en 2040.
+**Et surtout, il n'y a que du hachage.** C'est le point qui nous intéresse, puisque c'est le sujet de tout ce site. Un jeton signé en RSA-4096 tombe le jour où un ordinateur quantique fait tourner [l'algorithme de Shor](https://fr.wikipedia.org/wiki/Algorithme_de_Shor) à cette taille : on pourra alors fabriquer des jetons à n'importe quelle date. Une preuve OpenTimestamps n'est faite que de [SHA-256](https://fr.wikipedia.org/wiki/SHA-2) (et parfois de RIPEMD-160). Contre une fonction de hachage, un ordinateur quantique dispose de [l'algorithme de Grover](https://fr.wikipedia.org/wiki/Algorithme_de_Grover), qui **divise par deux** la marge de sécurité au lieu de l'annuler. Pour trouver un autre document qui suive le même chemin de hachages, il faudrait de l'ordre de 2¹²⁸ opérations, même avec Grover. La preuve que nous produisons aujourd'hui a toutes les raisons d'être encore lisible en 2040.
 
 Une précision, pour ne pas en dire plus que ce qui est vrai : la sécurité *de Bitcoin* comme monnaie repose aussi sur ECDSA, qui est vulnérable au quantique. Mais une preuve de date n'en dépend pas. Elle a besoin que l'en-tête du bloc existe et qu'il ait coûté du travail, pas que quiconque puisse encore dépenser ses bitcoins.
 
@@ -59,7 +59,7 @@ Pour vérifier, il faut connaître la racine de Merkle du bloc numéro N. Si vou
 Voici ce que nous en avons fait dans [Sablier](https://github.com/mesa-black/sablier), dans cet ordre :
 
 1. **Votre propre nœud**, s'il est configuré. Aucune confiance nécessaire.
-2. Sinon, **deux explorateurs indépendants** (blockstream.info et mempool.space), **qui doivent donner le même en-tête**. S'ils divergent, la vérification échoue bruyamment.
+2. Sinon, **deux explorateurs indépendants** ([blockstream.info](https://blockstream.info) et [mempool.space](https://mempool.space)), **qui doivent donner le même en-tête**. S'ils divergent, la vérification échoue bruyamment.
 3. Et dans tous les cas, **on vérifie l'en-tête lui-même** : son double SHA-256 doit être inférieur à la cible de difficulté qu'il annonce, et cette difficulté doit dépasser un plancher. Un explorateur qui voudrait mentir ne peut donc pas inventer un en-tête : il devrait en **miner** un.
 
 C'est la différence avec une autorité : on ne croit pas l'explorateur, on vérifie ce qu'il donne. Il peut refuser de répondre, il ne peut pas mentir à bas prix.
@@ -71,10 +71,10 @@ Hors ligne, en mode `--airgap`, on peut fournir l'en-tête à la main. Il passe 
 C'est la moitié du sujet, et nous l'écrivons dans le rapport plutôt qu'en note.
 
 - **Qui.** Une preuve OpenTimestamps ne dit rien de l'auteur. C'est le travail de la signature, et ça le reste.
-- **Une heure précise.** L'horodatage d'un bloc Bitcoin est fixé par le mineur, dans une marge : il doit dépasser la médiane des onze blocs précédents et ne pas avoir plus de deux heures d'avance. La date est donc juste **à quelques heures près**, pas à la seconde. Pour dire « inventorié avant le 31 décembre 2026 », c'est largement suffisant ; pour départager deux dépôts à dix minutes d'écart, non.
+- **Une heure précise.** L'horodatage d'un bloc Bitcoin est fixé par le mineur, dans une marge : il doit dépasser la médiane des onze blocs précédents et ne pas avoir plus de deux heures d'avance ([les règles exactes](https://en.bitcoin.it/wiki/Block_timestamp), en anglais). La date est donc juste **à quelques heures près**, pas à la seconde. Pour dire « inventorié avant le 31 décembre 2026 », c'est largement suffisant ; pour départager deux dépôts à dix minutes d'écart, non.
 - **Tout de suite.** La preuve n'est complète qu'après l'inscription dans un bloc, en général **[[À COMPLÉTER : délai mesuré entre la soumission et la preuve complète]]**. Dans l'intervalle, on a une promesse des calendriers, pas une preuve.
 - **Que le document n'existait pas avant.** Comme un jeton RFC 3161, c'est une borne supérieure. Prouver le contraire (« ce rapport n'a pas été fabriqué à l'avance ») demanderait d'y inclure une valeur publique imprévisible du jour, comme un tirage de la balise [drand](https://drand.love). C'est un autre outil, et nous ne l'avons pas construit.
-- **Une valeur juridique.** Un horodatage *qualifié* au sens d'eIDAS bénéficie d'une présomption d'exactitude de la date (règlement (UE) n° 910/2014, article 41). Une preuve OpenTimestamps n'en a aucune : un juge peut l'admettre, rien ne l'y oblige.
+- **Une valeur juridique.** Un horodatage *qualifié* au sens d'eIDAS bénéficie d'une présomption d'exactitude de la date ([règlement (UE) n° 910/2014](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32014R0910), article 41). Une preuve OpenTimestamps n'en a aucune : un juge peut l'admettre, rien ne l'y oblige.
 
 ## Les deux ensemble, et pourquoi
 
@@ -92,7 +92,7 @@ Le jeton sert pour un litige dans les trois prochaines années. La preuve sert p
 
 ## Le faire chez vous, aujourd'hui, sans nous
 
-Comme en octobre, rien de cela n'a besoin de notre outil. Le client officiel suffit.
+Comme en octobre, rien de cela n'a besoin de notre outil. Le [client officiel](https://github.com/opentimestamps/opentimestamps-client) suffit.
 
 [[À COMPLÉTER : rejouer ce bloc dans un conteneur vide, coller les sorties réelles, et vérifier en particulier ce que fait `ots verify` sans nœud Bitcoin local.]]
 
@@ -155,3 +155,13 @@ ots verify -d 8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 r
 - Une preuve en attente n'est pas une preuve. Un rapport qui afficherait « ancré » avant l'inscription dans un bloc dirait plus qu'il ne sait.
 - Aucune valeur juridique n'est attachée à l'ancrage. Si vous avez besoin d'une présomption devant un juge, il vous faut un horodatage qualifié eIDAS, en plus.
 - Ancrer ne dit rien de l'auteur. Une empreinte ancrée sans signature prouve qu'un fichier existait, pas que quelqu'un en répond.
+
+## Références
+
+- **OpenTimestamps** : [le site du projet](https://opentimestamps.org), [le client officiel](https://github.com/opentimestamps/opentimestamps-client), [l'annonce de Peter Todd en 2016](https://petertodd.org/2016/opentimestamps-announcement) (en anglais).
+- **Horodatage par autorité** : [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) ; [règlement eIDAS (UE) n° 910/2014](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32014R0910), article 41.
+- **Bitcoin** : [les règles d'horodatage des blocs](https://en.bitcoin.it/wiki/Block_timestamp) (en anglais), [la preuve de travail](https://fr.wikipedia.org/wiki/Preuve_de_travail).
+- **Cryptographie** : [RSA](https://fr.wikipedia.org/wiki/Chiffrement_RSA), [l'algorithme de Shor](https://fr.wikipedia.org/wiki/Algorithme_de_Shor), [l'algorithme de Grover](https://fr.wikipedia.org/wiki/Algorithme_de_Grover), [SHA-2](https://fr.wikipedia.org/wiki/SHA-2), [les arbres de Merkle](https://fr.wikipedia.org/wiki/Arbre_de_Merkle).
+- **Aléa public** : [drand](https://drand.love) (en anglais).
+- **Notre Observatoire post-quantique** : [le Q-Day](https://observatoire.mesa.black/comprendre#g-q-day), [la cryptographie post-quantique](https://observatoire.mesa.black/comprendre#g-post-quantique), [« récolter maintenant, déchiffrer plus tard »](https://observatoire.mesa.black/comprendre#g-harvest), [ML-DSA](https://observatoire.mesa.black/comprendre#g-ml-dsa).
+- **Chez nous** : [« Une signature prouve qui et quoi. Jamais quand. »](/quand/), [Sablier](https://github.com/mesa-black/sablier), et [l'inventaire de ce site](/audit/report.html).
