@@ -81,7 +81,7 @@ jobs:
       -
         # A tag, not a branch: this decides whether the build passes.
         name: Get Sablier
-        run: git clone --depth 1 --branch v0.8.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+        run: git clone --depth 1 --branch v0.12.2 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
       -
         # The reference records zero findings, which is the point: a static site
         # generator contains no cryptography, and this job exists to notice the
