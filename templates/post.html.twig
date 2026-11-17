@@ -90,6 +90,9 @@
                     {% for link in site.author.links %}
                         <a href="{{ link.url }}" target="_blank" rel="noopener me">{{ link.label }}</a>
                     {% endfor %}
+                    {# The author's other work, not one of his profiles: no rel="me", and
+                       out of the JSON-LD sameAs. French only, said by hreflang. #}
+                    <a href="https://observatoire.mesa.black/" target="_blank" rel="noopener"{{ locale != 'fr' ? ' hreflang="fr"' : '' }}>{{ t.signature_observatoire }}</a>
                 </p>
             </footer>
 
