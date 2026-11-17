@@ -1,0 +1,280 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 4 /Kids [3 0 R 5 0 R 7 0 R 9 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4660 >>
+stream
+BT 0 g /F2 15.0 Tf 56.00 769.89 Td (Sablier — BlackMesa Labs) Tj ET
+0.85 G 0.4 w 56.00 745.19 m 539.28 745.19 l S
+BT 0 g /F1 9.5 Tf 56.00 739.19 Td (No data whose confidentiality lifetime outlasts the expiry of the algorithms protecting it.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 721.08 Td (2 findings kept across everything analysed. Expiry date used: 2035 — that is the regulatory deadline, not a) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 707.97 Td (prediction of when the maths breaks. Deadline last checked against its sources on 30/09/2026.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 678.86 Td (How long data must stay confidential, against the expiry of the algorithms) Tj ET
+0.72 G 0.5 w [2 2] 0 d 236.26 650.99 m 236.26 629.99 l S [] 0 d
+BT 0.45 g /F1 7.0 Tf 227.26 654.99 Td (2030) Tj ET
+BT 0.45 g /F1 6.5 Tf 227.26 620.99 Td (deprecation) Tj ET
+0.72 G 0.5 w [2 2] 0 d 314.08 650.99 m 314.08 629.99 l S [] 0 d
+BT 0.45 g /F1 7.0 Tf 305.08 654.99 Td (2035) Tj ET
+BT 0.45 g /F1 6.5 Tf 305.08 620.99 Td (expiry) Tj ET
+BT 0 g /F1 8.0 Tf 56.00 640.99 Td (undeclared) Tj ET
+0.90 g 174.00 639.99 311.28 6.00 re f
+0.17 0.30 0.49 rg 174.00 639.99 2.00 6.00 re f
+BT 0.35 g /F1 8.0 Tf 493.28 640.99 Td (0 year) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 611.99 Td (Each bar is how long the data must stay confidential. It turns red when a harvestable algorithm protects it past the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 598.88 Td (expiry line — crossing the line without turning red means the data lives long but is protected by cryptography that) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 585.77 Td (will hold.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 556.66 Td (What the server actually negotiates) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 525.79 Td (mesa.black) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 507.99 Td (service) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 507.99 Td (HTTPS) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 492.88 Td (negotiated protocol) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 492.88 Td (TLSv1.3) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 477.77 Td (cipher suite) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 477.77 Td (TLS_AES_128_GCM_SHA256 \(128 bits\)) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 462.66 Td (negotiated group) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 462.66 Td (X25519MLKEM768) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 447.55 Td (certificate signature) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 447.55 Td (ecdsa-with-SHA384) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 432.44 Td (certificate key) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 432.44 Td (elliptic curve 256 bits) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 417.33 Td (chain) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 417.33 Td (4 certificates) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 402.22 Td (certificate valid until) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 402.22 Td (12/01/2027) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 387.11 Td (accepted versions) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 387.11 Td (TLSv1.3) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 368.00 Td (A handshake, not a file read: it is the only way to know what really protects the traffic, and it can contradict what) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 354.89 Td (the repository declares.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 325.78 Td (WATCH 1) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 294.91 Td (ECDSA undeclared) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 277.11 Td (Signature: not harvestable. Migrate before 2030 for compliance, with no confidentiality urgency. Server certificate.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 264.00 Td (Its lifetime is short: replacing it with a post-quantum signature happens at renewal, with no data migration.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 245.89 Td (Accept this finding: sablier accept 4d2a0227 --reason="…" --until=2027-05-17) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 227.78 Td (The tool is wrong? Open a pre-filled report) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 198.67 Td (CLEAR 1) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 178.80 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 178.80 Td (tls://mesa.black:443:0) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 151.69 Td (What this report did not look at) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 131.82 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 131.82 Td (the cryptography of your managed services — database, object storage, TLS terminated by an intermediary —) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 118.71 Td (appears in no file of this repository) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 102.60 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 102.60 Td (what is actually negotiated at runtime, for any host not declared in the probe section) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 86.49 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 86.49 Td (keys held in an HSM or by a provider) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 70.38 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 70.38 Td (the real lifetime of the data: it comes from your declaration, not from the code — an undeclared domain is) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Sablier — BlackMesa Labs · 1/4) Tj ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 6312 >>
+stream
+BT 0 g /F1 9.5 Tf 70.00 785.89 Td (computed with a default lifetime of 0 years) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 769.78 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 769.78 Td (The system's service horizon is not declared: the calculation assumes it stops writing data today. That is the) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 756.67 Td (optimistic reading — a service still in production in ten years will produce ten more years of data to protect. Add) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 743.56 Td (`service_until` to the declaration.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 727.45 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 727.45 Td (Expiry used: 2035, after NIST IR 8547. Another regime — institutional, defence — gives another date: see) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 714.34 Td (`regime` in the declaration.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 698.23 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 698.23 Td (Checksums \(CRC32, Adler-32\) are reported only beside a token, a link or a secret. A Luhn check digit or a) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 685.12 Td (modulo written by hand never is: nothing tells it apart from ordinary arithmetic, and code that accepts a number) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 672.01 Td (on the strength of its check digit does not appear here.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 655.90 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 655.90 Td (Binary files \(images, fonts, archives\) are read in full up to 8 MiB \(8,388,608 bytes\) — anything larger is not read) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 642.79 Td (at all — and only for three verifiable signs: a key block, bytes after the end of the image, an extension that lies) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 629.68 Td (about the content. A message hidden in the bits of an image is not detected here, and does not claim to be.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 613.57 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 613.57 Td (YAML configuration files are read as text, not interpreted: an algorithm set through a parameter, an imported) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 600.46 Td (file or an environment variable is not seen here.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 584.35 Td (An inventory that does not say what it failed to look at is not an inventory.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 555.24 Td (What it looked for and did not find) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 535.37 Td (Every line here is a result rather than a silence: a detector opened these files and got nothing out of them. The) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 522.26 Td (count is there so you can judge how far the sentence reaches instead of taking it.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 504.15 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 504.15 Td (6 PHP file\(s\) read: no cryptographic call.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 488.04 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 488.04 Td (360 file\(s\) read: no private key, no certificate, no keystore in the versioned tree.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 471.93 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 471.93 Td (106 binary file\(s\) examined: none carries a key block, bytes past the end of the image, or an extension that lies) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 458.82 Td (about its content.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 442.71 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 442.71 Td (2 dependency file\(s\) read: no catalogued cryptographic library.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 426.60 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 426.60 Td (2 web server configuration\(s\) read: no cipher and no protocol version declared.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 410.49 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 410.49 Td (7 script\(s\) and Dockerfile\(s\) read: no cryptographic command.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 383.38 Td (What there is to change) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 363.51 Td (1 place\(s\) to revisit, across 1 file\(s\). The rows below count places, not weeks.) Tj ET
+BT 0 g /F2 8.5 Tf 56.00 339.40 Td (Algorithm) Tj ET
+BT 0 g /F2 8.5 Tf 152.66 339.40 Td (Call sites) Tj ET
+BT 0 g /F2 8.5 Tf 249.31 339.40 Td (Files) Tj ET
+BT 0 g /F2 8.5 Tf 345.97 339.40 Td (Domains) Tj ET
+BT 0 g /F2 8.5 Tf 442.62 339.40 Td (What that changes) Tj ET
+0.85 G 0.4 w 56.00 324.67 m 539.28 324.67 l S
+BT 0 g /F1 8.5 Tf 56.00 318.67 Td (ECDSA) Tj ET
+BT 0 g /F1 8.5 Tf 152.66 318.67 Td (1) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 318.67 Td (1) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 318.67 Td (1) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 318.67 Td () Tj ET
+0.85 G 0.4 w 56.00 303.94 m 539.28 303.94 l S
+BT 0 g /F1 9.5 Tf 56.00 291.94 Td (The EU roadmap counts the migration effort among the three factors of quantum risk. This tool counts it in places,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 278.83 Td (because that is what a repository can tell; it does not turn that into a duration. Eight call sites in one file behind one) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 265.72 Td (function are an afternoon; eight across six services with a protocol between them are a quarter, and nothing in the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 252.61 Td (files distinguishes the two. That estimate is yours.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 223.50 Td (What to do, in order) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 203.63 Td (An inventory that concludes nothing gets filed away. Here is the arbitration — and the order matters as much as the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 190.52 Td (list.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 172.41 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 172.41 Td (Nothing urgent, and that is a resultNo long-lived data is exposed to harvesting, and nothing is broken today.) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 159.30 Td (Doing nothing is the right decision here: replacing cryptography that holds costs time, introduces risk and) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 146.19 Td (improves nothing.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 130.08 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 130.08 Td (Put this report back on the calendarThe window closes by itself: the expiry date does not move \(2035\), but) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 116.97 Td (every year that passes brings your data closer to that line. A domain that is clear today with a nine-year lifetime) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 103.86 Td (will not be next year. Re-running the analysis once a year is enough — and checking, while you are there, that) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 90.75 Td (the regulatory deadline has not moved.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 74.64 Td (Send the summary on Threema) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Sablier — BlackMesa Labs · 2/4) Tj ET
+
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 6362 >>
+stream
+BT 0 g /F1 9.5 Tf 56.00 785.89 Td (Opens Threema on a phone where the app is installed. On a desktop the scheme is usually not registered and the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 772.78 Td (browser refuses the link: copy the text below instead. Nothing is sent to a third party.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 743.67 Td (False positive?) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 723.80 Td (Two different things get called a false positive, and they do not go to the same place.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 705.69 Td (1. The tool is right, but this finding is accepted here. That is a project decision: add this block to your declaration. It) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 692.58 Td (is versioned, so the review happens in code review. A reason and an expiry date are both required.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 674.47 Td (On the command line: sablier accept <fingerprint> --reason="…" --until=2027-05-17) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 656.36 Td (2. The tool is wrong. That is a rule to fix, and it belongs in Sablier's own repository: github.com/mesa-black/sablier) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 638.25 Td (The fingerprint printed next to each finding identifies it, and it is what you quote in either case. It is computed from) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 625.14 Td (the evidence rather than the line number: it survives the code moving, and it changes the day the line materially) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 612.03 Td (changes.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 582.92 Td (Digest and signature) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 563.05 Td (findings digest) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 563.05 Td (8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 547.94 Td (signed on) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 547.94 Td (Ed25519 + ML-DSA-65 · 16/10/2026 22:20) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 532.83 Td (public key) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 532.83 Td (zEMKv+R/IT+XlaqW…) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 517.72 Td (page signature) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 517.72 Td (report.html.page.sig) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 502.61 Td (date attested) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 502.61 Td (06/10/2026 21:58 UTC · Asseco Data Systems S.A.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 487.50 Td (Bitcoin anchoring) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 487.50 Td (block 976238 · 17/11/2026 06:11 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 468.39 Td (The digest covers the findings, not this file: two renderings of the same inventory, in two languages, give the same) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 455.28 Td (value.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 437.17 Td (This report carries two signatures: Ed25519, verifiable anywhere, and ML-DSA-65, which resists the known) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 424.06 Td (quantum algorithms. Neither replaces the other — it is the hybridation ANSSI asks for, applied to the document) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 410.95 Td (itself.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 392.84 Td (What the timestamp establishes: the digest above existed on that date, according to a third party with no stake in) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 379.73 Td (these conclusions. No signature on this report can prove that, because the date it carries comes from the clock of) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 366.62 Td (the machine that signed. Its limit: the token is signed with RSA-4096, which this report itself classes as quantum) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 353.51 Td (vulnerable — it is evidence for a dispute in the next few years, not for 2040.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 335.40 Td (The date is checked without this tool, with the token filed beside the report:) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 317.29 Td (Three steps rather than one line, and each repairs a false assumption. The certificate store is not at the same path) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 304.18 Td (from one system to the next — the command everybody publishes, `-CAfile /etc/ssl/certs/ca-certificates.crt`, fails on) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 291.07 Td (Fedora, Rocky and openSUSE, where that file does not exist. And the token carries its full chain, but LibreSSL —) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 277.96 Td (the openssl shipped with macOS — does not read it and answers `unable to get local issuer certificate`: handing it) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 264.85 Td (over with `-untrusted` changes nothing elsewhere and settles that case. Checked as printed on Debian, Ubuntu,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 251.74 Td (Alpine, Fedora, Rocky, openSUSE, and on macOS with both openssl builds.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 233.63 Td (The same imprint was presented to other authorities, in other jurisdictions. Each signed its own token knowing) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 220.52 Td (nothing of the others, and each sets an independent bound: the date defensible without trusting any single) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 207.41 Td (operator is the latest in this list, so forging the earliest no longer detaches this document from a date.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 189.30 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 189.30 Td (08/10/2026 02:19 UTC, by GlobalSign nv-sa — token in report.html.2.tsr, verifiable with the same recipe.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 173.19 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 173.19 Td (08/10/2026 02:19 UTC, by DigiCert — token in report.html.3.tsr, verifiable with the same recipe.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 157.08 Td (What the anchoring establishes: the digest above existed no later than that block of the Bitcoin chain, which) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 143.97 Td (thousands of independent machines hold. Nobody has to be believed: the proof is a chain of SHA-256 operations) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 130.86 Td (from the digest to the block's merkle root, checked without this tool and without any certificate. Its limits: it proves) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 117.75 Td (when, not who — that is the signature's job. Against a quantum computer, the proof itself is hashes only \(SHA-256,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 104.64 Td (sometimes RIPEMD-160\), which Grover's algorithm weakens without breaking, so it does not expire like the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 91.53 Td (tokens' RSA; whether the Bitcoin chain keeps its consensus through that transition is outside what the proof can) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 78.42 Td (say.) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Sablier — BlackMesa Labs · 3/4) Tj ET
+
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 11 0 R /F2 12 0 R /F3 13 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 2702 >>
+stream
+BT 0 g /F1 9.5 Tf 56.00 785.89 Td (Checked without any authority, with the proof filed beside the report:) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 767.78 Td (The official client \(pip install opentimestamps-client\) takes the block header from a Bitcoin node of your own.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 754.67 Td (sablier verify takes it from two public explorers that must agree, and checks the header's proof of work itself rather) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 741.56 Td (than believing them; on a machine with no network, the header is passed by hand with --block-header.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 723.45 Td (This date is earlier than the report's \(17/11/2026 07:51 UTC\), and that is not an inconsistency: the findings have) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 710.34 Td (not moved since, so the original signature and the original token are both kept. Only the rendering changed. The) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 697.23 Td (earliest attestation is the one that carries weight — re-signing and re-attesting on every run would destroy the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 684.12 Td (antecedence it establishes, for no new information at all.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 666.01 Td (What the signature guarantees: the list of what was found — each algorithm, the file it was found in, the verdict it) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 652.90 Td (was given. It does not depend on how this page is laid out or on the language it is written in: the same analysis) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 639.79 Td (checks out in French, English or Spanish. The page itself has its own signature, in the file report.html.page.sig filed) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 626.68 Td (beside it. That one is made from a fingerprint of the file — change one character and the fingerprint changes) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 613.57 Td (completely — so if a single character of this page is changed, a verdict, a date, a comma, checking it fails. What) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 600.46 Td (neither signature can stop: whoever holds the signing key can sign another page. Which key is the right one is the) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 587.35 Td (subject of the next paragraph. One command checks both: sablier verify report.html.sig --declare=sablier.json) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 569.24 Td (What the signatures establish: the list and the page were signed by the key the declaration designates. What ties) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 556.13 Td (that key to somebody is not this page — it is the history of the file that declares it, where any change of key is a) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 543.02 Td (dated commit anybody can read.) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Sablier — BlackMesa Labs · 4/4) Tj ET
+
+endstream
+endobj
+11 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+12 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+13 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+14 0 obj
+<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.13.2) /CreationDate (D:20261117085154) >>
+endobj
+xref
+0 15
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000133 00000 n 
+0000000288 00000 n 
+0000004999 00000 n 
+0000005154 00000 n 
+0000011517 00000 n 
+0000011672 00000 n 
+0000018085 00000 n 
+0000018241 00000 n 
+0000020995 00000 n 
+0000021093 00000 n 
+0000021196 00000 n 
+0000021292 00000 n 
+trailer
+<< /Size 15 /Root 1 0 R /Info 14 0 R >>
+startxref
+21408
+%%EOF
