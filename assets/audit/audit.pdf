@@ -1,0 +1,491 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 6 /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 4566 >>
+stream
+BT 0 g /F2 15.0 Tf 56.00 769.89 Td (Rapport d'audit — BlackMesa Labs) Tj ET
+0.85 G 0.4 w 56.00 745.19 m 539.28 745.19 l S
+BT 0 g /F1 9.5 Tf 56.00 739.19 Td (Rapport d'audit) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 710.08 Td (BlackMesa Labs) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposition cryptographique et durées de confidentialité · 17/11/2026 07:51 UTC) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 661.10 Td (Sommaire) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 641.23 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 641.23 Td (Objet et périmètre) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 625.12 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 625.12 Td (Méthode) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 609.01 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 609.01 Td (Limites de l'analyse) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 592.90 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 592.90 Td (Références normatives) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 576.79 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 576.79 Td (Constatations de fait) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 560.68 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 560.68 Td (Durées de confidentialité déclarées) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 544.57 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 544.57 Td (Avis) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 528.46 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 528.46 Td (Conclusion et recommandations) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 512.35 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 512.35 Td (Glossaire) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 496.24 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 496.24 Td (Intégrité du document) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 469.13 Td (1. Objet et périmètre) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 449.26 Td (Commanditaire) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 449.26 Td ([à compléter]) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 434.15 Td (Auditeur) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 434.15 Td ([à compléter]) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 419.04 Td (Organisation) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 419.04 Td ([à compléter]) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 403.93 Td (Référence) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 403.93 Td ([à compléter]) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 388.82 Td (Mission) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 388.82 Td ([à compléter]) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 373.71 Td (Périmètre analysé) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 373.71 Td (.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 358.60 Td (Date de l'analyse) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 358.60 Td (17/11/2026 07:51 UTC) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 343.49 Td (Volume examiné) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 343.49 Td (356 fichiers lus) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 328.38 Td (Outil) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 328.38 Td (Sablier 0.13.2) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 313.27 Td (Commande exécutée) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 313.27 Td (/Users/jerome/Development/BlackMesa/sablier/bin/sablier scan .) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 300.16 Td (--out=assets/audit/report.html --audit=assets/audit/audit.html) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 287.05 Td (--pdf=assets/audit/report.pdf --lang=fr) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 273.94 Td (--sign=/Users/jerome/.sablier/blackmesa-labs.key) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 260.83 Td (--timestamp=http://time.certum.pl,http://timestamp.globalsign.com/tsa/r6advanc) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 247.72 Td (ed1,http://timestamp.digicert.com --anchor=opentimestamps --quiet) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 228.61 Td (Ce document est produit par un outil d'analyse. Il rapporte des faits vérifiables et l'avis qui en découle ; il n'emporte) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 215.50 Td (aucune qualification juridique, et l'auditeur signataire en demeure l'auteur.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 186.39 Td (2. Méthode) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 166.52 Td (Lecture statique du dépôt : appels cryptographiques dont l'algorithme est écrit en clair, matériel de clé et certificats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 153.41 Td (présents dans l'arborescence, configuration de serveur et de cadriciel, scripts de déploiement, dépendances) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 140.30 Td (déclarées.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 122.19 Td (Sonde réseau : un handshake TLS ordinaire, identique à celui d'un navigateur, sur les hôtes déclarés. Elle établit) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 109.08 Td (ce qui est réellement négocié, que le dépôt peut contredire dans les deux sens.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 90.97 Td (L'inventaire est ensuite croisé avec la durée pendant laquelle chaque catégorie de donnée doit rester) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 77.86 Td (confidentielle. Le raisonnement est celui de l'inégalité de Mosca \(2015\), simplifié :) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 1/6) Tj ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 6265 >>
+stream
+BT 0 g /F1 9.5 Tf 56.00 785.89 Td (année de l'analyse + durée de confidentialité déclarée > péremption de l'algorithme  =>  la donnée déjà émise est) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 772.78 Td (exposée, et migrer ne la répare pas) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 754.67 Td (L'analyse est reproductible : la même commande sur le même état du dépôt produit la même empreinte de) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 741.56 Td (constatations. L'outil ne prédit pas l'arrivée d'un calculateur quantique ; il utilise l'échéance réglementaire comme) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 728.45 Td (date de planification.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 699.34 Td (3. Limites de l'analyse) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 679.47 Td (Ces limites figurent dans le corps du rapport et non en note de bas de page : un inventaire qui ne dit pas ce qu'il) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 666.36 Td (n'a pas regardé n'est pas un inventaire.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 648.25 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 648.25 Td (la cryptographie de vos services gérés — base de données, stockage objet, terminaison TLS chez un) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 635.14 Td (intermédiaire — n'apparaît dans aucun fichier de ce dépôt) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 619.03 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 619.03 Td (ce qui est réellement négocié à l'exécution, pour tout hôte non déclaré dans la section « sonde ») Tj ET
+BT 0 g /F1 9.5 Tf 56.00 602.92 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 602.92 Td (les clés détenues dans un HSM ou chez un fournisseur) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 586.81 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 586.81 Td (la durée de vie réelle des données : elle vient de votre déclaration, pas du code — un domaine non déclaré est) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 573.70 Td (calculé avec une durée par défaut de 0 ans) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 557.59 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 557.59 Td (L'horizon d'exploitation du système n'est pas déclaré : le calcul suppose qu'il cesse d'écrire des données) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 544.48 Td (aujourd'hui. C'est l'hypothèse optimiste — un service encore en production dans dix ans produira dix ans de) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 531.37 Td (données de plus à protéger. Ajoutez `service_until` à la déclaration.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 515.26 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 515.26 Td (Échéance retenue : 2035, d'après NIST IR 8547. Un autre cadre — institutionnel, défense — donne une autre) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 502.15 Td (date : voir `regime` dans la déclaration.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 486.04 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 486.04 Td (Les sommes de contrôle \(CRC32, Adler-32\) ne sont signalées qu'à côté d'un jeton, d'un lien ou d'un secret.) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 472.93 Td (Une clé de Luhn ou un modulo écrits à la main ne le sont jamais : rien ne les distingue d'un calcul ordinaire, et) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 459.82 Td (un code qui accepte un numéro sur la foi de son chiffre de contrôle n'apparaît pas ici.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 443.71 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 443.71 Td (Les fichiers binaires \(images, polices, archives\) sont lus en entier jusqu'à 8 Mio \(8 388 608 octets\) — au-delà, ils) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 430.60 Td (ne sont pas lus du tout —, et seulement pour trois signes vérifiables : un bloc de clé, des octets après la fin de) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 417.49 Td (l'image, une extension qui ment sur le contenu. Un message dissimulé dans les bits d'une image n'est pas) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 404.38 Td (détecté ici, et ne prétend pas l'être.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 388.27 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 388.27 Td (Les fichiers YAML de configuration sont lus comme du texte, pas interprétés : un algorithme défini par un) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 375.16 Td (paramètre, par un fichier importé ou par une variable d'environnement n'est pas vu ici.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 359.05 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 359.05 Td (Les constatations de confiance moyenne sont signalées comme telles : l'algorithme y provient d'une variable ou) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 345.94 Td (d'une configuration, et n'a pas pu être établi par la seule lecture.) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 318.83 Td (Ce qu'il a cherché et n'a pas trouvé) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 301.03 Td (Chaque ligne est un résultat, pas un silence : un détecteur a ouvert ces fichiers et n'en a rien tiré. Le nombre est là) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 287.92 Td (pour que vous puissiez juger la portée de la phrase plutôt que la croire.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 269.81 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 269.81 Td (6 fichier\(s\) PHP lu\(s\) : aucun appel cryptographique.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 253.70 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 253.70 Td (356 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 237.59 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 237.59 Td (106 fichier\(s\) binaire\(s\) examiné\(s\) : aucun ne porte de bloc de clé, d'octets après la fin de l'image, ni) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 224.48 Td (d'extension qui mente sur son contenu.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 208.37 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 208.37 Td (2 fichier\(s\) de dépendances lu\(s\) : aucune bibliothèque cryptographique du catalogue.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 192.26 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 192.26 Td (2 configuration\(s\) de serveur web lue\(s\) : aucun chiffre ni version de protocole déclarés.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 176.15 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 176.15 Td (7 script\(s\) et Dockerfile lu\(s\) : aucune commande cryptographique.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 149.04 Td (4. Références normatives) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 129.17 Td (La date de péremption retenue est une échéance réglementaire, pas une prédiction de rupture cryptographique.) Tj ET
+BT 0 g /F2 8.5 Tf 56.00 105.06 Td (FIPS 203 / 204 / 205 \(2024\)) Tj ET
+BT 0 g /F2 8.5 Tf 297.64 105.06 Td (ML-KEM, ML-DSA et SLH-DSA normalisés \(août 2024\).) Tj ET
+0.85 G 0.4 w 56.00 90.33 m 539.28 90.33 l S
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 2/6) Tj ET
+
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 6074 >>
+stream
+BT 0 g /F1 8.5 Tf 56.00 785.89 Td (NIST IR 8547 ipd \(2024\)) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 785.89 Td (Brouillon public initial, novembre 2024. Table 2 : RSA et) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 774.16 Td (ECDSA à 112 bits de sécurité sont dépréciés après 2030 ;) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 762.43 Td (RSA, ECDSA et EdDSA sont interdits après 2035, quel que) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 750.70 Td (soit le niveau.) Tj ET
+0.85 G 0.4 w 56.00 735.97 m 539.28 735.97 l S
+BT 0 g /F1 8.5 Tf 56.00 729.97 Td (CNSA 2.0 \(NSA\)) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 729.97 Td (Échéances par usage : signature de logiciels et de) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 718.24 Td (micrologiciels et équipements réseau en 2030, navigateurs,) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 706.51 Td (services en nuage et systèmes d'exploitation en 2033.) Tj ET
+0.85 G 0.4 w 56.00 691.78 m 539.28 691.78 l S
+BT 0 g /F1 8.5 Tf 56.00 685.78 Td (Directive \(UE\) 2022/2555 \(NIS 2\)) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 685.78 Td (Directive du 14 décembre 2022, JO L 333/80, à transposer «) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 674.05 Td (by 17 October 2024 » selon son article 41. Son article 21 §2) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 662.32 Td (h\) range parmi les mesures de gestion du risque « policies) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 650.59 Td (and procedures regarding the use of cryptography and, where) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 638.86 Td (appropriate, encryption ». Son article 34 fixe ce que la loi de) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 627.13 Td (chaque État membre doit au minimum permettre : pour une) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 615.40 Td (entité essentielle, un plafond d'au moins 10 000 000 € ou 2 %) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 603.67 Td (du chiffre d'affaires mondial annuel, le plus élevé des deux ;) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 591.94 Td (pour une entité importante, 7 000 000 € ou 1,4 %. C'est un) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 580.21 Td (plancher sur le plafond et non une limite — une loi nationale) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 568.48 Td (peut aller au-delà, et plusieurs ajoutent leurs propres) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 556.75 Td (sanctions pour des manquements précis. Dans l'Union, c'est) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 545.02 Td (l'obligation à laquelle cet inventaire répond, et elle vaut dans) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 533.29 Td (les vingt-sept États membres indépendamment de) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 521.56 Td (l'avancement de chaque transposition. Pour une entité hors de) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 509.83 Td (l'Union, cette ligne est un repère et non une obligation : le) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 498.10 Td (cadre retenu est celui que désigne `regime` dans la) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 486.37 Td (déclaration. Ce document est un inventaire cryptographique,) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 474.64 Td (pas un rapport de conformité NIS 2 : il ne dit rien de) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 462.91 Td (l'enregistrement auprès de l'autorité ni de la déclaration des) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 451.18 Td (incidents.) Tj ET
+0.85 G 0.4 w 56.00 436.45 m 539.28 436.45 l S
+BT 0 g /F1 8.5 Tf 56.00 430.45 Td (Recommandation \(UE\) 2024/1101) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 430.45 Td (Recommandation du 11 avril 2024 : feuilles de route) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 418.72 Td (nationales coordonnées, publiées sous deux ans, et schémas) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 406.99 Td (hybrides.) Tj ET
+0.85 G 0.4 w 56.00 392.26 m 539.28 392.26 l S
+BT 0 g /F1 8.5 Tf 56.00 386.26 Td (UE — feuille de route NIS CG \(23/06/2025\)) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 386.26 Td (Feuille de route coordonnée du groupe de coopération NIS,) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 374.53 Td (23 juin 2025. Classe les cas d'usage par la confidentialité due) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 362.80 Td (: haut risque si une compromission après dix ans ou plus) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 351.07 Td (causerait encore un dommage significatif. La cryptographie à) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 339.34 Td (clé publique vulnérable au quantique ne doit plus être) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 327.61 Td (employée seule après fin 2030 pour le haut risque, après fin) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 315.88 Td (2035 pour le risque moyen. L'inventaire cryptographique figure) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 304.15 Td (parmi les First Steps attendus au 31/12/2026, et le format) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 292.42 Td (CBOM y est recommandé.) Tj ET
+0.85 G 0.4 w 56.00 277.69 m 539.28 277.69 l S
+BT 0 g /F1 8.5 Tf 56.00 271.69 Td (ANSSI — avis sur la migration post-quantique) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 271.69 Td (Hybridation jugée essentielle partout où le post-quantique est) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 259.96 Td (déployé, et exigée pour les visas de sécurité français. Après) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 248.23 Td (2030, l'ANSSI estime qu'il ne sera plus raisonnable d'acquérir) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 236.50 Td (un produit sans post-quantique.) Tj ET
+0.85 G 0.4 w 56.00 221.77 m 539.28 221.77 l S
+BT 0 g /F1 8.5 Tf 56.00 215.77 Td (Cadre national — non déclaré) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 215.77 Td (Aucune juridiction déclarée, et elle n'est pas déduite de la) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 204.04 Td (langue de ce document : une langue n'est pas un pays.) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 192.31 Td (Ajoutez `jurisdiction` à la déclaration, en code à deux lettres,) Tj ET
+BT 0 g /F1 8.5 Tf 297.64 180.58 Td (pour que ce document cite la transposition qui vous auditera.) Tj ET
+0.85 G 0.4 w 56.00 165.85 m 539.28 165.85 l S
+BT 0 g /F1 9.5 Tf 56.00 153.85 Td (Échéance retenue pour ce rapport : 2035. Échéances vérifiées auprès de leurs sources le 30/09/2026.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 124.74 Td (5. Constatations de fait) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 104.87 Td (Chaque ligne est une observation directe, numérotée pour pouvoir être citée. Elle n'emporte aucun jugement :) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 91.76 Td (l'avis figure en section 7.) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 3/6) Tj ET
+
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 5733 >>
+stream
+BT 0 g /F2 8.5 Tf 56.00 785.89 Td (N°) Tj ET
+BT 0 g /F2 8.5 Tf 152.66 785.89 Td (Élément relevé) Tj ET
+BT 0 g /F2 8.5 Tf 249.31 785.89 Td (Emplacement) Tj ET
+BT 0 g /F2 8.5 Tf 345.97 785.89 Td (Élément observé) Tj ET
+BT 0 g /F2 8.5 Tf 442.62 785.89 Td (Confiance) Tj ET
+0.85 G 0.4 w 56.00 771.16 m 539.28 771.16 l S
+BT 0 g /F1 8.5 Tf 56.00 765.16 Td (1) Tj ET
+BT 0 g /F1 8.5 Tf 152.66 765.16 Td (ML-KEM) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 765.16 Td (tls://mesa.black:443) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 765.16 Td (X25519MLKEM768) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 765.16 Td (haute) Tj ET
+0.85 G 0.4 w 56.00 750.43 m 539.28 750.43 l S
+BT 0 g /F1 8.5 Tf 56.00 744.43 Td (2) Tj ET
+BT 0 g /F1 8.5 Tf 152.66 744.43 Td (ECDSA) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 744.43 Td (tls://mesa.black:443) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 744.43 Td (ecdsa-with-SHA384 ·) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 732.70 Td (EC-256) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 744.43 Td (haute) Tj ET
+0.85 G 0.4 w 56.00 717.97 m 539.28 717.97 l S
+BT 0 g /F2 11.5 Tf 56.00 694.97 Td (6. Durées de confidentialité déclarées) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 675.10 Td (Ces durées sont une donnée d'entrée fournie par le commanditaire. L'outil ne peut ni les vérifier ni les déduire du) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 661.99 Td (code : tout l'avis de la section 7 en dépend, et une durée corrigée change le verdict.) Tj ET
+BT 0 g /F2 8.5 Tf 56.00 637.88 Td (Domaine) Tj ET
+BT 0 g /F2 8.5 Tf 152.66 637.88 Td (Durée) Tj ET
+BT 0 g /F2 8.5 Tf 249.31 637.88 Td (Chemins) Tj ET
+BT 0 g /F2 8.5 Tf 345.97 637.88 Td (Justification fournie) Tj ET
+BT 0 g /F2 8.5 Tf 442.62 637.88 Td (Déclarée par) Tj ET
+0.85 G 0.4 w 56.00 623.15 m 539.28 623.15 l S
+BT 0 g /F1 8.5 Tf 56.00 617.15 Td (contenu publié) Tj ET
+BT 0 g /F1 8.5 Tf 152.66 617.15 Td (0) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 617.15 Td (content/*, templates/*,) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 605.42 Td (assets/*, public/*, bin/*) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 617.15 Td (Articles, gabarits et) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 605.42 Td (générateur. Tout est) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 593.69 Td (écrit pour être servi en) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 581.96 Td (clair à qui le demande :) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 570.23 Td (la confidentialité due) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 558.50 Td (est nulle, par) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 546.77 Td (construction et pas par) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 535.04 Td (négligence.) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 617.15 Td (Jérôme Nadaud,) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 605.42 Td (BlackMesa ·) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 593.69 Td (2026-11-17) Tj ET
+0.85 G 0.4 w 56.00 520.31 m 539.28 520.31 l S
+BT 0 g /F1 8.5 Tf 56.00 514.31 Td (chaîne de construction) Tj ET
+BT 0 g /F1 8.5 Tf 56.00 502.58 Td (et de déploiement) Tj ET
+BT 0 g /F1 8.5 Tf 152.66 514.31 Td (0) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 514.31 Td (Dockerfile, container/*,) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 502.58 Td (.github/*, Makefile,) Tj ET
+BT 0 g /F1 8.5 Tf 249.31 490.85 Td (.dockerignore) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 514.31 Td (Construction de l'image) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 502.58 Td (et sa mise en ligne. La) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 490.85 Td (CI construit l'image et la) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 479.12 Td (pousse sur ghcr.io avec) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 467.39 Td (le jeton du run) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 455.66 Td (\(GITHUB_TOKEN\), qui) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 443.93 Td (expire avec lui ; elle) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 432.20 Td (écrit ensuite l'empreinte) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 420.47 Td (de l'image dans le) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 408.74 Td (dépôt de déploiement) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 397.01 Td (avec une clé qui ne) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 385.28 Td (peut écrire que là) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 373.55 Td (\(K3S_STACK_DEPLO) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 361.82 Td (Y_KEY\), un secret) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 350.09 Td (GitHub qui n'entre) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 338.36 Td (jamais dans ce dépôt.) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 326.63 Td (Argo CD déploie depuis) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 314.90 Td (ce dépôt-là. Dans le) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 303.17 Td (conteneur, Caddy sert) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 291.44 Td (en HTTP : le TLS est) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 279.71 Td (terminé par Traefik,) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 267.98 Td (avec un certificat de) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 256.25 Td (cert-manager, et sa) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 244.52 Td (configuration vit dans le) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 232.79 Td (dépôt de déploiement.) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 221.06 Td (Aucun de ces fichiers) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 209.33 Td (ne contient de secret :) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 197.60 Td (s'ils sortaient, ils) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 185.87 Td (n'apprendraient rien à) Tj ET
+BT 0 g /F1 8.5 Tf 345.97 174.14 Td (personne.) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 514.31 Td (Jérôme Nadaud,) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 502.58 Td (BlackMesa ·) Tj ET
+BT 0 g /F1 8.5 Tf 442.62 490.85 Td (2026-11-17) Tj ET
+0.85 G 0.4 w 56.00 159.41 m 539.28 159.41 l S
+BT 0 g /F1 9.5 Tf 56.00 147.41 Td (Durée appliquée aux domaines non déclarés : 0 ans.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 129.30 Td (Déclaration endossée le 17/11/2026 04:49, empreinte des clefs 2ED4 E986 E4B7 4AAB 443F D356 19B5 10A7.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 116.19 Td (La signature couvre les durées, les chemins, le régime et les auteurs ci-dessus ; elle survit à une remise en forme) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 103.08 Td (du fichier et pas à une correction de son contenu.) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 4/6) Tj ET
+
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 5578 >>
+stream
+BT 0 g /F2 11.5 Tf 56.00 785.89 Td (Durée de confidentialité des données, face à la péremption des algorithmes) Tj ET
+0.72 G 0.5 w [2 2] 0 d 236.26 758.02 m 236.26 737.02 l S [] 0 d
+BT 0.45 g /F1 7.0 Tf 227.26 762.02 Td (2030) Tj ET
+BT 0.45 g /F1 6.5 Tf 227.26 728.02 Td (dépréciation) Tj ET
+0.72 G 0.5 w [2 2] 0 d 314.08 758.02 m 314.08 737.02 l S [] 0 d
+BT 0.45 g /F1 7.0 Tf 305.08 762.02 Td (2035) Tj ET
+BT 0.45 g /F1 6.5 Tf 305.08 728.02 Td (péremption) Tj ET
+BT 0 g /F1 8.0 Tf 56.00 748.02 Td (non déclaré) Tj ET
+0.90 g 174.00 747.02 311.28 6.00 re f
+0.17 0.30 0.49 rg 174.00 747.02 2.00 6.00 re f
+BT 0.35 g /F1 8.0 Tf 493.28 748.02 Td (0 an) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 719.02 Td (Chaque barre est la durée pendant laquelle la donnée doit rester confidentielle. Elle passe en rouge quand un) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 705.91 Td (algorithme récoltable la protège au-delà du trait de péremption — dépasser le trait sans être rouge signifie que la) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 692.80 Td (donnée dure longtemps, mais qu'elle est protégée par de la cryptographie qui tiendra.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 663.69 Td (7. Avis) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 643.82 Td (L'avis découle des constatations de la section 5 et des durées de la section 6. Il distingue ce qui se récolte — le) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 630.71 Td (chiffrement, qu'un adversaire peut capturer aujourd'hui pour le déchiffrer plus tard — de ce qui ne se récolte pas,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 617.60 Td (les signatures.) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 588.49 Td (SURVEILLER) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 570.69 Td (Signature : pas de récolte possible. À migrer avant 2030 pour la conformité, sans urgence de confidentialité.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 552.58 Td (Constatations concernées : n°2) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 523.47 Td (CONFORME) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 505.67 Td (Normalisé FIPS 203.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 487.56 Td (Constatations concernées : n°1) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 458.45 Td (8. Conclusion et recommandations) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 438.58 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 438.58 Td (Rien d'urgent, et c'est un résultatAucune donnée à longue durée n'est exposée à la récolte, et rien n'est cassé) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 425.47 Td (aujourd'hui. Ne rien faire est ici la bonne décision : remplacer de la cryptographie qui tient coûte du temps,) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 412.36 Td (introduit du risque et n'améliore rien.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 396.25 Td (-) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 396.25 Td (Remettre ce rapport au calendrierLa fenêtre se referme d'elle-même : la date de péremption ne bouge pas) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 383.14 Td (\(2035\), mais chaque année qui passe rapproche vos données de cette ligne. Un domaine conforme aujourd'hui) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 370.03 Td (avec une durée de neuf ans ne le sera plus l'an prochain. Rejouer l'analyse une fois par an suffit — et vérifier à) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 356.92 Td (cette occasion que l'échéance réglementaire n'a pas bougé.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 329.81 Td (9. Glossaire) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 309.94 Td (Les sept termes nécessaires à la lecture du présent rapport.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 291.83 Td (Récolte différée) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 291.83 Td (Capturer aujourd'hui des données chiffrées pour les déchiffrer lorsque la) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 278.72 Td (machine capable de le faire existera. Pour ces données, la date de) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 265.61 Td (compromission est le jour du chiffrement, pas celui de l'attaque.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 250.50 Td (Confidentialité) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 250.50 Td (Ce que protège le chiffrement : la donnée reste illisible. C'est la seule propriété) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 237.39 Td (exposée à la récolte différée.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 222.28 Td (Authenticité) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 222.28 Td (Ce que protège une signature : l'origine est établie. Une signature ne se) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 209.17 Td (capture pas pour être forgée plus tard ; l'urgence ne porte que sur les ancres) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 196.06 Td (de confiance à longue durée.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 180.95 Td (Durée de confidentialité) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 180.95 Td (Nombre d'années pendant lesquelles une catégorie de donnée doit rester) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 167.84 Td (secrète. Elle est déclarée par le commanditaire ; aucun outil ne peut la déduire) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 154.73 Td (du code.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 139.62 Td (Péremption) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 139.62 Td (Année à partir de laquelle un algorithme ne doit plus protéger de donnée) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 126.51 Td (confidentielle. Retenue ici d'après les textes cités en section 4.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 111.40 Td (Symétrique / asymétrique) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 111.40 Td (La cryptographie symétrique \(AES, ChaCha20\) n'est pas le sujet : un) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 98.29 Td (calculateur quantique en réduit la marge sans la casser. Le problème porte sur) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 85.18 Td (l'asymétrique : RSA, courbes elliptiques, échange de clés.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 70.07 Td (Hybridation) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 70.07 Td (Combiner un algorithme classique et un algorithme post-quantique, de sorte) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 5/6) Tj ET
+
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 15 0 R /F2 16 0 R /F3 17 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 5865 >>
+stream
+BT 0 g /F1 9.5 Tf 206.00 785.89 Td (que la protection tienne si l'un des deux tombe. C'est la position des autorités) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 772.78 Td (pendant la transition.) Tj ET
+BT 0 g /F2 11.5 Tf 56.00 742.67 Td (10. Intégrité du document) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 722.80 Td (L'empreinte porte sur les constatations et non sur ce fichier : deux rendus du même inventaire, dans deux langues,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 709.69 Td (donnent la même valeur.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 691.58 Td (empreinte des constats) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 691.58 Td (8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 672.47 Td (signé le) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 672.47 Td (Ed25519 · 16/10/2026 22:20) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 657.36 Td (clé publique) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 657.36 Td (zEMKv+R/IT+XlaqWadXXnTAuHX0jQ+dXNxPOporqHiM=) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 638.25 Td (rapport précédent) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 638.25 Td (8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 619.14 Td (date attestée) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 619.14 Td (06/10/2026 21:58 UTC · Asseco Data Systems S.A.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 600.03 Td (Ce que l'horodatage établit : l'empreinte ci-dessus existait à cette date, selon un tiers qui n'a aucun intérêt dans) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 586.92 Td (ces conclusions. Aucune signature de ce rapport ne peut le prouver, puisque la date qu'elle porte sort de l'horloge) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 573.81 Td (de la machine qui a signé. Sa limite : le jeton est signé en RSA-4096, que ce rapport classe lui-même comme) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 560.70 Td (vulnérable au quantique — c'est une preuve pour un litige dans les prochaines années, pas pour 2040.) Tj ET
+BT 0 g /F2 9.5 Tf 56.00 542.59 Td (ancrage Bitcoin) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 542.59 Td (bloc 976238 · 17/11/2026 06:11 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 523.48 Td (Ce que l'ancrage établit : l'empreinte ci-dessus existait au plus tard à ce bloc de la chaîne Bitcoin, que des milliers) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 510.37 Td (de machines indépendantes détiennent. Personne n'a à être cru : la preuve est une suite d'opérations SHA-256) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 497.26 Td (qui mène de l'empreinte à la racine de Merkle du bloc, vérifiée sans cet outil et sans aucun certificat. Ses limites :) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 484.15 Td (elle prouve quand, pas qui — c'est le rôle de la signature. Face à un ordinateur quantique, la preuve elle-même) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 471.04 Td (n'est faite que d'empreintes \(SHA-256, parfois RIPEMD-160\), que l'algorithme de Grover affaiblit sans les casser :) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 457.93 Td (elle n'expire pas comme le RSA des jetons ; que la chaîne Bitcoin garde son consensus à travers cette transition) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 444.82 Td (est hors de ce que la preuve peut dire.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 426.71 Td (Se vérifie sans aucune autorité, avec la preuve déposée à côté du rapport : ots verify -d) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 413.60 Td (8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1dabbfc58ee7b4d6b670b5 report.html.ots) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 395.49 Td (Le client officiel \(pip install opentimestamps-client\) prend l'en-tête du bloc auprès d'un nœud Bitcoin à vous. sablier) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 382.38 Td (verify le prend auprès de deux explorateurs publics qui doivent concorder, et vérifie lui-même la preuve de travail) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 369.27 Td (de l'en-tête plutôt que de les croire ; sur une machine sans réseau, l'en-tête se passe à la main avec) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 356.16 Td (--block-header.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 338.05 Td (Cette date est antérieure à celle du rapport \(17/11/2026 07:51 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 324.94 Td (n'ont pas bougé depuis, donc la signature et le jeton d'origine sont tous deux conservés. Seul le rendu a changé.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 311.83 Td (C'est l'attestation la plus ancienne qui a une valeur — en resignant et en réattestant à chaque passage, on détruirait) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 298.72 Td (l'antériorité qu'elle établit, pour n'y gagner aucune information nouvelle.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 280.61 Td (Ce rapport porte deux signatures : Ed25519, vérifiable partout, et ML-DSA-65, qui résiste aux algorithmes) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 267.50 Td (quantiques connus. Aucune ne remplace l'autre — c'est l'hybridation que l'ANSSI demande, appliquée ici au) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 254.39 Td (document lui-même.) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 236.28 Td (Vérification par un tiers : sablier verify report.html.sig --declare=sablier.json) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 218.17 Td (Ce document a sa propre signature, dans le fichier audit.html.page.sig déposé à côté de lui. Elle est calculée sur) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 205.06 Td (une empreinte du fichier — changez un seul caractère et l'empreinte change complètement —, si bien que si un seul) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 191.95 Td (caractère de ce document est modifié, la vérification échoue. Le PDF, quand il y en a un, a la sienne à côté de lui,) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 178.84 Td (de la même façon. Pour la vérifier : sablier verify audit.html.page.sig --declare=sablier.json) Tj ET
+BT 0 g /F2 10.0 Tf 56.00 149.73 Td (Déclaration de l'auditeur) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 131.93 Td (Aucune déclaration de l'auditeur n'a été fournie. Elle doit être rédigée, datée et signée avant que ce document soit) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 118.82 Td (produit devant un tiers.) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 6/6) Tj ET
+
+endstream
+endobj
+15 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+16 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+17 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+18 0 obj
+<< /Title (Rapport d'audit — BlackMesa Labs) /Producer (Sablier 0.13.2) /CreationDate (D:20261117085148) >>
+endobj
+xref
+0 19
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000147 00000 n 
+0000000302 00000 n 
+0000004919 00000 n 
+0000005074 00000 n 
+0000011390 00000 n 
+0000011545 00000 n 
+0000017670 00000 n 
+0000017826 00000 n 
+0000023611 00000 n 
+0000023768 00000 n 
+0000029398 00000 n 
+0000029555 00000 n 
+0000035472 00000 n 
+0000035570 00000 n 
+0000035673 00000 n 
+0000035769 00000 n 
+trailer
+<< /Size 19 /Root 1 0 R /Info 18 0 R >>
+startxref
+35893
+%%EOF

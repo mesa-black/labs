@@ -190,7 +190,7 @@ audit: $(PHP_DEPS) ## Produce the site's signed cryptographic inventory, in thre
 	@for lang in fr en es; do \
 		dir=assets/audit; [ "$$lang" = fr ] || dir=assets/audit/$$lang; \
 		mkdir -p "$$dir"; \
-		$(PHP) $(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" \
+		$(PHP) $(SABLIER) scan . --out="$$dir/report.html" --audit="$$dir/audit.html" --pdf="$$dir/report.pdf" \
 			--lang=$$lang --sign="$(SABLIER_KEY)" --timestamp=$(TSA) --anchor=$(ANCHOR) --quiet; \
 		test -s "$$dir/report.html.tsr" \
 			|| { echo "✗ no token for $$lang: the audit would claim a date nobody attests"; exit 1; }; \
