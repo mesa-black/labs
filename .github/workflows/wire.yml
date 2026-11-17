@@ -12,11 +12,11 @@ permissions:
 jobs:
   probe:
     name: Probe mesa.black
-    # Pinned, where every other job floats. The probe measures a *pair* — what
-    # this client and that server agree on — so a runner image that changes its
-    # OpenSSL changes the findings without anything on mesa.black moving, and the
-    # reference would drift under us. ubuntu-latest becomes Ubuntu 26 on 19
-    # October 2026, which is exactly that event.
+    # Kept on 24.04 while the other jobs run 26.04. The probe measures a *pair*
+    # — what this client and that server agree on — so a runner image that
+    # changes its OpenSSL changes the findings without anything on mesa.black
+    # moving, and the reference would drift under us. Moving this job to a newer
+    # image means capturing .sablier/wire.json again from that image.
     runs-on: ubuntu-24.04
     steps:
       -

@@ -18,7 +18,7 @@ permissions:
 jobs:
   build:
     name: Build the site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       -
         name: Checkout
@@ -66,7 +66,7 @@ jobs:
 
   cryptography:
     name: Cryptography in the source
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       -
         name: Checkout
@@ -128,7 +128,7 @@ jobs:
     name: Image
     needs: [build, dependencies, cryptography]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # The repository's default token is read-only; this job alone may write
     # packages. No personal token involved: the image is pushed by the
     # workflow's own GITHUB_TOKEN, which expires with the run.
@@ -195,7 +195,7 @@ jobs:
   deploy:
     name: Deploy via Argo CD
     needs: image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # Two pushes in a row must not race each other's commit. Queued, never
     # cancelled: a cancelled deploy would leave the older image running.
     concurrency:
