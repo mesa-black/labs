@@ -1,0 +1,35 @@
+# Are the three packages the site is built from still free of known
+# advisories? Called by CI on every push, and by the daily checks: a dependency
+# with no known advisory today is not a dependency with no known advisory in
+# March, and this site goes weeks without a commit.
+name: Dependencies
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: composer audit
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v7
+      -
+        name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+      -
+        # --locked reads composer.lock, so what is checked is what gets deployed
+        # rather than what a fresh resolution would pick today. Three packages,
+        # and the site's own published inventory names their versions — which is
+        # a claim about them being sound, and this is what checks it.
+        name: Advisories
+        run: |
+          composer validate --strict --no-check-publish
+          composer audit --locked --no-interaction
