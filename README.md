@@ -30,19 +30,25 @@ make serve       # build with drafts + http://localhost:8000
 | `make serve` | `drafts` + local server on port 8000 |
 | `make preview` | The site as of a given date, served locally: `make preview DATE=2026-10-08` |
 | `make clean` | Removes `public/` |
+| `make deps` | Checks `composer.lock` against the advisory database |
+| `make help` | Lists every target — also what plain `make` does |
 
 No PHP on the workstation is needed: without one, the Makefile runs the PHP the image is
 built with (the Dockerfile's `php` stage), in a Podman container built on first use. A local
 build and the published one then cannot disagree — they once did, on reading times,
 because two PHPs counted words differently.
 
+That PHP is **8.5**, in the image and in CI alike. `composer.json` still says `>=8.4`; only
+8.5 is built and tested.
+
 `make build` fails when no post is published: deliberately, so that an empty site cannot be
 deployed unnoticed.
 
-`make preview` exists because `deploy` rebuilds `public/` once per release date and
-finishes with today's — it silently replaces any preview of a future state, and with the
-deployed site's URLs. With no argument it shows the furthest scheduled date, so a preview
-carries everything queued, and it prints which date it is showing.
+`make preview` exists because any build rewrites `public/` for a single date, with the
+deployed site's URLs, and silently replaces a preview of a future state. (One version per
+release date is built by the image, in the Dockerfile, not here.) With no argument it shows
+the furthest scheduled date, so a preview carries everything queued, and it prints which
+date it is showing.
 
 ## Writing a post
 
@@ -150,12 +156,22 @@ reader never sees does not count.
 ## Structure
 
 ```
-bin/build.php     the generator, in full
-content/posts/    the posts, in markdown, one folder per language
-templates/        the Twig templates (base, list, post, Atom feed)
-assets/style.css  one stylesheet, with no build step
-assets/audit/     this site's own cryptographic inventory, signed — see below
-public/           the output — generated, never versioned
+bin/build.php         the generator, in full
+bin/cards.php         the sharing cards (PNG), drawn at build time
+bin/publish.php       drafts-list, publish, unpublish: rewrites the `draft` lines
+content/posts/        the posts, in markdown, one folder per language
+templates/            the Twig templates (base, list, post, Atom feed)
+assets/style.css      one stylesheet, with no build step
+assets/audit/         this site's own cryptographic inventory, signed — see below
+public/               the output — generated, never versioned
+Dockerfile            the image: every dated version of the site, served by Caddy
+container/Caddyfile   Caddy inside the image: :8080, plain HTTP, the site's headers
+container/labs-switch the sidecar that points at the version whose date has come
+.github/workflows/    ci.yml (every push), daily.yml (every morning), and the two
+                      reusable checks both call: dependencies.yml, wire.yml
+.sablier/             CI's references: baseline.json (source), wire.json (TLS)
+sablier.json          what this repository declares to Sablier, plus its .sig
+sablier.probe.txt     the last TLS negotiation `make audit` saw, kept for diffing
 ```
 
 `public/` is emptied on every build: a page whose slug changed cannot survive the next
@@ -180,6 +196,14 @@ holes.
 
 Light and dark themes through CSS tokens, including when the visitor lets their system
 decide. The dark one is warm too, to stay consistent with the cream.
+
+**Above 86rem the empty margin carries something**: on a post, its contents (three
+sections or more, sticky while the text scrolls); on a listing, each piece's date and
+reading time beside its title. No script, the text column does not move, and below that
+width nothing changes. Headings get ids, so every section has its own address.
+
+The footer links to the **post-quantum Observatory** (observatoire.mesa.black). It is
+French only, so in English and Spanish the link says so and carries `hreflang="fr"`.
 
 ## SEO and answer engines
 
@@ -233,7 +257,9 @@ refuses to build the image if new cryptography appears.
 
 Scanned with no declaration it returns nothing at all: a static generator encrypts nothing,
 signs nothing, hashes nothing. All of this site's cryptography is in its transport and in
-the ssh key that deploys it, and neither is a file here. So `sablier.json` declares what
+the keys that deliver it — CI's deploy key (`K3S_STACK_DEPLOY_KEY`, write access to
+k3s-stack and nothing else) and the run's own `GITHUB_TOKEN` for ghcr.io; the workstation
+deploys nothing — and none of them is a file here. So `sablier.json` declares what
 this repository is — almost everything in it is written to be served in the clear, and the
 confidentiality owed is zero, by construction rather than by neglect — and it declares the
 probe host, because the real cryptography is negotiated rather than written.
@@ -256,6 +282,26 @@ its own signature, so it cannot contain it. Tying the two together means replayi
 on the same state of this repository and comparing the digest — which this repository being
 public is what makes possible.
 
+## CI
+
+`ci.yml` runs on every push and pull request: **build** (the site builds, has pages and
+cards, and `--release-dates` prints dates only), **dependencies** (`composer audit
+--locked`), **cryptography in the source** (Sablier against `.sablier/baseline.json`) and
+**cryptography on the wire** (a TLS probe of mesa.black against `.sablier/wire.json`). On
+main only, and once the first three pass, **Image** builds and pushes to ghcr.io and
+**Deploy via Argo CD** commits the new tag and digest to k3s-stack. The probe is not a
+prerequisite: it measures the live server, which a commit here does not change.
+
+`daily.yml`, at 06:17 UTC, runs only dependencies and the TLS probe — the two things that
+change without a commit (a new advisory, a renewed certificate). Both are reusable
+workflows (`dependencies.yml`, `wire.yml`), written once and called from either file.
+
+Runners are pinned to `ubuntu-26.04`, except the probe, kept on `ubuntu-24.04`: it
+measures what that client and the server agree on, and its reference was captured from
+that image. Its client does not offer ML-KEM, so the probe cannot see whether mesa.black
+still does; `make audit` checks that half from a client that offers it (`wire.yml` says
+why). Actions are on their Node 24 majors.
+
 ## The server
 
 The site runs on mesa.black as a container in **k3s**, deployed by **Argo CD** from
@@ -263,8 +309,10 @@ k3s-stack, a private repository (`spoke/apps/labs`), which documents the
 whole chain. In short:
 
 ```
-push here ──► CI: build · dependencies · cryptography ──► image ghcr.io/mesa-black/labs:<sha>
-          └─► CI commits the new tag to k3s-stack ──► Argo CD ──► rolling update on mesa.black
+push here ──► CI: build · dependencies · cryptography (source) · TLS probe (not blocking)
+          └─► main only: Image ──► ghcr.io/mesa-black/labs:<sha>@sha256:<digest>
+          └─► Deploy via Argo CD: commits tag + digest to k3s-stack (spoke/apps/labs)
+          └─► Argo CD syncs ──► rolling update on mesa.black
 ```
 
 - `Dockerfile`: PHP builds **one complete version of the site per publication date still

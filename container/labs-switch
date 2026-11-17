@@ -1,15 +1,17 @@
 #!/bin/sh
 #
-# Points /run/site/current at the newest dated version whose date has come —
-# deploy/release.sh, for a container. Every version, future ones included, is in
-# the image under /srv/releases/YYYY-MM-DD/; this only moves a link.
+# Points /run/site/current at the newest dated version whose date has come. It
+# runs as a sidecar next to Caddy in the pod. Every version, future ones
+# included, is built into the image under /srv/releases/YYYY-MM-DD/; this only
+# moves a link, so a scheduled piece needs no build or deployment on its day.
 #
 #   labs-switch            check every minute, forever (a sidecar)
 #   labs-switch --once     set the link and exit
 #   LABS_TODAY=2026-10-20 labs-switch --once    rehearse a future day
 #
 # A piece dated D goes live on D at LABS_PUBLISH_HOUR (default 7) Paris time —
-# the morning, as the server's timer did, so that it is there when people read.
+# the morning, so that it is there when people read. This loop is what makes it
+# happen: nothing else wakes up at 07:00.
 #
 # The link lives in a volume shared with Caddy (an emptyDir in Kubernetes); it
 # points at a path that exists in both containers because they run one image.

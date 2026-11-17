@@ -2,8 +2,8 @@
 #
 # The blog as a container image: every dated version of the site, built once,
 # served by Caddy. Which version is live is decided at run time by
-# container/labs-switch (a sidecar in Kubernetes), exactly as the server's timer
-# does today with a symlink.
+# container/labs-switch, a sidecar in the pod that checks every minute and moves
+# a symlink: no rebuild, no redeploy, no push on the day a piece comes out.
 #
 #   podman build --build-arg SITE_DATE=$(TZ=Europe/Paris date -v-7H +%F) -t labs .
 #
@@ -29,7 +29,7 @@ RUN apt-get update \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # The publication calendar is the author's: dates are compared in Paris, as
-# release.sh does on the server.
+# labs-switch does in the pod and CI does when it picks SITE_DATE.
 RUN echo 'date.timezone = Europe/Paris' > /usr/local/etc/php/conf.d/timezone.ini
 
 # ------------------------------------------------------------------ build

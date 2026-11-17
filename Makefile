@@ -76,8 +76,8 @@ clean: ## Remove the generated site
 
 # --- publication -------------------------------------------------------------
 # Publishing is a push. The site is an image built by CI from what is in Git,
-# and Argo CD deploys it (github.com/mesa-black/k3s-stack): nothing here talks
-# to the server any more. A piece goes live on its `date` at 07:00 Paris — on
+# and Argo CD deploys it (the k3s-stack deployment repository, private):
+# nothing here talks to the server any more. A piece goes live on its `date` at 07:00 Paris — on
 # the day of the push if that date has come, on its own later otherwise: every
 # dated version is in the image, and a small process in the pod switches.
 #
@@ -220,8 +220,8 @@ audit-if-changed:
 # --- serveur -----------------------------------------------------------------
 # Nothing here any more: deploying is pushing (see publication), and the server
 # — the machine, k3s, the ingress (Traefik) and the certificates (cert-manager)
-# — is described in github.com/mesa-black/k3s-stack. Until 2026-10-14 this
-# section held `make provision` (deploy/provision.sh: host Caddy and the
+# — is described in the k3s-stack deployment repository (private). Until
+# 2026-10-14 this section held `make provision` (deploy/provision.sh: host Caddy and the
 # machine's base), retired when Traefik took over.
 
 # The dependencies are three Composer packages, and the site's own inventory

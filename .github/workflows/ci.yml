@@ -49,10 +49,10 @@ jobs:
           test "$cards" -gt 10
           test -s public/sitemap.xml
       -
-        # `deploy` turns this list into one directory per publication date on the
-        # server. A single stray line on stdout — a PHP warning, once — became
-        # nine release directories, each holding a full copy of the site. The
-        # list must contain dates and nothing else.
+        # The image build (Dockerfile) turns this list into one directory per
+        # publication date. A single stray line on stdout — a PHP warning, once —
+        # became nine release directories, each holding a full copy of the site.
+        # The list must contain dates and nothing else.
         name: The release dates are dates
         run: |
           php bin/build.php --release-dates | tee /tmp/dates
