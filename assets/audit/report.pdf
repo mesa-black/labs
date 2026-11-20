@@ -229,7 +229,7 @@ BT 0 g /F1 9.5 Tf 56.00 736.56 Td (Le client officiel \(pip install opentimestam
 BT 0 g /F1 9.5 Tf 56.00 723.45 Td (verify le prend auprès de deux explorateurs publics qui doivent concorder, et vérifie lui-même la preuve de travail) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 710.34 Td (de l'en-tête plutôt que de les croire ; sur une machine sans réseau, l'en-tête se passe à la main avec) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 697.23 Td (--block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 679.12 Td (Cette date est antérieure à celle du rapport \(20/11/2026 02:06 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 679.12 Td (Cette date est antérieure à celle du rapport \(20/11/2026 03:24 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 666.01 Td (n'ont pas bougé depuis, donc la signature et le jeton d'origine sont tous deux conservés. Seul le rendu a changé.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 652.90 Td (C'est l'attestation la plus ancienne qui a une valeur — en resignant et en réattestant à chaque passage, on détruirait) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 639.79 Td (l'antériorité qu'elle établit, pour n'y gagner aucune information nouvelle.) Tj ET
@@ -258,7 +258,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 14 0 obj
-<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.15.0) /CreationDate (D:20261120030632) >>
+<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120042434) >>
 endobj
 xref
 0 15
