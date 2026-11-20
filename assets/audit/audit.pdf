@@ -15,7 +15,7 @@ BT 0 g /F2 15.0 Tf 56.00 769.89 Td (Rapport d'audit — BlackMesa Labs) Tj ET
 0.85 G 0.4 w 56.00 745.19 m 539.28 745.19 l S
 BT 0 g /F1 9.5 Tf 56.00 739.19 Td (Rapport d'audit) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 710.08 Td (BlackMesa Labs) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposition cryptographique et durées de confidentialité · 20/11/2026 03:24 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposition cryptographique et durées de confidentialité · 20/11/2026 09:46 UTC) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 661.10 Td (Sommaire) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 641.23 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 641.23 Td (Objet et périmètre) Tj ET
@@ -51,9 +51,9 @@ BT 0 g /F1 9.5 Tf 206.00 388.82 Td ([à compléter]) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 373.71 Td (Périmètre analysé) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 373.71 Td (.) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 358.60 Td (Date de l'analyse) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 358.60 Td (20/11/2026 03:24 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 358.60 Td (20/11/2026 09:46 UTC) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 343.49 Td (Volume examiné) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 343.49 Td (368 fichiers lus) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 343.49 Td (401 fichiers lus) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 328.38 Td (Outil) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 328.38 Td (Sablier 0.16.0) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 313.27 Td (Commande exécutée) Tj ET
@@ -129,9 +129,9 @@ BT 0 g /F1 9.5 Tf 56.00 287.92 Td (pour que vous puissiez juger la portée de la 
 BT 0 g /F1 9.5 Tf 56.00 269.81 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 269.81 Td (6 fichier\(s\) PHP lu\(s\) : aucun appel cryptographique.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 253.70 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 253.70 Td (368 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 253.70 Td (401 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 237.59 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 237.59 Td (106 fichier\(s\) binaire\(s\) examiné\(s\) : aucun ne porte de bloc de clé, d'octets après la fin de l'image, ni) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 237.59 Td (112 fichier\(s\) binaire\(s\) examiné\(s\) : aucun ne porte de bloc de clé, d'octets après la fin de l'image, ni) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 224.48 Td (d'extension qui mente sur son contenu.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 208.37 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 208.37 Td (2 fichier\(s\) de dépendances lu\(s\) : aucune bibliothèque cryptographique du catalogue.) Tj ET
@@ -432,7 +432,7 @@ BT 0 g /F1 9.5 Tf 56.00 395.49 Td (Le client officiel \(pip install opentimestam
 BT 0 g /F1 9.5 Tf 56.00 382.38 Td (verify le prend auprès de deux explorateurs publics qui doivent concorder, et vérifie lui-même la preuve de travail) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 369.27 Td (de l'en-tête plutôt que de les croire ; sur une machine sans réseau, l'en-tête se passe à la main avec) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 356.16 Td (--block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 338.05 Td (Cette date est antérieure à celle du rapport \(20/11/2026 03:24 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 338.05 Td (Cette date est antérieure à celle du rapport \(20/11/2026 09:46 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 324.94 Td (n'ont pas bougé depuis, donc la signature et le jeton d'origine sont tous deux conservés. Seul le rendu a changé.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 311.83 Td (C'est l'attestation la plus ancienne qui a une valeur — en resignant et en réattestant à chaque passage, on détruirait) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 298.72 Td (l'antériorité qu'elle établit, pour n'y gagner aucune information nouvelle.) Tj ET
@@ -461,7 +461,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 18 0 obj
-<< /Title (Rapport d'audit — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120042434) >>
+<< /Title (Rapport d'audit — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120104624) >>
 endobj
 xref
 0 19

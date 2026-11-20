@@ -15,7 +15,7 @@ BT 0 g /F2 15.0 Tf 56.00 769.89 Td (Informe de auditoría — BlackMesa Labs) Tj ET
 0.85 G 0.4 w 56.00 745.19 m 539.28 745.19 l S
 BT 0 g /F1 9.5 Tf 56.00 739.19 Td (Informe de auditoría) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 710.08 Td (BlackMesa Labs) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposición criptográfica y duraciones de confidencialidad · 20/11/2026 03:24 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposición criptográfica y duraciones de confidencialidad · 20/11/2026 09:46 UTC) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 661.10 Td (Índice) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 641.23 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 641.23 Td (Objeto y alcance) Tj ET
@@ -51,9 +51,9 @@ BT 0 g /F1 9.5 Tf 206.00 388.82 Td ([por completar]) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 373.71 Td (Alcance analizado) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 373.71 Td (.) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 358.60 Td (Fecha del análisis) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 358.60 Td (20/11/2026 03:24 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 358.60 Td (20/11/2026 09:46 UTC) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 343.49 Td (Volumen examinado) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 343.49 Td (368 archivos leídos) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 343.49 Td (401 archivos leídos) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 328.38 Td (Herramienta) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 328.38 Td (Sablier 0.16.0) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 313.27 Td (Comando ejecutado) Tj ET
@@ -129,10 +129,10 @@ BT 0 g /F1 9.5 Tf 56.00 287.92 Td (ahí para que juzgue el alcance de la frase en
 BT 0 g /F1 9.5 Tf 56.00 269.81 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 269.81 Td (6 archivo\(s\) PHP leído\(s\): ninguna llamada criptográfica.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 253.70 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 253.70 Td (368 archivo\(s\) leído\(s\): ninguna clave privada, ningún certificado, ningún almacén de claves en el árbol) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 253.70 Td (401 archivo\(s\) leído\(s\): ninguna clave privada, ningún certificado, ningún almacén de claves en el árbol) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 240.59 Td (versionado.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 224.48 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 224.48 Td (106 archivo\(s\) binario\(s\) examinado\(s\): ninguno lleva un bloque de clave, bytes tras el final de la imagen, ni) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 224.48 Td (112 archivo\(s\) binario\(s\) examinado\(s\): ninguno lleva un bloque de clave, bytes tras el final de la imagen, ni) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 211.37 Td (una extensión que mienta sobre su contenido.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 195.26 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 195.26 Td (2 archivo\(s\) de dependencias leído\(s\): ninguna biblioteca criptográfica del catálogo.) Tj ET
@@ -434,7 +434,7 @@ BT 0 g /F1 9.5 Tf 56.00 426.71 Td (8ecb829ccc278ef7ab3138f56e07ee13319cbb72ce1da
 BT 0 g /F1 9.5 Tf 56.00 408.60 Td (El cliente oficial \(pip install opentimestamps-client\) toma la cabecera del bloque de un nodo Bitcoin propio. sablier) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 395.49 Td (verify la toma de dos exploradores públicos que deben coincidir, y comprueba él mismo la prueba de trabajo de la) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 382.38 Td (cabecera en lugar de creerles; en una máquina sin red, la cabecera se pasa a mano con --block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 364.27 Td (Esta fecha es anterior a la del informe \(20/11/2026 03:24 UTC\), y no es una incoherencia: los hallazgos no han) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 364.27 Td (Esta fecha es anterior a la del informe \(20/11/2026 09:46 UTC\), y no es una incoherencia: los hallazgos no han) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 351.16 Td (cambiado desde entonces, así que se conservan tanto la firma como el testigo originales. Solo cambió la) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 338.05 Td (representación. La atestación más antigua es la que tiene valor: volver a firmar y a atestiguar en cada ejecución) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 324.94 Td (destruiría la anterioridad que establece, sin ganar ninguna información nueva.) Tj ET
@@ -463,7 +463,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 18 0 obj
-<< /Title (Informe de auditoría — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120042456) >>
+<< /Title (Informe de auditoría — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120104641) >>
 endobj
 xref
 0 19

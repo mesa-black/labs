@@ -109,10 +109,10 @@ BT 0 g /F1 9.5 Tf 56.00 496.04 Td (ahí para que juzgue el alcance de la frase en
 BT 0 g /F1 9.5 Tf 56.00 477.93 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 477.93 Td (6 archivo\(s\) PHP leído\(s\): ninguna llamada criptográfica.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 461.82 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 461.82 Td (368 archivo\(s\) leído\(s\): ninguna clave privada, ningún certificado, ningún almacén de claves en el árbol) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 461.82 Td (401 archivo\(s\) leído\(s\): ninguna clave privada, ningún certificado, ningún almacén de claves en el árbol) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 448.71 Td (versionado.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 432.60 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 432.60 Td (106 archivo\(s\) binario\(s\) examinado\(s\): ninguno lleva un bloque de clave, bytes tras el final de la imagen, ni) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 432.60 Td (112 archivo\(s\) binario\(s\) examinado\(s\): ninguno lleva un bloque de clave, bytes tras el final de la imagen, ni) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 419.49 Td (una extensión que mienta sobre su contenido.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 403.38 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 403.38 Td (2 archivo\(s\) de dependencias leído\(s\): ninguna biblioteca criptográfica del catálogo.) Tj ET
@@ -231,7 +231,7 @@ BT 0 g /F1 9.5 Tf 56.00 715.34 Td (Se verifica sin ninguna autoridad, con la pru
 BT 0 g /F1 9.5 Tf 56.00 697.23 Td (El cliente oficial \(pip install opentimestamps-client\) toma la cabecera del bloque de un nodo Bitcoin propio. sablier) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 684.12 Td (verify la toma de dos exploradores públicos que deben coincidir, y comprueba él mismo la prueba de trabajo de la) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 671.01 Td (cabecera en lugar de creerles; en una máquina sin red, la cabecera se pasa a mano con --block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 652.90 Td (Esta fecha es anterior a la del informe \(20/11/2026 03:24 UTC\), y no es una incoherencia: los hallazgos no han) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 652.90 Td (Esta fecha es anterior a la del informe \(20/11/2026 09:46 UTC\), y no es una incoherencia: los hallazgos no han) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 639.79 Td (cambiado desde entonces, así que se conservan tanto la firma como el testigo originales. Solo cambió la) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 626.68 Td (representación. La atestación más antigua es la que tiene valor: volver a firmar y a atestiguar en cada ejecución) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 613.57 Td (destruiría la anterioridad que establece, sin ganar ninguna información nueva.) Tj ET
@@ -260,7 +260,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 14 0 obj
-<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120042456) >>
+<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120104641) >>
 endobj
 xref
 0 15
