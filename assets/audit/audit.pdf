@@ -15,7 +15,7 @@ BT 0 g /F2 15.0 Tf 56.00 769.89 Td (Rapport d'audit — BlackMesa Labs) Tj ET
 0.85 G 0.4 w 56.00 745.19 m 539.28 745.19 l S
 BT 0 g /F1 9.5 Tf 56.00 739.19 Td (Rapport d'audit) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 710.08 Td (BlackMesa Labs) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposition cryptographique et durées de confidentialité · 17/11/2026 07:51 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 690.21 Td (Exposition cryptographique et durées de confidentialité · 20/11/2026 02:06 UTC) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 661.10 Td (Sommaire) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 641.23 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 641.23 Td (Objet et périmètre) Tj ET
@@ -51,11 +51,11 @@ BT 0 g /F1 9.5 Tf 206.00 388.82 Td ([à compléter]) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 373.71 Td (Périmètre analysé) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 373.71 Td (.) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 358.60 Td (Date de l'analyse) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 358.60 Td (17/11/2026 07:51 UTC) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 358.60 Td (20/11/2026 02:06 UTC) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 343.49 Td (Volume examiné) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 343.49 Td (356 fichiers lus) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 343.49 Td (368 fichiers lus) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 328.38 Td (Outil) Tj ET
-BT 0 g /F1 9.5 Tf 206.00 328.38 Td (Sablier 0.13.2) Tj ET
+BT 0 g /F1 9.5 Tf 206.00 328.38 Td (Sablier 0.15.0) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 313.27 Td (Commande exécutée) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 313.27 Td (/Users/jerome/Development/BlackMesa/sablier/bin/sablier scan .) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 300.16 Td (--out=assets/audit/report.html --audit=assets/audit/audit.html) Tj ET
@@ -73,7 +73,7 @@ BT 0 g /F1 9.5 Tf 56.00 122.19 Td (Sonde réseau : un handshake TLS ordinaire, id
 BT 0 g /F1 9.5 Tf 56.00 109.08 Td (ce qui est réellement négocié, que le dépôt peut contredire dans les deux sens.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 90.97 Td (L'inventaire est ensuite croisé avec la durée pendant laquelle chaque catégorie de donnée doit rester) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 77.86 Td (confidentielle. Le raisonnement est celui de l'inégalité de Mosca \(2015\), simplifié :) Tj ET
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 1/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 1/6) Tj ET
 
 endstream
 endobj
@@ -129,7 +129,7 @@ BT 0 g /F1 9.5 Tf 56.00 287.92 Td (pour que vous puissiez juger la portée de la 
 BT 0 g /F1 9.5 Tf 56.00 269.81 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 269.81 Td (6 fichier\(s\) PHP lu\(s\) : aucun appel cryptographique.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 253.70 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 253.70 Td (356 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 253.70 Td (368 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 237.59 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 237.59 Td (106 fichier\(s\) binaire\(s\) examiné\(s\) : aucun ne porte de bloc de clé, d'octets après la fin de l'image, ni) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 224.48 Td (d'extension qui mente sur son contenu.) Tj ET
@@ -144,7 +144,7 @@ BT 0 g /F1 9.5 Tf 56.00 129.17 Td (La date de péremption retenue est une échéanc
 BT 0 g /F2 8.5 Tf 56.00 105.06 Td (FIPS 203 / 204 / 205 \(2024\)) Tj ET
 BT 0 g /F2 8.5 Tf 297.64 105.06 Td (ML-KEM, ML-DSA et SLH-DSA normalisés \(août 2024\).) Tj ET
 0.85 G 0.4 w 56.00 90.33 m 539.28 90.33 l S
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 2/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 2/6) Tj ET
 
 endstream
 endobj
@@ -220,7 +220,7 @@ BT 0 g /F1 9.5 Tf 56.00 153.85 Td (Échéance retenue pour ce rapport : 2035. Éché
 BT 0 g /F2 11.5 Tf 56.00 124.74 Td (5. Constatations de fait) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 104.87 Td (Chaque ligne est une observation directe, numérotée pour pouvoir être citée. Elle n'emporte aucun jugement :) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 91.76 Td (l'avis figure en section 7.) Tj ET
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 3/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 3/6) Tj ET
 
 endstream
 endobj
@@ -318,7 +318,7 @@ BT 0 g /F1 9.5 Tf 56.00 147.41 Td (Durée appliquée aux domaines non déclarés : 0
 BT 0 g /F1 9.5 Tf 56.00 129.30 Td (Déclaration endossée le 17/11/2026 04:49, empreinte des clefs 2ED4 E986 E4B7 4AAB 443F D356 19B5 10A7.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 116.19 Td (La signature couvre les durées, les chemins, le régime et les auteurs ci-dessus ; elle survit à une remise en forme) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 103.08 Td (du fichier et pas à une correction de son contenu.) Tj ET
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 4/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 4/6) Tj ET
 
 endstream
 endobj
@@ -388,7 +388,7 @@ BT 0 g /F1 9.5 Tf 206.00 98.29 Td (calculateur quantique en réduit la marge sans
 BT 0 g /F1 9.5 Tf 206.00 85.18 Td (l'asymétrique : RSA, courbes elliptiques, échange de clés.) Tj ET
 BT 0 g /F2 9.5 Tf 56.00 70.07 Td (Hybridation) Tj ET
 BT 0 g /F1 9.5 Tf 206.00 70.07 Td (Combiner un algorithme classique et un algorithme post-quantique, de sorte) Tj ET
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 5/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 5/6) Tj ET
 
 endstream
 endobj
@@ -432,7 +432,7 @@ BT 0 g /F1 9.5 Tf 56.00 395.49 Td (Le client officiel \(pip install opentimestam
 BT 0 g /F1 9.5 Tf 56.00 382.38 Td (verify le prend auprès de deux explorateurs publics qui doivent concorder, et vérifie lui-même la preuve de travail) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 369.27 Td (de l'en-tête plutôt que de les croire ; sur une machine sans réseau, l'en-tête se passe à la main avec) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 356.16 Td (--block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 338.05 Td (Cette date est antérieure à celle du rapport \(17/11/2026 07:51 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 338.05 Td (Cette date est antérieure à celle du rapport \(20/11/2026 02:06 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 324.94 Td (n'ont pas bougé depuis, donc la signature et le jeton d'origine sont tous deux conservés. Seul le rendu a changé.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 311.83 Td (C'est l'attestation la plus ancienne qui a une valeur — en resignant et en réattestant à chaque passage, on détruirait) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 298.72 Td (l'antériorité qu'elle établit, pour n'y gagner aucune information nouvelle.) Tj ET
@@ -447,7 +447,7 @@ BT 0 g /F1 9.5 Tf 56.00 178.84 Td (de la même façon. Pour la vérifier : sablier 
 BT 0 g /F2 10.0 Tf 56.00 149.73 Td (Déclaration de l'auditeur) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 131.93 Td (Aucune déclaration de l'auditeur n'a été fournie. Elle doit être rédigée, datée et signée avant que ce document soit) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 118.82 Td (produit devant un tiers.) Tj ET
-BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.13.2 · 6/6) Tj ET
+BT 0.45 g /F1 7.5 Tf 56.00 38.00 Td (Rapport d'audit · BlackMesa Labs · Sablier 0.15.0 · 6/6) Tj ET
 
 endstream
 endobj
@@ -461,7 +461,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 18 0 obj
-<< /Title (Rapport d'audit — BlackMesa Labs) /Producer (Sablier 0.13.2) /CreationDate (D:20261117085148) >>
+<< /Title (Rapport d'audit — BlackMesa Labs) /Producer (Sablier 0.15.0) /CreationDate (D:20261120030632) >>
 endobj
 xref
 0 19
