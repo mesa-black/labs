@@ -57,7 +57,7 @@ BT 0 g /F2 10.0 Tf 56.00 294.91 Td (ECDSA non déclaré) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 277.11 Td (Signature : pas de récolte possible. À migrer avant 2030 pour la conformité, sans urgence de confidentialité.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 264.00 Td (Certificat serveur. Sa durée de vie est courte : le remplacer par une signature post-quantique se fera au) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 250.89 Td (renouvellement, sans migration de données.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 232.78 Td (Accepter ce constat : sablier accept 4d2a0227 --reason="…" --until=2027-05-17) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 232.78 Td (Accepter ce constat : sablier accept 4d2a0227 --reason="…" --until=2027-05-20) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 214.67 Td (L'outil a tort ? Ouvrir un signalement pré-rempli) Tj ET
 BT 0 g /F2 11.5 Tf 56.00 185.56 Td (CONFORME 1) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 165.69 Td (-) Tj ET
@@ -109,7 +109,7 @@ BT 0 g /F1 9.5 Tf 56.00 496.04 Td (pour que vous puissiez juger la portée de la 
 BT 0 g /F1 9.5 Tf 56.00 477.93 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 477.93 Td (6 fichier\(s\) PHP lu\(s\) : aucun appel cryptographique.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 461.82 Td (-) Tj ET
-BT 0 g /F1 9.5 Tf 70.00 461.82 Td (356 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
+BT 0 g /F1 9.5 Tf 70.00 461.82 Td (368 fichier\(s\) lu\(s\) : aucune clé privée, aucun certificat, aucun magasin de clés dans l'arborescence versionnée.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 445.71 Td (-) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 445.71 Td (106 fichier\(s\) binaire\(s\) examiné\(s\) : aucun ne porte de bloc de clé, d'octets après la fin de l'image, ni) Tj ET
 BT 0 g /F1 9.5 Tf 70.00 432.60 Td (d'extension qui mente sur son contenu.) Tj ET
@@ -165,7 +165,7 @@ BT 0 g /F2 11.5 Tf 56.00 725.56 Td (Faux positif ?) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 705.69 Td (Deux choses s'appellent « faux positif », et elles ne vont pas au même endroit.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 687.58 Td (1. L'outil a raison, mais ce constat est accepté ici. C'est une décision de projet : ajoutez ce bloc à votre déclaration,) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 674.47 Td (elle est versionnée, donc la relecture se fait en revue de code. La raison et la date d'expiration sont obligatoires.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 656.36 Td (En ligne de commande : sablier accept <empreinte> --reason="…" --until=2027-05-17) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 656.36 Td (En ligne de commande : sablier accept <empreinte> --reason="…" --until=2027-05-20) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 638.25 Td (2. L'outil a tort. C'est une règle à corriger, et sa place est dans le dépôt de Sablier : github.com/mesa-black/sablier) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 620.14 Td (L'empreinte imprimée à côté de chaque constat le désigne, et c'est elle qu'on cite dans les deux cas. Elle est) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 607.03 Td (calculée sur la preuve, pas sur le numéro de ligne : elle survit à un déplacement du code, et change le jour où la) Tj ET
@@ -229,7 +229,7 @@ BT 0 g /F1 9.5 Tf 56.00 736.56 Td (Le client officiel \(pip install opentimestam
 BT 0 g /F1 9.5 Tf 56.00 723.45 Td (verify le prend auprès de deux explorateurs publics qui doivent concorder, et vérifie lui-même la preuve de travail) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 710.34 Td (de l'en-tête plutôt que de les croire ; sur une machine sans réseau, l'en-tête se passe à la main avec) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 697.23 Td (--block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 679.12 Td (Cette date est antérieure à celle du rapport \(17/11/2026 07:51 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 679.12 Td (Cette date est antérieure à celle du rapport \(20/11/2026 02:06 UTC\), et ce n'est pas une incohérence : les constats) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 666.01 Td (n'ont pas bougé depuis, donc la signature et le jeton d'origine sont tous deux conservés. Seul le rendu a changé.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 652.90 Td (C'est l'attestation la plus ancienne qui a une valeur — en resignant et en réattestant à chaque passage, on détruirait) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 639.79 Td (l'antériorité qu'elle établit, pour n'y gagner aucune information nouvelle.) Tj ET
@@ -258,7 +258,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 14 0 obj
-<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.13.2) /CreationDate (D:20261117085148) >>
+<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.15.0) /CreationDate (D:20261120030632) >>
 endobj
 xref
 0 15
