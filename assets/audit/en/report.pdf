@@ -226,7 +226,7 @@ BT 0 g /F1 9.5 Tf 56.00 785.89 Td (Checked without any authority, with the proof
 BT 0 g /F1 9.5 Tf 56.00 767.78 Td (The official client \(pip install opentimestamps-client\) takes the block header from a Bitcoin node of your own.) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 754.67 Td (sablier verify takes it from two public explorers that must agree, and checks the header's proof of work itself rather) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 741.56 Td (than believing them; on a machine with no network, the header is passed by hand with --block-header.) Tj ET
-BT 0 g /F1 9.5 Tf 56.00 723.45 Td (This date is earlier than the report's \(20/11/2026 02:06 UTC\), and that is not an inconsistency: the findings have) Tj ET
+BT 0 g /F1 9.5 Tf 56.00 723.45 Td (This date is earlier than the report's \(20/11/2026 03:24 UTC\), and that is not an inconsistency: the findings have) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 710.34 Td (not moved since, so the original signature and the original token are both kept. Only the rendering changed. The) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 697.23 Td (earliest attestation is the one that carries weight — re-signing and re-attesting on every run would destroy the) Tj ET
 BT 0 g /F1 9.5 Tf 56.00 684.12 Td (antecedence it establishes, for no new information at all.) Tj ET
@@ -254,7 +254,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
 endobj
 14 0 obj
-<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.15.0) /CreationDate (D:20261120030640) >>
+<< /Title (Sablier — BlackMesa Labs) /Producer (Sablier 0.16.0) /CreationDate (D:20261120042443) >>
 endobj
 xref
 0 15
