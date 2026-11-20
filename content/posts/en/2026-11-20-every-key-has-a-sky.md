@@ -8,6 +8,8 @@ slug: every-key-has-a-sky
 
 It all started with one sentence: *what if we created a new model of cryptography, like RSA, but based on constellations? It will take light-years before a constellation disappears from our sight.*
 
+It is a dreamer's idea, and we stand by that. People have found their way by the stars forever: sailors to hold a course, children to find the Great Bear again. Wanting to entrust to that sky the most fragile thing we have, our secrets, is not absurd. It is the kind of idea you have looking up, not reading a standard, and projects that start that way are not the worst ones.
+
 The image is a fine one. It does not make an encryption system, and it is better to say why before telling what we built instead.
 
 ## Why stars encrypt nothing

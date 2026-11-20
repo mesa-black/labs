@@ -8,6 +8,8 @@ slug: cada-clave-tiene-su-cielo
 
 Todo empezó con una frase: *¿y si creáramos un nuevo modelo de criptografía, como RSA, pero basado en las constelaciones? Harán falta años luz antes de que una constelación desaparezca de nuestra vista.*
 
+Es una idea de soñador, y la defendemos. Nos orientamos por las estrellas desde siempre: los marineros para mantener un rumbo, los niños para volver a encontrar la Osa Mayor. Querer confiar a ese cielo lo más frágil que tenemos, nuestros secretos, no tiene nada de absurdo. Es el tipo de idea que se tiene levantando la vista, no leyendo una norma, y los proyectos que empiezan así no son los peores.
+
 La imagen es bonita. No hace un sistema de cifrado, y más vale decir por qué antes de contar lo que construimos en su lugar.
 
 ## Por qué las estrellas no cifran nada

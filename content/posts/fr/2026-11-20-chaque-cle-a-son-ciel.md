@@ -8,6 +8,8 @@ slug: chaque-cle-a-son-ciel
 
 Tout est parti d'une phrase : *et si on créait un nouveau modèle de cryptographie, comme RSA, mais fondé sur les constellations ? Il faudra des années-lumière avant qu'une constellation disparaisse à nos yeux.*
 
+C'est une idée de rêveur, et nous y tenons. On se repère aux étoiles depuis toujours : les marins pour tenir un cap, les enfants pour retrouver la Grande Ourse. Qu'on veuille confier à ce ciel-là ce que nous avons de plus fragile, nos secrets, n'a rien d'absurde. C'est le genre d'idée qu'on a en levant les yeux, pas en lisant une norme, et les projets qui commencent ainsi ne sont pas les plus mauvais.
+
 L'image est belle. Elle ne fait pas un système de chiffrement, et il vaut mieux dire pourquoi avant de raconter ce que nous avons construit à la place.
 
 ## Pourquoi les étoiles ne chiffrent rien
