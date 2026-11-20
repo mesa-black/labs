@@ -31,7 +31,7 @@ jobs:
           coverage: none
       -
         name: Get Sablier
-        run: git clone --depth 1 --branch v0.13.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
+        run: git clone --depth 1 --branch v0.16.0 https://github.com/mesa-black/sablier.git "$RUNNER_TEMP/sablier"
       -
         # Its own reference, separate from the source one: these findings come
         # from a handshake rather than from a file, so mixing them into the source
