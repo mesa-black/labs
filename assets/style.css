@@ -12,11 +12,12 @@
  * turns out to be the point: a heading that does not shout sits better on a
  * cream ground than a bold one.
  *
- * Colour carries meaning: teal is the accent, amber marks what went wrong or is
- * unfinished. Nothing is coloured for decoration, with one exception that is
- * a signature rather than a decoration: the orange of a hazard suit, on the
- * crowbar beside the name, the stars over the mesa, the date of a piece and
- * a title under the pointer, and nowhere else.
+ * Colour carries meaning, and there is one: the orange of a hazard suit, a
+ * nod to the facility the house is named after. It is the accent — links, the
+ * wash under bold text, the date of a piece, a title under the pointer, the
+ * crowbar beside the name and the stars over the mesa. Amber, close to it but
+ * darker and duller, still marks what went wrong or is unfinished. Nothing
+ * else is coloured.
  */
 
 /*
@@ -51,7 +52,7 @@
     --surface: #f5f1e9;
     --ink:     #14181a;
     --muted:   #6b6558;
-    --accent:  #0d6b63;
+    --accent:  #b24c00;
     --warn:    #9c5510;
     --hazard:  #d9620a;   /* the crowbar, the stars of the mesa, a title under the pointer */
     --hazard-ink: #b24c00; /* the same orange, darkened to be read at the size of a date */
@@ -62,7 +63,7 @@
        never lighten the ground under already-light text — the band has to stay
        darker than the text, or the contrast collapses exactly where the
        emphasis was wanted. */
-    --mark:    rgba(13, 107, 99, .14);
+    --mark:    rgba(217, 98, 10, .16);
 
     --serif:   "Instrument Serif", "Iowan Old Style", Georgia, serif;
     --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -78,13 +79,13 @@
         --surface: #1d1a14;
         --ink:     #ece7dc;
         --muted:   #9d9687;
-        --accent:  #56b9ac;
+        --accent:  #f08a2e;
         --warn:    #dd9750;
         --hazard:  #f08a2e;
         --hazard-ink: #f08a2e;
         --rule:    #2e2a22;
         --chip:    #241f18;
-        --mark:    rgba(86, 185, 172, .22);
+        --mark:    rgba(240, 138, 46, .24);
     }
 }
 
@@ -93,13 +94,13 @@
     --surface: #1d1a14;
     --ink:     #ece7dc;
     --muted:   #9d9687;
-    --accent:  #56b9ac;
+    --accent:  #f08a2e;
     --warn:    #dd9750;
     --hazard:  #f08a2e;
     --hazard-ink: #f08a2e;
     --rule:    #2e2a22;
     --chip:    #241f18;
-    --mark:    rgba(86, 185, 172, .22);
+    --mark:    rgba(240, 138, 46, .24);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -223,7 +224,7 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     text-decoration: none;
 }
 /* A title under the pointer turns orange, like the crowbar: it does not
-   compete with the teal, which stays the colour of the links in the text. */
+   belongs with the links in the text, which are the same orange, darker. */
 .post-link:hover .post-title,
 .post-link:focus-visible .post-title { color: var(--hazard); }
 
