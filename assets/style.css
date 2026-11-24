@@ -13,7 +13,10 @@
  * cream ground than a bold one.
  *
  * Colour carries meaning: teal is the accent, amber marks what went wrong or is
- * unfinished. Nothing is coloured for decoration.
+ * unfinished. Nothing is coloured for decoration, with one exception that is
+ * a signature rather than a decoration: the orange of a hazard suit, on the
+ * crowbar beside the name, the stars over the mesa, the date of a piece and
+ * a title under the pointer, and nowhere else.
  */
 
 /*
@@ -49,8 +52,9 @@
     --ink:     #14181a;
     --muted:   #6b6558;
     --accent:  #0d6b63;
-    --blue:    #1c3f8c;   /* survol des titres, uniquement */
     --warn:    #9c5510;
+    --hazard:  #d9620a;   /* the crowbar, the stars of the mesa, a title under the pointer */
+    --hazard-ink: #b24c00; /* the same orange, darkened to be read at the size of a date */
     --rule:    #e2ddd1;
     --chip:    #efe9dd;
     /* Highlighting of bold text: a wash laid under the line. On the light
@@ -75,8 +79,9 @@
         --ink:     #ece7dc;
         --muted:   #9d9687;
         --accent:  #56b9ac;
-        --blue:    #8aa8f2;
         --warn:    #dd9750;
+        --hazard:  #f08a2e;
+        --hazard-ink: #f08a2e;
         --rule:    #2e2a22;
         --chip:    #241f18;
         --mark:    rgba(86, 185, 172, .22);
@@ -89,8 +94,9 @@
     --ink:     #ece7dc;
     --muted:   #9d9687;
     --accent:  #56b9ac;
-    --blue:    #8aa8f2;
     --warn:    #dd9750;
+    --hazard:  #f08a2e;
+    --hazard-ink: #f08a2e;
     --rule:    #2e2a22;
     --chip:    #241f18;
     --mark:    rgba(86, 185, 172, .22);
@@ -164,6 +170,14 @@ a { color: inherit; }
     text-decoration: none;
 }
 
+/* The crowbar: a sign beside the name, the one orange thing in the bar. */
+.crowbar {
+    width: 2.1em;
+    height: .73em;
+    margin-right: .5em;
+    color: var(--hazard);
+}
+
 .feed {
     font-family: var(--mono);
     font-size: .72rem;
@@ -208,10 +222,10 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     padding-block: 1.7rem;
     text-decoration: none;
 }
-/* Le survol d'un titre est la seule chose qui passe au bleu : il ne concurrence
-   donc pas le sarcelle, qui reste la couleur des liens de texte. */
+/* A title under the pointer turns orange, like the crowbar: it does not
+   compete with the teal, which stays the colour of the links in the text. */
 .post-link:hover .post-title,
-.post-link:focus-visible .post-title { color: var(--blue); }
+.post-link:focus-visible .post-title { color: var(--hazard); }
 
 .post-meta {
     display: flex;
@@ -226,6 +240,8 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     text-transform: uppercase;
     color: var(--muted);
 }
+/* The date of a piece, in the orange of the house. */
+.post-meta time { color: var(--hazard-ink); }
 
 .draft {
     color: var(--warn);
@@ -270,7 +286,7 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
         text-align: right;
     }
     .post-link .post-meta > [aria-hidden] { display: none; }
-    .post-link .post-meta time { color: var(--ink); }
+    .post-link .post-meta time { color: var(--hazard-ink); }
 }
 
 /* ---------------------------------------------------------------- article */
@@ -617,6 +633,19 @@ main.wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
     line-height: 1.7;
     color: var(--muted);
 }
+/* The mesa: a line drawing set on the rule above the footer, at the right
+   edge of the column, in the space the page leaves under its last line. */
+.site-footer .wrap { position: relative; }
+.mesa {
+    position: absolute;
+    right: clamp(1rem, 5vw, 2rem);
+    bottom: calc(100% + 2rem + 1px);
+    width: min(15rem, 55%);
+    height: auto;
+    opacity: .7;
+    pointer-events: none;
+}
+.mesa-stars { color: var(--hazard); }
 .site-footer p { margin: 0 0 .3rem; }
 .site-footer a { color: var(--accent); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
