@@ -4,6 +4,10 @@ standfirst: "The starting idea was to invent a cryptography based on constellati
 key: chaque-cle-a-son-ciel
 date: 2026-11-20
 slug: every-key-has-a-sky
+corrections:
+  - date: 2026-11-26
+    note: >-
+      The piece said each star has “a colour”. That was true of the first drawing. Since 24 November, Stellar draws the sky in one ink: the brightness of a star is the size of its cell, and what the colour said is said by a mark inside it. The stars, the lines and the name of a key have not changed.
 ---
 
 It all started with one sentence: *what if we created a new model of cryptography, like RSA, but based on constellations? It will take light-years before a constellation disappears from our sight.*
@@ -38,7 +42,7 @@ Drawing a fingerprint is not a new idea, and we do not claim it as ours. OpenSSH
 
 [Stellar](https://stellar.mesa.black) takes the fingerprint of a public key and derives from it, always the same way, a constellation:
 
-- seven to twelve main stars, each with a position, a brightness and a colour;
+- seven to twelve main stars, each with a position, a brightness and a mark;
 - lines joining them into a single figure;
 - a background of fainter stars;
 - and a name, for instance *Zijizia Vudensis*.

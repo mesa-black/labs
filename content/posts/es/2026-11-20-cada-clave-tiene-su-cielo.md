@@ -4,6 +4,10 @@ standfirst: "La idea de partida era inventar una criptografía basada en las con
 key: chaque-cle-a-son-ciel
 date: 2026-11-20
 slug: cada-clave-tiene-su-cielo
+corrections:
+  - date: 2026-11-26
+    note: >-
+      El artículo decía que cada estrella tiene «un color». Era cierto del primer dibujo. Desde el 24 de noviembre, Stellar traza el cielo con una sola tinta: el brillo de una estrella es el tamaño de su celda, y lo que decía el color lo dice una marca en su interior. Las estrellas, los trazos y el nombre de una clave no han cambiado.
 ---
 
 Todo empezó con una frase: *¿y si creáramos un nuevo modelo de criptografía, como RSA, pero basado en las constelaciones? Harán falta años luz antes de que una constelación desaparezca de nuestra vista.*
@@ -38,7 +42,7 @@ Dibujar una huella no es una idea nueva, y no pretendemos que sea nuestra. OpenS
 
 [Stellar](https://stellar.mesa.black) toma la huella de una clave pública y obtiene de ella, siempre de la misma manera, una constelación:
 
-- de siete a doce estrellas principales, cada una con una posición, un brillo y un color;
+- de siete a doce estrellas principales, cada una con una posición, un brillo y una marca;
 - trazos que las unen en una sola figura;
 - un fondo de estrellas más débiles;
 - y un nombre, por ejemplo *Zijizia Vudensis*.

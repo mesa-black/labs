@@ -4,6 +4,10 @@ standfirst: "L'idée de départ était d'inventer une cryptographie fondée sur 
 key: chaque-cle-a-son-ciel
 date: 2026-11-20
 slug: chaque-cle-a-son-ciel
+corrections:
+  - date: 2026-11-26
+    note: >-
+      L'article disait que chaque étoile a « une couleur ». C'était vrai du premier dessin. Depuis le 24 novembre, Stellar trace le ciel d'une seule encre : l'éclat d'une étoile est la taille de sa cellule, et ce que disait la couleur est dit par une marque à l'intérieur. Les étoiles, les traits et le nom d'une clé n'ont pas changé.
 ---
 
 Tout est parti d'une phrase : *et si on créait un nouveau modèle de cryptographie, comme RSA, mais fondé sur les constellations ? Il faudra des années-lumière avant qu'une constellation disparaisse à nos yeux.*
@@ -38,7 +42,7 @@ L'idée de dessiner une empreinte n'est pas neuve, et nous ne prétendons pas l'
 
 [Stellar](https://stellar.mesa.black) prend l'empreinte d'une clé publique et en tire, toujours de la même façon, une constellation :
 
-- de sept à douze étoiles principales, chacune avec une position, un éclat et une couleur ;
+- de sept à douze étoiles principales, chacune avec une position, un éclat et une marque ;
 - des traits qui les relient en une seule figure ;
 - un fond d'étoiles plus faibles ;
 - et un nom, par exemple *Zijizia Vudensis*.
