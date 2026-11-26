@@ -164,6 +164,9 @@ a { color: inherit; }
 .masthead-nav .feed + .feed { margin-left: .55rem; }
 
 .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
     font-family: var(--display);
     font-weight: 700;
     font-size: 1rem;
@@ -171,11 +174,13 @@ a { color: inherit; }
     text-decoration: none;
 }
 
-/* The crowbar: a sign beside the name, the one orange thing in the bar. */
+/* The crowbar: a sign beside the name, the one orange thing in the bar.
+   Held at an angle, hook up, the way one is carried: lying flat it read as
+   a line at this size. */
 .crowbar {
-    width: 2.1em;
-    height: .73em;
-    margin-right: .5em;
+    flex: none;
+    height: 1.35em;
+    width: 1.81em;
     color: var(--hazard);
 }
 
