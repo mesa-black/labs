@@ -8,7 +8,7 @@
     signature du certificat      ecdsa-with-SHA384
     clé du certificat            courbe elliptique 256 bits
     chaîne                       4 certificats
-    certificat valide jusqu'au   12/01/2027
+    certificat valide jusqu'au   18/02/2027
     versions acceptées           TLSv1.3
 
     · ML-KEM — Échange de clés hybride : une capture du trafic d'aujourd'hui reste illisible pour un adversaire quantique.
